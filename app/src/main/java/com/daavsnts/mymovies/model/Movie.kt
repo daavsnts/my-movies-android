@@ -1,4 +1,6 @@
 package com.daavsnts.mymovies.model
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
@@ -8,8 +10,9 @@ data class Genre(
     val name: String
 )
 
+@Entity(tableName = "favorite_movies")
 data class FavoriteMovieId(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val title: String?,
 )
 
