@@ -14,19 +14,19 @@ class MoviesApiServiceTest {
         assert(checkApiResponse { service.getTrendingMovies() })
 
     @Test
-    fun getPopularMovies() =
+    fun testGetPopularMovies() =
         assert(checkApiResponse { service.getPopularMovies() })
 
     @Test
-    fun getUpcomingMovies() =
+    fun testGetUpcomingMovies() =
         assert(checkApiResponse { service.getUpcomingMovies() })
 
     @Test
-    fun getMovieDetails() =
+    fun testGetMovieDetails() =
         assert(checkApiResponse { service.getMovieDetails(500) })
 
     @Test
-    fun searchMoviesByTerm() =
+    fun testSearchMoviesByTerm() =
         assert(checkApiResponse { service.searchMoviesByTerm(searchTerm = "Avatar") })
 
     private fun <T> checkApiResponse(
