@@ -37,7 +37,7 @@ class UserDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun insertFavoriteMovie() = runBlocking {
+    fun testInsertFavoriteMovie() = runBlocking {
         val favoriteMovieId = FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania")
         userDao.insertFavoriteMovie(favoriteMovieId)
         assert(userDao.isMovieFavorite(favoriteMovieId.id) > 0)
@@ -45,7 +45,7 @@ class UserDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun deleteFavoriteMovie() = runBlocking {
+    fun testDeleteFavoriteMovie() = runBlocking {
         val favoriteMovieId =
             FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania")
         userDao.insertFavoriteMovie(favoriteMovieId)
@@ -56,7 +56,7 @@ class UserDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun allFavoriteMovieIds() = runBlocking {
+    fun testAllFavoriteMovieIds() = runBlocking {
         val favoriteMovieIdList = listOf(
             FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania"),
             FavoriteMovieId(502356, "The Super Mario Bros. Movie"),
@@ -70,7 +70,7 @@ class UserDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun searchFavoriteMovies() = runBlocking {
+    fun testSearchFavoriteMovies() = runBlocking {
         val antManFavoriteMovieId = FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania")
         userDao.insertFavoriteMovie(antManFavoriteMovieId)
 
