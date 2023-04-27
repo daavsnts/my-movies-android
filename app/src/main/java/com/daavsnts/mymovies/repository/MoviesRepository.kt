@@ -62,7 +62,7 @@ class NetworkMoviesRepository(
     }
 
     private fun treatMovie(movie: Movie): Movie {
-        val prefixUrl = "https://image.tmdb.org/t/p/original/"
+        val prefixUrl = "https://image.tmdb.org/t/p/original"
 
         val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
