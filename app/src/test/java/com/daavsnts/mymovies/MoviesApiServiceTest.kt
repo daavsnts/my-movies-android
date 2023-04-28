@@ -32,7 +32,7 @@ class MoviesApiServiceTest {
     private fun <T> checkApiResponse(
         serviceFunction: suspend () -> Response<T>
     ): Boolean {
-        var success = false
+        var success: Boolean
         runBlocking {
             val response = serviceFunction()
             val errorBody = response.errorBody()
