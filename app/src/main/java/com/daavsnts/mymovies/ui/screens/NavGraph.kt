@@ -1,17 +1,31 @@
 package com.daavsnts.mymovies.ui.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesScreen
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesViewModel
@@ -26,7 +40,7 @@ sealed class Screen(
     val icon: ImageVector
 ) {
     companion object {
-        val navScreenList = listOf(Movies)
+        val navScreenList = listOf(Movies, Favorites)
     }
 
     object Movies : Screen(
@@ -131,6 +145,35 @@ fun NavGraph(navController: NavHostController) {
                     )
                 }
             )
+        }
+    }
+}
+
+@Composable
+fun BottomNavBar(navController: NavHostController, modifier: Modifier = Modifier) {
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry.value?.destination?.route
+
+    Box(modifier.background(MaterialTheme.colorScheme.primary)) {
+        NavigationBar(containerColor = Color.Transparent) {
+            Screen.navScreenList.forEach { screen ->
+                NavigationBarItem(
+                    label = { Text(screen.title) },
+                    icon = {
+                        Icon(
+                            imageVector = screen.icon,
+                            contentDescription = screen.title
+                        )
+                    },
+                    selected = currentDestination == screen.route,
+                    onClick = {
+                        navController.navigate(screen.route) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
         }
     }
 }

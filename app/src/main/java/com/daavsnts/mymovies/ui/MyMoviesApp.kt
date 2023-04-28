@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.daavsnts.mymovies.ui.screens.BottomNavBar
 import com.daavsnts.mymovies.ui.screens.NavGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,6 +23,7 @@ fun MyMoviesApp(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .statusBarsPadding(),
+        bottomBar = { BottomNavBar(navController) }
     ) {
         Surface(
             modifier = Modifier

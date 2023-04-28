@@ -27,10 +27,10 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     background = GhostWhite,
     onBackground = EerieBlack,
-    surface = Night,
-    onSurface = GhostWhite,
     primary = Night,
-    onPrimary = GhostWhite
+    onPrimary = GhostWhite,
+    surface = Night,
+    onSurface = GhostWhite
 )
 
 @Composable
