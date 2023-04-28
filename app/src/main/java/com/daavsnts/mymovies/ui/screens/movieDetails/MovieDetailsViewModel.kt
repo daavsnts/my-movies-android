@@ -11,6 +11,7 @@ import com.daavsnts.mymovies.repository.MoviesRepository
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.model.FavoriteMovieId
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class MovieDetailsViewModel(
     val isMovieFavorite: Flow<Boolean> = _isMovieFavorite
 
     fun setMovieDetails(movieId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _movieDetailUiState.value = ScreenUiState.Loading
             _movieDetailUiState.value = try {
                 ScreenUiState.Success(moviesRepository.getMovieDetails(movieId))
@@ -41,21 +42,21 @@ class MovieDetailsViewModel(
     }
 
     fun addFavoriteMovie(movie: Movie) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userRepository.insertFavoriteMovie(FavoriteMovieId(movie.id, movie.title))
             refreshIsMovieFavorite(movie.id)
         }
     }
 
     fun removeFavoriteMovie(movie: Movie) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userRepository.deleteFavoriteMovie(FavoriteMovieId(movie.id, movie.title))
             refreshIsMovieFavorite(movie.id)
         }
     }
 
     fun refreshIsMovieFavorite(movieId: Int) =
-        viewModelScope.launch { _isMovieFavorite.value = userRepository.isMovieFavorite(movieId) }
+        viewModelScope.launch(Dispatchers.IO) { _isMovieFavorite.value = userRepository.isMovieFavorite(movieId) }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
