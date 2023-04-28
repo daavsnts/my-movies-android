@@ -50,7 +50,6 @@ class MoviesRepositoryTest {
     @Test
     fun testSearchMoviesByTerm() = runBlocking {
         val searchedMoviesList = repository.searchMoviesByTerm("Fight Club")
-        Log.d("tetSearchMoviesByTerm", searchedMoviesList.toString())
         val fightClubMovie = Movie(550,
             "Fight Club",
             "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
