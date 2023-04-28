@@ -16,7 +16,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -39,47 +38,43 @@ class FavoriteMoviesViewModel(
     }
 
     private fun setupFavoriteMovies() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _favoriteMoviesUiState.value = ScreenUiState.Loading
-            lateinit var favoriteMoviesUiStateResponse: ScreenUiState<List<Movie>>
-
-            withContext(Dispatchers.IO) {
-                try {
-                    val deferredIds = async { userRepository.allFavoriteMoviesIds.first() }
-                    val ids = deferredIds.await()
-                    favoriteMoviesUiStateResponse =
-                        ScreenUiState.Success(getFavoriteMoviesListByIds(ids))
-                } catch (e: IOException) {
-                    _favoriteMoviesUiState.value = ScreenUiState.Error
-                } catch (e: HttpException) {
-                    _favoriteMoviesUiState.value = ScreenUiState.Error
+            try {
+                val favoritesIdListDeferred = async { userRepository.allFavoriteMoviesIds }
+                val favoritesIdList = favoritesIdListDeferred.await()
+                withContext(Dispatchers.Main) {
+                    favoritesIdList.collect {
+                        _favoriteMoviesUiState.value =
+                            ScreenUiState.Success(getFavoriteMoviesListByIds(it))
+                    }
                 }
+            } catch (e: IOException) {
+                _favoriteMoviesUiState.value = ScreenUiState.Error
+            } catch (e: HttpException) {
+                _favoriteMoviesUiState.value = ScreenUiState.Error
             }
-
-            _favoriteMoviesUiState.value = favoriteMoviesUiStateResponse
         }
     }
 
     fun setSearchedMoviesList(searchTerm: String) {
         viewModelScope.launch {
             _searchedMoviesUiState.value = ScreenUiState.Loading
-            lateinit var searchedMoviesUiStateResponse: ScreenUiState<List<Movie>>
-
-            withContext(Dispatchers.IO) {
-                try {
-                    val deferredIds = async {
-                        userRepository.searchFavoriteMovies(searchTerm).first()
+            try {
+                val searchFavoritesIdListDeferred =
+                    async { userRepository.searchFavoriteMovies(searchTerm) }
+                val searchFavoritesIdList = searchFavoritesIdListDeferred.await()
+                withContext(Dispatchers.Main) {
+                    searchFavoritesIdList.collect {
+                        _searchedMoviesUiState.value =
+                            ScreenUiState.Success(getFavoriteMoviesListByIds(it))
                     }
-                    val ids = deferredIds.await()
-                    searchedMoviesUiStateResponse =
-                        ScreenUiState.Success(getFavoriteMoviesListByIds(ids))
-                } catch (e: IOException) {
-                    ScreenUiState.Error
-                } catch (e: HttpException) {
-                    ScreenUiState.Error
                 }
+            } catch (e: IOException) {
+                ScreenUiState.Error
+            } catch (e: HttpException) {
+                ScreenUiState.Error
             }
-            _searchedMoviesUiState.value = searchedMoviesUiStateResponse
         }
     }
 
