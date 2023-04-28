@@ -12,13 +12,13 @@ import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.model.FavoriteMovieId
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
-import kotlin.properties.Delegates
 
 class MovieDetailsViewModel(
     private val moviesRepository: MoviesRepository,
@@ -31,21 +31,20 @@ class MovieDetailsViewModel(
     val isMovieFavorite: Flow<Boolean> = _isMovieFavorite
 
     fun setMovieDetails(movieId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _movieDetailUiState.value = ScreenUiState.Loading
-            lateinit var moviesDetailsUiStateResponse: ScreenUiState<Movie>
-
-            withContext(Dispatchers.IO) {
-                moviesDetailsUiStateResponse = try {
-                    ScreenUiState.Success(moviesRepository.getMovieDetails(movieId))
-                } catch (e: IOException) {
-                    ScreenUiState.Error
-                } catch (e: HttpException) {
-                    ScreenUiState.Error
+            try {
+                val moviesDetailsUiStateDeferred =
+                    async { moviesRepository.getMovieDetails(movieId) }
+                val moviesDetailsUiState = moviesDetailsUiStateDeferred.await()
+                withContext(Dispatchers.Main) {
+                    _movieDetailUiState.value = ScreenUiState.Success(moviesDetailsUiState)
                 }
+            } catch (e: IOException) {
+                ScreenUiState.Error
+            } catch (e: HttpException) {
+                ScreenUiState.Error
             }
-
-            _movieDetailUiState.value = moviesDetailsUiStateResponse
         }
     }
 
@@ -64,12 +63,12 @@ class MovieDetailsViewModel(
     }
 
     fun refreshIsMovieFavorite(movieId: Int) =
-        viewModelScope.launch {
-            var isMovieFavoriteResponse by Delegates.notNull<Boolean>()
-            withContext(Dispatchers.IO) {
-                isMovieFavoriteResponse = userRepository.isMovieFavorite(movieId)
+        viewModelScope.launch(Dispatchers.IO) {
+            val isMovieFavoriteDeferred = async { userRepository.isMovieFavorite(movieId) }
+            val isMovieFavorite = isMovieFavoriteDeferred.await()
+            withContext(Dispatchers.Main) {
+                _isMovieFavorite.value = isMovieFavorite
             }
-            _isMovieFavorite.value = isMovieFavoriteResponse
         }
 
     companion object {
