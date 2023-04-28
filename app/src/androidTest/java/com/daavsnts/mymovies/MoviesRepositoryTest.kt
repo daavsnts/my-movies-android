@@ -6,6 +6,7 @@ import com.daavsnts.mymovies.data.network.MoviesRetrofitBuilder
 import com.daavsnts.mymovies.model.Genre
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.repository.NetworkMoviesRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.reflect.KSuspendFunction0
@@ -32,18 +33,18 @@ class MoviesRepositoryTest {
         val fightClubMovie = repository.getMovieDetails(550)
         val detailedFightClubMovie = Movie(550,
             "Fight Club",
-            "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
+            overview = "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
             releaseDate = "10/15/1999",
             posterPath = "https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
             voteAverage = 8.433f,
-            voteCount = 26280,
+            voteCount = 26288,
             genres = listOf(
                 Genre(18, "Drama"),
                 Genre(53, "Thriller"),
                 Genre(35, "Comedy")
             )
         )
-
+        delay(1000)
         assert(fightClubMovie == detailedFightClubMovie)
     }
 
@@ -56,9 +57,10 @@ class MoviesRepositoryTest {
             releaseDate = "10/15/1999",
             posterPath = "https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
             voteAverage = 8.433f,
-            voteCount = 26280,
+            voteCount = 26288,
             genres = null
         )
+        delay(1000)
         assert(searchedMoviesList.contains(fightClubMovie))
     }
 }
