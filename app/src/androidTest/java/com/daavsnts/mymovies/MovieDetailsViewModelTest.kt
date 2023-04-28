@@ -56,7 +56,7 @@ class MovieDetailsViewModelTest {
         releaseDate = "10/15/1999",
         posterPath = "https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
         voteAverage = 8.433f,
-        voteCount = 26280,
+        voteCount = 26288,
         genres = listOf(
             Genre(18, "Drama"),
             Genre(53, "Thriller"),
