@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.daavsnts.mymovies.ui.theme.Emerald
+import com.daavsnts.mymovies.ui.theme.Night
 
 @Composable
 fun CircularProgressBar(
@@ -58,7 +59,7 @@ fun CircularProgressBar(
     ) {
         Canvas(modifier = Modifier.size(radius * 2f)) {
             drawCircle(
-                color = Color.Black,
+                color = Night,
                 alpha = 0.6f
             )
             drawArc(
