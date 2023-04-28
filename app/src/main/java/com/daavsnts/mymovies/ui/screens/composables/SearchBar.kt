@@ -32,7 +32,7 @@ fun SearchBar(
     val label = remember { mutableStateOf("Search...") }
     Box(
         modifier = modifier.background(
-            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.surface,
             RoundedCornerShape(15.dp)
         ),
     ) {
@@ -40,7 +40,7 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimary,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = modifier.padding(15.dp)
             )
             Box {
@@ -56,13 +56,13 @@ fun SearchBar(
                         searchTerm.value = it
                         if (searchTerm.value !== "") label.value = "" else label.value = "Search..."
                     },
-                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimary),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
                     singleLine = true,
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(16.dp),
                     textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Normal
                     )
