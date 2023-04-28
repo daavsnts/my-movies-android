@@ -127,7 +127,7 @@ fun BackButton(
     Box(
         modifier = modifier
             .padding(5.dp)
-            .background(MaterialTheme.colorScheme.primary)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         IconButton(
             onClick = { navController.popBackStack() },
@@ -135,7 +135,7 @@ fun BackButton(
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "go back",
-                tint = MaterialTheme.colorScheme.onPrimary
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
     }
