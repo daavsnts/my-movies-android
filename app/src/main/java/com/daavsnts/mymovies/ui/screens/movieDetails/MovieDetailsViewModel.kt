@@ -15,8 +15,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
+import kotlin.properties.Delegates
 
 class MovieDetailsViewModel(
     private val moviesRepository: MoviesRepository,
@@ -29,15 +31,21 @@ class MovieDetailsViewModel(
     val isMovieFavorite: Flow<Boolean> = _isMovieFavorite
 
     fun setMovieDetails(movieId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _movieDetailUiState.value = ScreenUiState.Loading
-            _movieDetailUiState.value = try {
-                ScreenUiState.Success(moviesRepository.getMovieDetails(movieId))
-            } catch (e: IOException) {
-                ScreenUiState.Error
-            } catch (e: HttpException) {
-                ScreenUiState.Error
+            lateinit var moviesDetailsUiStateResponse: ScreenUiState<Movie>
+
+            withContext(Dispatchers.IO) {
+                moviesDetailsUiStateResponse = try {
+                    ScreenUiState.Success(moviesRepository.getMovieDetails(movieId))
+                } catch (e: IOException) {
+                    ScreenUiState.Error
+                } catch (e: HttpException) {
+                    ScreenUiState.Error
+                }
             }
+
+            _movieDetailUiState.value = moviesDetailsUiStateResponse
         }
     }
 
@@ -56,7 +64,13 @@ class MovieDetailsViewModel(
     }
 
     fun refreshIsMovieFavorite(movieId: Int) =
-        viewModelScope.launch(Dispatchers.IO) { _isMovieFavorite.value = userRepository.isMovieFavorite(movieId) }
+        viewModelScope.launch {
+            var isMovieFavoriteResponse by Delegates.notNull<Boolean>()
+            withContext(Dispatchers.IO) {
+                isMovieFavoriteResponse = userRepository.isMovieFavorite(movieId)
+            }
+            _isMovieFavorite.value = isMovieFavoriteResponse
+        }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
