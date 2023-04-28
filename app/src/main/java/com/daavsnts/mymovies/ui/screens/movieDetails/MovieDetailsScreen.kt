@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -70,6 +71,7 @@ fun MovieDetailsScreen(
                 removeFavoriteMovie = removeFavoriteMovie
             )
         }
+
         is ScreenUiState.Error -> Log.d("moviesUiState", "Error")
     }
 }
@@ -124,21 +126,18 @@ fun BackButton(
 ) {
     Box(
         modifier = modifier
-            .padding(10.dp)
+            .padding(5.dp)
             .background(MaterialTheme.colorScheme.primary)
-            .clickable(indication = rememberRipple(
-                radius = 32.dp,
-                color = Color.Black.copy(alpha = 0.4f)
-            ),
-                interactionSource = remember { MutableInteractionSource() }) {
-                navController.popBackStack()
-            }
     ) {
-        Icon(
-            imageVector = Icons.Default.ArrowBack,
-            contentDescription = "go back",
-            tint = MaterialTheme.colorScheme.onPrimary
-        )
+        IconButton(
+            onClick = { navController.popBackStack() },
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "go back",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
 
