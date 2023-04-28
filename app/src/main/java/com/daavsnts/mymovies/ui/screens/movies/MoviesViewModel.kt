@@ -1,6 +1,5 @@
 package com.daavsnts.mymovies.ui.screens.movies
 
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -12,6 +11,7 @@ import com.daavsnts.mymovies.MyMoviesApplication
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -82,37 +82,37 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
         moviesUiState: KProperty0<MutableStateFlow<ScreenUiState<List<Movie>>>>,
         getMoviesFunction: suspend () -> List<Movie>
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             moviesUiState.get().value = ScreenUiState.Loading
-            lateinit var moviesUiStateResponse: ScreenUiState<List<Movie>>
-            withContext(Dispatchers.IO) {
-                moviesUiStateResponse = try {
-                    ScreenUiState.Success(getMoviesFunction())
-                } catch (e: IOException) {
-                    ScreenUiState.Error
-                } catch (e: HttpException) {
-                    ScreenUiState.Error
+            try {
+                val moviesUiStateListDeferred = async { getMoviesFunction() }
+                val moviesUiStateList = moviesUiStateListDeferred.await()
+                withContext(Dispatchers.Main) {
+                    moviesUiState.get().value = ScreenUiState.Success(moviesUiStateList)
                 }
+            } catch (e: IOException) {
+                ScreenUiState.Error
+            } catch (e: HttpException) {
+                ScreenUiState.Error
             }
-            moviesUiState.get().value = moviesUiStateResponse
         }
     }
 
     fun setSearchedMoviesList(searchTerm: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _searchedMoviesUiState.value = ScreenUiState.Loading
-            lateinit var searchedMoviesUiStateResponse: ScreenUiState<List<Movie>>
-
-            withContext(Dispatchers.IO) {
-                searchedMoviesUiStateResponse = try {
-                    ScreenUiState.Success(moviesRepository.searchMoviesByTerm(searchTerm))
-                } catch (e: IOException) {
-                    ScreenUiState.Error
-                } catch (e: HttpException) {
-                    ScreenUiState.Error
+            try {
+                val searchedMoviesUiStateDeferred =
+                    async { moviesRepository.searchMoviesByTerm(searchTerm) }
+                val searchedMoviesUiState = searchedMoviesUiStateDeferred.await()
+                withContext(Dispatchers.Main) {
+                    _searchedMoviesUiState.value = ScreenUiState.Success(searchedMoviesUiState)
                 }
+            } catch (e: IOException) {
+                ScreenUiState.Error
+            } catch (e: HttpException) {
+                ScreenUiState.Error
             }
-            _searchedMoviesUiState.value = searchedMoviesUiStateResponse
         }
     }
 
