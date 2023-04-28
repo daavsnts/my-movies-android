@@ -43,6 +43,6 @@ class MoviesApiServiceTest {
             assert(response.code() == 200)
             success = true
         }
-        return true
+        return success
     }
 }
