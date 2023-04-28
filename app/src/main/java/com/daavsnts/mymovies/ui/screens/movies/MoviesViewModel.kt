@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.daavsnts.mymovies.MyMoviesApplication
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -63,7 +64,7 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
         moviesUiState: KProperty0<MutableStateFlow<ScreenUiState<List<Movie>>>>,
         getMoviesFunction: suspend () -> List<Movie>
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             moviesUiState.get().value = ScreenUiState.Loading
             moviesUiState.get().value = try {
                 ScreenUiState.Success(getMoviesFunction())
@@ -76,7 +77,7 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
     }
 
     fun setSearchedMoviesList(searchTerm: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _searchedMoviesUiState.value = ScreenUiState.Loading
             _searchedMoviesUiState.value = try {
                 ScreenUiState.Success(moviesRepository.searchMoviesByTerm(searchTerm))
