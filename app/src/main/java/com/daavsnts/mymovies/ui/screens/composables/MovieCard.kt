@@ -14,6 +14,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.text.TextStyle
 import com.daavsnts.mymovies.model.Movie
 
 @Composable
@@ -57,16 +60,22 @@ fun MovieCard(
                 movie.title?.let {
                     Text(
                         text = it,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 20.sp,
-                        modifier = modifier.padding(bottom = 20.dp)
+                        modifier = modifier.padding(bottom = 20.dp),
+                        style = TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 20.sp,
+                            shadow = Shadow(Color.Black, blurRadius = 8f, offset = Offset(4f, 4f))
+                        )
                     )
                 }
                 movie.releaseDate?.let {
                     Text(
                         text = it,
-                        color = Color.LightGray,
-                        fontSize = 15.sp
+                        style = TextStyle(
+                            color = Color.LightGray,
+                            fontSize = 15.sp,
+                            shadow = Shadow(Color.Black, blurRadius = 8f, offset = Offset(4f, 4f))
+                        )
                     )
                 }
             }
