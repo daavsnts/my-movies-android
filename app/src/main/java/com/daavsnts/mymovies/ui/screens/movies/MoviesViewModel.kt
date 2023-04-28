@@ -85,7 +85,6 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
         viewModelScope.launch {
             moviesUiState.get().value = ScreenUiState.Loading
             lateinit var moviesUiStateResponse: ScreenUiState<List<Movie>>
-
             withContext(Dispatchers.IO) {
                 moviesUiStateResponse = try {
                     ScreenUiState.Success(getMoviesFunction())
@@ -95,7 +94,6 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
                     ScreenUiState.Error
                 }
             }
-
             moviesUiState.get().value = moviesUiStateResponse
         }
     }
@@ -114,7 +112,6 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
                     ScreenUiState.Error
                 }
             }
-
             _searchedMoviesUiState.value = searchedMoviesUiStateResponse
         }
     }
