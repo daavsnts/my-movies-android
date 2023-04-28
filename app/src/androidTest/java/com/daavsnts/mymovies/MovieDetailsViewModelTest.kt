@@ -70,7 +70,7 @@ class MovieDetailsViewModelTest {
         delay(1000)
         val movieDetailsUiState = movieDetailsViewModel.movieDetailUiState.first()
         if (movieDetailsUiState is ScreenUiState.Success) {
-            assert(movieDetailsUiState.data.title == detailedFightClubMovie.title)
+            assert(movieDetailsUiState.data == detailedFightClubMovie)
         }
     }
 
