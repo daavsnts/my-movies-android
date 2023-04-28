@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.daavsnts.mymovies.data.local.UserDao
 import com.daavsnts.mymovies.data.local.UserDatabase
 import com.daavsnts.mymovies.model.FavoriteMovieId
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -40,6 +41,7 @@ class UserDaoTest {
     fun testInsertFavoriteMovie() = runBlocking {
         val favoriteMovieId = FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania")
         userDao.insertFavoriteMovie(favoriteMovieId)
+        delay(1000)
         assert(userDao.isMovieFavorite(favoriteMovieId.id) > 0)
     }
 
@@ -49,8 +51,11 @@ class UserDaoTest {
         val favoriteMovieId =
             FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania")
         userDao.insertFavoriteMovie(favoriteMovieId)
+        delay(1000)
         assert(userDao.isMovieFavorite(favoriteMovieId.id) > 0)
+
         userDao.deleteFavoriteMovie(favoriteMovieId)
+        delay(1000)
         assert(userDao.isMovieFavorite(favoriteMovieId.id) == 0)
     }
 
@@ -63,6 +68,7 @@ class UserDaoTest {
             FavoriteMovieId(594767, "Shazam! Fury of the Gods")
         )
         favoriteMovieIdList.forEach { userDao.insertFavoriteMovie(it) }
+        delay(1000)
 
         val allFavoriteMoviesId = userDao.allFavoriteMoviesIds().first()
         assert(allFavoriteMoviesId.containsAll(favoriteMovieIdList))
@@ -73,6 +79,7 @@ class UserDaoTest {
     fun testSearchFavoriteMovies() = runBlocking {
         val antManFavoriteMovieId = FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania")
         userDao.insertFavoriteMovie(antManFavoriteMovieId)
+        delay(1000)
 
         val searchedList = userDao.searchFavoriteMovies("Ant-Man").first()
         assert(searchedList.contains(antManFavoriteMovieId))
