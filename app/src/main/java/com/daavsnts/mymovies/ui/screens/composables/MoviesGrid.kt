@@ -8,21 +8,24 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 
 @Composable
 fun MoviesGrid(
-    moviesUiStateList: ScreenUiState<List<Movie>>
-) = RenderMoviesGrid(moviesUiStateList = moviesUiStateList)
+    moviesUiStateList: ScreenUiState<List<Movie>>,
+    navController: NavController
+) = RenderMoviesGrid(moviesUiStateList = moviesUiStateList, navController = navController)
 
 @Composable
 fun RenderMoviesGrid(
-    moviesUiStateList: ScreenUiState<List<Movie>>
+    moviesUiStateList: ScreenUiState<List<Movie>>,
+    navController: NavController
 ) {
     when (moviesUiStateList) {
         is ScreenUiState.Loading -> LoadingGridOfMovies()
-        is ScreenUiState.Success -> GridOfMovies(moviesUiStateList.data)
+        is ScreenUiState.Success -> GridOfMovies(moviesUiStateList.data, navController)
         is ScreenUiState.Error -> Log.d("moviesUiState", "Error")
     }
 }
@@ -42,7 +45,8 @@ fun LoadingGridOfMovies() {
 
 @Composable
 fun GridOfMovies(
-    movies: List<Movie>
+    movies: List<Movie>,
+    navController: NavController
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -51,7 +55,7 @@ fun GridOfMovies(
         contentPadding = PaddingValues(bottom = 20.dp)
     ) {
         itemsIndexed(movies) { _, movie ->
-            MovieCard(movie = movie)
+            MovieCard(movie = movie, navController = navController)
         }
     }
 }

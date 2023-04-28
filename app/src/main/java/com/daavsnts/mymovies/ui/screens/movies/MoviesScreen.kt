@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.daavsnts.mymovies.ui.screens.composables.MoviesGrid
 import com.daavsnts.mymovies.ui.screens.composables.SearchBar
 import com.daavsnts.mymovies.model.Movie
@@ -16,7 +17,8 @@ fun MoviesScreen(
     modifier: Modifier = Modifier,
     moviesUiStateList: List<Pair<String, ScreenUiState<List<Movie>>>>,
     searchedMoviesUiStateList: ScreenUiState<List<Movie>>,
-    setSearchedMoviesList: (String) -> Unit
+    setSearchedMoviesList: (String) -> Unit,
+    navController: NavController
 ) {
     val searchTerm = remember { mutableStateOf("") }
 
@@ -33,9 +35,9 @@ fun MoviesScreen(
         SearchBar(searchTerm)
         Spacer(modifier.height(20.dp))
         if (searchTerm.value.isEmpty()) {
-            MoviesLists(moviesUiStateList = moviesUiStateList)
+            MoviesLists(moviesUiStateList = moviesUiStateList, navController = navController)
         } else {
-            MoviesGrid(searchedMoviesUiStateList)
+            MoviesGrid(searchedMoviesUiStateList, navController = navController)
         }
     }
 }

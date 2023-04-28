@@ -9,13 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.daavsnts.mymovies.ui.screens.ScreenUiState
-import com.daavsnts.mymovies.ui.screens.movies.MoviesScreen
-import com.daavsnts.mymovies.ui.screens.movies.MoviesViewModel
+import com.daavsnts.mymovies.ui.screens.NavGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -33,28 +29,7 @@ fun MyMoviesApp(modifier: Modifier = Modifier) {
                 .padding(it),
             color = MaterialTheme.colorScheme.background
         ) {
-            val moviesViewModel: MoviesViewModel =
-                viewModel(factory = MoviesViewModel.Factory)
-            val moviesUiStateList =
-                moviesViewModel.moviesUiStatesList.map {
-                    Pair(
-                        it.title,
-                        it.list.collectAsState(initial = ScreenUiState.Loading).value
-                    )
-                }
-            val searchedMoviesUiStateList =
-                moviesViewModel
-                    .searchedMoviesUiState
-                    .collectAsState(initial = ScreenUiState.Loading).value
-            MoviesScreen(
-                moviesUiStateList = moviesUiStateList,
-                searchedMoviesUiStateList = searchedMoviesUiStateList,
-                setSearchedMoviesList = { searchTerm: String ->
-                    moviesViewModel.setSearchedMoviesList(
-                        searchTerm
-                    )
-                }
-            )
+            NavGraph(navController)
         }
     }
 }

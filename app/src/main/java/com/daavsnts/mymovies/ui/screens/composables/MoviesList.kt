@@ -15,19 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 
 @Composable
 fun MoviesLists(
     modifier: Modifier = Modifier,
-    moviesUiStateList: List<Pair<String, ScreenUiState<List<Movie>>>>
+    moviesUiStateList: List<Pair<String, ScreenUiState<List<Movie>>>>,
+    navController: NavController
 ) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp), contentPadding = PaddingValues(bottom = 20.dp)) {
         itemsIndexed(moviesUiStateList) { _, list ->
             HeaderText(list.first)
             Spacer(modifier.height(10.dp))
-            RenderMoviesList(moviesUiState = list.second)
+            RenderMoviesList(moviesUiState = list.second, navController = navController)
         }
     }
 }
@@ -44,11 +46,12 @@ fun HeaderText(text: String) {
 
 @Composable
 fun RenderMoviesList(
-    moviesUiState: ScreenUiState<List<Movie>>
+    moviesUiState: ScreenUiState<List<Movie>>,
+    navController: NavController
 ) {
     when (moviesUiState) {
         is ScreenUiState.Loading -> LoadingListOfMovies()
-        is ScreenUiState.Success -> ListOfMovies(moviesUiState.data)
+        is ScreenUiState.Success -> ListOfMovies(moviesUiState.data, navController = navController)
         is ScreenUiState.Error -> Log.d("moviesUiState", "Error")
     }
 }
@@ -63,10 +66,10 @@ fun LoadingListOfMovies() {
 }
 
 @Composable
-fun ListOfMovies(movies: List<Movie>) {
+fun ListOfMovies(movies: List<Movie>, navController: NavController) {
     LazyRow(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         itemsIndexed(movies) { _, movie ->
-            MovieCard(movie = movie)
+            MovieCard(movie = movie, navController = navController)
         }
     }
 }

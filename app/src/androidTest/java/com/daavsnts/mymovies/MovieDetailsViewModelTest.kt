@@ -14,7 +14,7 @@ import com.daavsnts.mymovies.repository.MoviesRepository
 import com.daavsnts.mymovies.repository.NetworkMoviesRepository
 import com.daavsnts.mymovies.repository.UserRepository
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
-import com.daavsnts.mymovies.ui.screens.details.MovieDetailsViewModel
+import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

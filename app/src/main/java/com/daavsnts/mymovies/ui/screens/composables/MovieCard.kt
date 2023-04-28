@@ -12,21 +12,31 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
+import androidx.navigation.NavController
 import com.daavsnts.mymovies.model.Movie
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieCard(
     movie: Movie,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     Card(
         shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(5.dp)
+        elevation = CardDefaults.cardElevation(5.dp),
+        onClick = {
+            val movieId = movie.id
+            movieId.let {
+                navController.navigate("MovieDetailsScreen/$movieId")
+            }
+        }
     ) {
         Box(
             modifier = modifier

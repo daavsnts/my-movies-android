@@ -1,4 +1,4 @@
-package com.daavsnts.mymovies.ui.screens.details
+package com.daavsnts.mymovies.ui.screens.movieDetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
