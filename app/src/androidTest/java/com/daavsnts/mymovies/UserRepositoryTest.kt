@@ -8,6 +8,7 @@ import com.daavsnts.mymovies.data.local.UserDatabase
 import com.daavsnts.mymovies.model.FavoriteMovieId
 import com.daavsnts.mymovies.repository.LocalUserRepository
 import com.daavsnts.mymovies.repository.UserRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -40,7 +41,9 @@ class UserRepositoryTest {
     @Throws(Exception::class)
     fun testInsertFavoriteMovie() = runBlocking {
         val favoriteMovieId = FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania")
+
         userRepository.insertFavoriteMovie(favoriteMovieId)
+        delay(1000)
         assert(userRepository.isMovieFavorite(favoriteMovieId.id))
     }
 
@@ -49,9 +52,13 @@ class UserRepositoryTest {
     fun testDeleteFavoriteMovie() = runBlocking {
         val favoriteMovieId =
             FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania")
+
         userRepository.insertFavoriteMovie(favoriteMovieId)
+        delay(1000)
         assert(userRepository.isMovieFavorite(favoriteMovieId.id))
+
         userRepository.deleteFavoriteMovie(favoriteMovieId)
+        delay(1000)
         assert(!userRepository.isMovieFavorite(favoriteMovieId.id))
     }
 
@@ -64,6 +71,7 @@ class UserRepositoryTest {
             FavoriteMovieId(594767, "Shazam! Fury of the Gods")
         )
         favoriteMovieIdList.forEach { userRepository.insertFavoriteMovie(it) }
+        delay(1000)
 
         val allFavoriteMoviesId = userRepository.allFavoriteMoviesIds.first()
         assert(allFavoriteMoviesId.containsAll(favoriteMovieIdList))
@@ -74,6 +82,7 @@ class UserRepositoryTest {
     fun testSearchFavoriteMovies() = runBlocking {
         val antManFavoriteMovieId = FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania")
         userRepository.insertFavoriteMovie(antManFavoriteMovieId)
+        delay(1000)
 
         val searchedList = userRepository.searchFavoriteMovies("Ant-Man").first()
         assert(searchedList.contains(antManFavoriteMovieId))
