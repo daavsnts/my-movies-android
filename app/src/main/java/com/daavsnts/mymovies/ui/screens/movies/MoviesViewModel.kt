@@ -1,5 +1,6 @@
 package com.daavsnts.mymovies.ui.screens.movies
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 import kotlin.reflect.KProperty0
@@ -25,25 +27,39 @@ class PairOfListMoviesState(
 
 class PairOfStatesWithRepositoryFunctions(
     val stateList: MutableStateFlow<ScreenUiState<List<Movie>>>,
-    val apiFunction:  suspend () -> List<Movie>)
+    val apiFunction: suspend () -> List<Movie>
+)
 
 class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
-    private val _trendingMoviesUiState = MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
+    private val _trendingMoviesUiState =
+        MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
     val trendingMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _trendingMoviesUiState
 
-    private val _popularMoviesUiState = MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
+    private val _popularMoviesUiState =
+        MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
     val popularMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _popularMoviesUiState
 
-    private val _upcomingMoviesUiState = MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
+    private val _upcomingMoviesUiState =
+        MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
     val upcomingMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _upcomingMoviesUiState
 
-    private val _searchedMoviesUiState = MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
+    private val _searchedMoviesUiState =
+        MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
     val searchedMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _searchedMoviesUiState
 
     private val moviesUiStateWithApiFunctions = listOf(
-        PairOfStatesWithRepositoryFunctions(_trendingMoviesUiState, moviesRepository::getTrendingMovies),
-        PairOfStatesWithRepositoryFunctions(_popularMoviesUiState, moviesRepository::getPopularMovies),
-        PairOfStatesWithRepositoryFunctions(_upcomingMoviesUiState, moviesRepository::getUpcomingMovies)
+        PairOfStatesWithRepositoryFunctions(
+            _trendingMoviesUiState,
+            moviesRepository::getTrendingMovies
+        ),
+        PairOfStatesWithRepositoryFunctions(
+            _popularMoviesUiState,
+            moviesRepository::getPopularMovies
+        ),
+        PairOfStatesWithRepositoryFunctions(
+            _upcomingMoviesUiState,
+            moviesRepository::getUpcomingMovies
+        )
     )
 
     val moviesUiStatesList = listOf(
@@ -52,7 +68,9 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
         PairOfListMoviesState("Upcoming Movies", upcomingMoviesUiState)
     )
 
-    init { setupMoviesUiStates() }
+    init {
+        setupMoviesUiStates()
+    }
 
     private fun setupMoviesUiStates() {
         moviesUiStateWithApiFunctions.forEach {
@@ -64,28 +82,40 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
         moviesUiState: KProperty0<MutableStateFlow<ScreenUiState<List<Movie>>>>,
         getMoviesFunction: suspend () -> List<Movie>
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             moviesUiState.get().value = ScreenUiState.Loading
-            moviesUiState.get().value = try {
-                ScreenUiState.Success(getMoviesFunction())
-            } catch (e: IOException) {
-                ScreenUiState.Error
-            } catch (e: HttpException) {
-                ScreenUiState.Error
+            lateinit var moviesUiStateResponse: ScreenUiState<List<Movie>>
+
+            withContext(Dispatchers.IO) {
+                moviesUiStateResponse = try {
+                    ScreenUiState.Success(getMoviesFunction())
+                } catch (e: IOException) {
+                    ScreenUiState.Error
+                } catch (e: HttpException) {
+                    ScreenUiState.Error
+                }
             }
+
+            moviesUiState.get().value = moviesUiStateResponse
         }
     }
 
     fun setSearchedMoviesList(searchTerm: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _searchedMoviesUiState.value = ScreenUiState.Loading
-            _searchedMoviesUiState.value = try {
-                ScreenUiState.Success(moviesRepository.searchMoviesByTerm(searchTerm))
-            } catch (e: IOException) {
-                ScreenUiState.Error
-            } catch (e: HttpException) {
-                ScreenUiState.Error
+            lateinit var searchedMoviesUiStateResponse: ScreenUiState<List<Movie>>
+
+            withContext(Dispatchers.IO) {
+                searchedMoviesUiStateResponse = try {
+                    ScreenUiState.Success(moviesRepository.searchMoviesByTerm(searchTerm))
+                } catch (e: IOException) {
+                    ScreenUiState.Error
+                } catch (e: HttpException) {
+                    ScreenUiState.Error
+                }
             }
+
+            _searchedMoviesUiState.value = searchedMoviesUiStateResponse
         }
     }
 
