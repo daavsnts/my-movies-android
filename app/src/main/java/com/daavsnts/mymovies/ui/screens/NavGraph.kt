@@ -3,6 +3,7 @@ package com.daavsnts.mymovies.ui.screens
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -12,6 +13,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.daavsnts.mymovies.model.Movie
+import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesScreen
+import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesViewModel
 import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsScreen
 import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsViewModel
 import com.daavsnts.mymovies.ui.screens.movies.MoviesScreen
@@ -37,11 +40,17 @@ sealed class Screen(
         "Details",
         Icons.Default.List
     )
+
+    object Favorites : Screen(
+        "FavoriteMoviesScreen",
+        "Favorites",
+        Icons.Default.Star
+    )
 }
 
 @Composable
 fun NavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Movies.route) {
+    NavHost(navController = navController, startDestination = Screen.Favorites.route) {
         composable(Screen.Movies.route) {
             val moviesViewModel: MoviesViewModel =
                 viewModel(factory = MoviesViewModel.Factory)
@@ -100,6 +109,28 @@ fun NavGraph(navController: NavHostController) {
                     },
                 )
             }
+        }
+        composable(Screen.Favorites.route) {
+            val favoriteMoviesViewModel: FavoriteMoviesViewModel =
+                viewModel(factory = FavoriteMoviesViewModel.Factory)
+            val favoriteMoviesUiState =
+                favoriteMoviesViewModel
+                    .favoriteMoviesUiState
+                    .collectAsState(initial = ScreenUiState.Loading).value
+            val searchedMoviesUiStateList =
+                favoriteMoviesViewModel
+                    .searchedMoviesUiState
+                    .collectAsState(initial = ScreenUiState.Loading).value
+            FavoriteMoviesScreen(
+                navController = navController,
+                favoriteMoviesUiState = favoriteMoviesUiState,
+                searchedMoviesUiStateList = searchedMoviesUiStateList,
+                setSearchedMoviesList = { searchTerm: String ->
+                    favoriteMoviesViewModel.setSearchedMoviesList(
+                        searchTerm
+                    )
+                }
+            )
         }
     }
 }

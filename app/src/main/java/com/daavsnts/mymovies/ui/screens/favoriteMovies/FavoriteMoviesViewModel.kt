@@ -12,9 +12,11 @@ import com.daavsnts.mymovies.model.FavoriteMovieId
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -43,10 +45,10 @@ class FavoriteMoviesViewModel(
 
             withContext(Dispatchers.IO) {
                 try {
-                    userRepository.allFavoriteMoviesIds.collect {
-                        favoriteMoviesUiStateResponse =
-                            ScreenUiState.Success(getFavoriteMoviesListByIds(it))
-                    }
+                    val deferredIds = async { userRepository.allFavoriteMoviesIds.first() }
+                    val ids = deferredIds.await()
+                    favoriteMoviesUiStateResponse =
+                        ScreenUiState.Success(getFavoriteMoviesListByIds(ids))
                 } catch (e: IOException) {
                     _favoriteMoviesUiState.value = ScreenUiState.Error
                 } catch (e: HttpException) {
@@ -62,12 +64,15 @@ class FavoriteMoviesViewModel(
         viewModelScope.launch {
             _searchedMoviesUiState.value = ScreenUiState.Loading
             lateinit var searchedMoviesUiStateResponse: ScreenUiState<List<Movie>>
+
             withContext(Dispatchers.IO) {
                 try {
-                    userRepository.searchFavoriteMovies(searchTerm).collect {
-                        searchedMoviesUiStateResponse =
-                            ScreenUiState.Success(getFavoriteMoviesListByIds(it))
+                    val deferredIds = async {
+                        userRepository.searchFavoriteMovies(searchTerm).first()
                     }
+                    val ids = deferredIds.await()
+                    searchedMoviesUiStateResponse =
+                        ScreenUiState.Success(getFavoriteMoviesListByIds(ids))
                 } catch (e: IOException) {
                     ScreenUiState.Error
                 } catch (e: HttpException) {
