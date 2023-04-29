@@ -171,6 +171,7 @@ fun InfoBox(
                     removeFavoriteMovie = removeFavoriteMovie
                 )
             }
+            Spacer(modifier.height(5.dp))
             Row {
                 movie.title?.let {
                     TitleText(title = it)
