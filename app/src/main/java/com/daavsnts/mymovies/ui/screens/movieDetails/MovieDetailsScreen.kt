@@ -230,6 +230,7 @@ fun TitleText(title: String) {
         text = title,
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
+        lineHeight = 35.sp,
         color = MaterialTheme.colorScheme.onSurface
     )
 }
