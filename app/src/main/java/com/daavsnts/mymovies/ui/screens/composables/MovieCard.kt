@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.daavsnts.mymovies.model.Movie
 
@@ -70,21 +71,26 @@ fun MovieCard(
                 movie.title?.let {
                     Text(
                         text = it,
-                        modifier = modifier.padding(bottom = 20.dp),
-                        style = TextStyle(
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontSize = 20.sp,
-                            shadow = Shadow(Color.Black, blurRadius = 8f, offset = Offset(4f, 4f))
+                        modifier = modifier.padding(bottom = 24.dp),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            shadow = Shadow(
+                                Color.Black,
+                                blurRadius = 8f,
+                                offset = Offset(4f, 4f)
+                            )
                         )
                     )
                 }
                 movie.releaseDate?.let {
                     Text(
                         text = it,
-                        style = TextStyle(
-                            color = Color.LightGray,
-                            fontSize = 15.sp,
-                            shadow = Shadow(Color.Black, blurRadius = 8f, offset = Offset(4f, 4f))
+                        color = Color.LightGray,
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            shadow = Shadow(
+                                Color.Black, blurRadius = 8f,
+                                offset = Offset(4f, 4f)
+                            )
                         )
                     )
                 }

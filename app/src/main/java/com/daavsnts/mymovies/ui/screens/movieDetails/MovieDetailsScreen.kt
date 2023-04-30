@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -217,9 +218,10 @@ fun UserScoreText(modifier: Modifier = Modifier) {
         userScore.forEach {
             Text(
                 text = it,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold
+                )
             )
         }
     }
@@ -229,10 +231,8 @@ fun UserScoreText(modifier: Modifier = Modifier) {
 fun TitleText(title: String) {
     Text(
         text = title,
-        fontSize = 30.sp,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 35.sp,
-        color = MaterialTheme.colorScheme.onSurface
+        color = MaterialTheme.colorScheme.onSurface,
+        style = MaterialTheme.typography.headlineLarge
     )
 }
 
@@ -280,15 +280,16 @@ fun FavoriteIcon(
 fun ReleaseDateText(releaseDate: String) {
     Text(
         text = releaseDate,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Light,
-        color = Color.LightGray
+        color = Color.LightGray,
+        style = MaterialTheme.typography.bodyLarge.copy(
+            fontWeight = FontWeight.Light
+        )
     )
 }
 
 @Composable
 fun OverviewText(overview: String, modifier: Modifier = Modifier) {
-    val maxLines = remember { mutableStateOf(5) }
+    val maxLines = remember { mutableStateOf(7) }
 
     Box(modifier.fillMaxSize()) {
         Column(
@@ -300,15 +301,16 @@ fun OverviewText(overview: String, modifier: Modifier = Modifier) {
             )
         ) {
             Box(modifier.clickable {
-                if (maxLines.value == 5) maxLines.value = 20 else maxLines.value = 5
+                if (maxLines.value == 7) maxLines.value = 20 else maxLines.value = 7
             }) {
                 Text(
                     text = overview,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Light,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = maxLines.value,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Normal,
+                    )
                 )
             }
         }
@@ -317,7 +319,7 @@ fun OverviewText(overview: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun GenreList(genres: List<Genre>, modifier: Modifier = Modifier) {
-    LazyRow(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+    LazyRow(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(15.dp)) {
         itemsIndexed(genres) { _, genre ->
             GenreButton(genre.name)
         }
@@ -329,13 +331,14 @@ fun GenreButton(genre: String, modifier: Modifier = Modifier) {
     Box(
         modifier
             .background(Color.DarkGray, RoundedCornerShape(5.dp))
-            .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
+            .padding(start = 7.dp, end = 7.dp, top = 3.dp, bottom = 3.dp)
     ) {
         Text(
             text = genre,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Light,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontWeight = FontWeight.Light
+            )
         )
     }
 }

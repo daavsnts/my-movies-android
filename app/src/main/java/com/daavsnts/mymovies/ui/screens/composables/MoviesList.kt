@@ -38,9 +38,10 @@ fun MoviesLists(
 fun HeaderText(text: String) {
     Text(
         text = text,
-        fontSize = 25.sp,
-        fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onBackground
+        color = MaterialTheme.colorScheme.onBackground,
+        style = MaterialTheme.typography.headlineMedium.copy(
+            fontWeight = FontWeight.Bold
+        )
     )
 }
 

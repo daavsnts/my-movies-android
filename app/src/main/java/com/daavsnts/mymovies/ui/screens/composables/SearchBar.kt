@@ -61,10 +61,8 @@ fun SearchBar(
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 )
             }

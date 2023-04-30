@@ -2,6 +2,8 @@ package com.daavsnts.mymovies.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -19,6 +21,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -33,6 +37,7 @@ import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsScreen
 import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsViewModel
 import com.daavsnts.mymovies.ui.screens.movies.MoviesScreen
 import com.daavsnts.mymovies.ui.screens.movies.MoviesViewModel
+import com.daavsnts.mymovies.ui.theme.GoogleSans
 
 sealed class Screen(
     val route: String,
@@ -158,7 +163,7 @@ fun BottomNavBar(navController: NavHostController, modifier: Modifier = Modifier
         NavigationBar(containerColor = Color.Transparent) {
             Screen.navScreenList.forEach { screen ->
                 NavigationBarItem(
-                    label = { Text(screen.title) },
+                    label = {Text(screen.title, fontFamily = GoogleSans)},
                     icon = {
                         Icon(
                             imageVector = screen.icon,
