@@ -40,10 +40,8 @@ class MovieDetailsViewModel(
                 withContext(Dispatchers.Main) {
                     _movieDetailUiState.value = ScreenUiState.Success(moviesDetailsUiState)
                 }
-            } catch (e: IOException) {
-                ScreenUiState.Error
             } catch (e: HttpException) {
-                ScreenUiState.Error
+                ScreenUiState.Error(e.message)
             }
         }
     }

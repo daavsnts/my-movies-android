@@ -49,10 +49,8 @@ class FavoriteMoviesViewModel(
                             ScreenUiState.Success(getFavoriteMoviesListByIds(it))
                     }
                 }
-            } catch (e: IOException) {
-                _favoriteMoviesUiState.value = ScreenUiState.Error
             } catch (e: HttpException) {
-                _favoriteMoviesUiState.value = ScreenUiState.Error
+                ScreenUiState.Error(e.message)
             }
         }
     }
@@ -70,10 +68,8 @@ class FavoriteMoviesViewModel(
                             ScreenUiState.Success(getFavoriteMoviesListByIds(it))
                     }
                 }
-            } catch (e: IOException) {
-                ScreenUiState.Error
             } catch (e: HttpException) {
-                ScreenUiState.Error
+                ScreenUiState.Error(e.message)
             }
         }
     }

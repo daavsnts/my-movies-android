@@ -90,10 +90,8 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
                 withContext(Dispatchers.Main) {
                     moviesUiState.get().value = ScreenUiState.Success(moviesUiStateList)
                 }
-            } catch (e: IOException) {
-                ScreenUiState.Error
             } catch (e: HttpException) {
-                ScreenUiState.Error
+                ScreenUiState.Error(e.message)
             }
         }
     }
@@ -108,10 +106,8 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
                 withContext(Dispatchers.Main) {
                     _searchedMoviesUiState.value = ScreenUiState.Success(searchedMoviesUiState)
                 }
-            } catch (e: IOException) {
-                ScreenUiState.Error
             } catch (e: HttpException) {
-                ScreenUiState.Error
+                ScreenUiState.Error(e.message)
             }
         }
     }
