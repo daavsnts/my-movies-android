@@ -15,6 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
@@ -103,7 +104,8 @@ fun MovieCard(
 fun LoadingMovieCard(modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(5.dp)
+        elevation = CardDefaults.cardElevation(5.dp),
+        modifier = modifier.alpha(0.5f)
     ) {
         Box(
             modifier = modifier

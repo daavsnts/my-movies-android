@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -46,7 +47,7 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
                     painter = posterImage,
                     contentDescription = "movie poster",
                     contentScale = ContentScale.Crop,
-                    modifier = modifier.fillMaxSize().shimmerEffect()
+                    modifier = modifier.fillMaxSize().alpha(0.5f).shimmerEffect()
                 )
             }
         }
