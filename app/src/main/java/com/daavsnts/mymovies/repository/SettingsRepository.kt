@@ -9,16 +9,16 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-interface DataStoreRepository {
+interface SettingsRepository {
     suspend fun <T> getPreference(key: Preferences.Key<T>, defaultValue: T): Flow<T>
     suspend fun <T> insertPreference(key: Preferences.Key<T>, value: T)
     suspend fun <T> removePreference(key: Preferences.Key<T>)
     suspend fun clearAllPreference()
 }
 
-class SettingsRepository(
+class DataStoreSettingsRepository(
     private val settingsDataStore: DataStore<Preferences>
-) : DataStoreRepository {
+) : SettingsRepository {
 
     override suspend fun <T> getPreference(key: Preferences.Key<T>, defaultValue: T):
             Flow<T> = settingsDataStore.data.catch { exception ->
