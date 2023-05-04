@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import java.io.IOException
 import kotlin.reflect.KProperty0
 
 class PairOfListMoviesState(
@@ -33,15 +32,15 @@ class PairOfStatesWithRepositoryFunctions(
 class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
     private val _trendingMoviesUiState =
         MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
-    val trendingMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _trendingMoviesUiState
+    private val trendingMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _trendingMoviesUiState
 
     private val _popularMoviesUiState =
         MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
-    val popularMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _popularMoviesUiState
+    private val popularMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _popularMoviesUiState
 
     private val _upcomingMoviesUiState =
         MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
-    val upcomingMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _upcomingMoviesUiState
+    private val upcomingMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _upcomingMoviesUiState
 
     private val _searchedMoviesUiState =
         MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
