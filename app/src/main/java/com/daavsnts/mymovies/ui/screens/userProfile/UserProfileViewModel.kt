@@ -1,5 +1,6 @@
 package com.daavsnts.mymovies.ui.screens.userProfile
 
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -29,23 +29,28 @@ class UserProfileViewModel(private val settingsRepository: SettingsRepository) :
     }
 
     private fun setupProfileUiStates() {
-        updatePreferenceUiState(_userName, "user_name")
-        updatePreferenceUiState(_profilePictureUri, "profile_picture_uri")
+        updatePreferencesUiState(_userName, stringPreferencesKey("user_name"), "")
+        updatePreferencesUiState(
+            _profilePictureUri,
+            stringPreferencesKey("profile_picture_uri"),
+            ""
+        )
     }
 
-    private fun updatePreferenceUiState(
-        preferenceUiState: MutableStateFlow<ScreenUiState<String>>,
-        key: String
+    private fun <T> updatePreferencesUiState(
+        preferenceUiState: MutableStateFlow<ScreenUiState<T>>,
+        key: Preferences.Key<T>,
+        defaultValue: T,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             preferenceUiState.value = ScreenUiState.Loading
             try {
-                val preferenceUiStateStringDeferred = async {
-                    settingsRepository.getPreference(stringPreferencesKey(key), "")
+                val preferenceUiStateDeferred = async {
+                    settingsRepository.getPreference(key, defaultValue)
                 }
-                val preferenceUiStateString = preferenceUiStateStringDeferred.await()
+                val preferenceUiStateAwaited = preferenceUiStateDeferred.await()
                 withContext(Dispatchers.Main) {
-                    preferenceUiStateString.collect {
+                    preferenceUiStateAwaited.collect {
                         preferenceUiState.value = ScreenUiState.Success(it)
                     }
                 }
@@ -55,10 +60,25 @@ class UserProfileViewModel(private val settingsRepository: SettingsRepository) :
         }
     }
 
-    fun setStringPreference(key: String, preference: String) =
+    private fun <T> setPreference(key: Preferences.Key<T>, value: T) {
         viewModelScope.launch(Dispatchers.IO) {
-            settingsRepository.insertPreference(stringPreferencesKey(key), preference)
+            settingsRepository.insertPreference(key, value)
         }
+    }
+
+    fun setUserName(userName: String) {
+        setPreference(stringPreferencesKey("user_name"), userName)
+        updatePreferencesUiState(_userName, stringPreferencesKey("user_name"), "")
+    }
+
+    fun setProfilePictureUri(profilePictureUri: String) {
+        setPreference(stringPreferencesKey("profile_picture_uri"), profilePictureUri)
+        updatePreferencesUiState(
+            _profilePictureUri,
+            stringPreferencesKey("profile_picture_uri"),
+            ""
+        )
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
