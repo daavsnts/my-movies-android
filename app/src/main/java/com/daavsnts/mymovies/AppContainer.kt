@@ -10,7 +10,6 @@ import com.daavsnts.mymovies.repository.UserRepository
 import com.daavsnts.mymovies.data.network.MoviesApiService
 import com.daavsnts.mymovies.repository.MoviesRepository
 import com.daavsnts.mymovies.data.network.MoviesRetrofitBuilder
-import com.daavsnts.mymovies.repository.DataStoreRepository
 import com.daavsnts.mymovies.repository.DataStoreSettingsRepository
 import com.daavsnts.mymovies.repository.NetworkMoviesRepository
 import com.daavsnts.mymovies.repository.SettingsRepository
