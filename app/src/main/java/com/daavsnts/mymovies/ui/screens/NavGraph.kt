@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -30,6 +31,7 @@ import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsScreen
 import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsViewModel
 import com.daavsnts.mymovies.ui.screens.movies.MoviesScreen
 import com.daavsnts.mymovies.ui.screens.movies.MoviesViewModel
+import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileScreen
 import com.daavsnts.mymovies.ui.theme.GoogleSans
 
 sealed class Screen(
@@ -38,7 +40,7 @@ sealed class Screen(
     val icon: ImageVector
 ) {
     companion object {
-        val navScreenList = listOf(Movies, Favorites)
+        val navScreenList = listOf(Movies, Favorites, Profile)
     }
 
     object Movies : Screen(
@@ -58,11 +60,17 @@ sealed class Screen(
         "Favorites",
         Icons.Default.Star
     )
+
+    object Profile: Screen(
+        "UserProfileScreen",
+        "Profile",
+        Icons.Default.Person
+    )
 }
 
 @Composable
 fun NavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Movies.route) {
+    NavHost(navController = navController, startDestination = Screen.Profile.route) {
         composable(Screen.Movies.route) {
             val moviesViewModel: MoviesViewModel =
                 viewModel(factory = MoviesViewModel.Factory)
@@ -143,6 +151,9 @@ fun NavGraph(navController: NavHostController) {
                     )
                 }
             )
+        }
+        composable(Screen.Profile.route) {
+            UserProfileScreen(navController = navController)
         }
     }
 }
