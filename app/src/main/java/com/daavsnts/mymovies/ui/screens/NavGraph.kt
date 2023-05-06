@@ -32,6 +32,7 @@ import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsViewModel
 import com.daavsnts.mymovies.ui.screens.movies.MoviesScreen
 import com.daavsnts.mymovies.ui.screens.movies.MoviesViewModel
 import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileScreen
+import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileViewModel
 import com.daavsnts.mymovies.ui.theme.GoogleSans
 
 sealed class Screen(
@@ -61,7 +62,7 @@ sealed class Screen(
         Icons.Default.Star
     )
 
-    object Profile: Screen(
+    object Profile : Screen(
         "UserProfileScreen",
         "Profile",
         Icons.Default.Person
@@ -153,7 +154,26 @@ fun NavGraph(navController: NavHostController) {
             )
         }
         composable(Screen.Profile.route) {
-            UserProfileScreen(navController = navController)
+            val userProfileViewModel: UserProfileViewModel =
+                viewModel(factory = UserProfileViewModel.Factory)
+            val userNameUiState =
+                userProfileViewModel
+                    .userName
+                    .collectAsState(initial = ScreenUiState.Loading).value
+            val profilePictureUriUiState =
+                userProfileViewModel
+                    .profilePictureUri
+                    .collectAsState(initial = ScreenUiState.Loading).value
+            UserProfileScreen(
+                userNameUiState = userNameUiState,
+                profilePictureUriUiState = profilePictureUriUiState,
+                setUserName = { userName: String ->
+                    userProfileViewModel.setUserName(userName)
+                },
+                setProfilePicture = {profilePictureUri: String ->
+                    userProfileViewModel.setProfilePictureUri(profilePictureUri)
+                }
+            )
         }
     }
 }
@@ -167,7 +187,7 @@ fun BottomNavBar(navController: NavHostController, modifier: Modifier = Modifier
         NavigationBar(containerColor = Color.Transparent) {
             Screen.navScreenList.forEach { screen ->
                 NavigationBarItem(
-                    label = {Text(screen.title, fontFamily = GoogleSans)},
+                    label = { Text(screen.title, fontFamily = GoogleSans) },
                     icon = {
                         Icon(
                             imageVector = screen.icon,
