@@ -109,6 +109,7 @@ fun ProfilePicture(
     Box(
         modifier
             .size(200.dp)
+            .background(MaterialTheme.colorScheme.onBackground, CircleShape)
     ) {
         when (profilePictureUriUiState) {
             is ScreenUiState.Loading -> Log.d("profilePictureUriUiState", "Loading")
@@ -139,9 +140,9 @@ fun ProfileImage(
     modifier: Modifier = Modifier,
     profilePictureUri: String
 ) {
-    val profilePictureBitmap =
-        loadBitmapFromUri(LocalContext.current.contentResolver, Uri.parse(profilePictureUri))
-    if (profilePictureBitmap == null) {
+    /*val profilePictureBitmap =
+        loadBitmapFromUri(LocalContext.current.contentResolver, Uri.parse(profilePictureUri))*/
+    if (profilePictureUri == "") {
         Icon(
             imageVector = Icons.Rounded.Person,
             tint = MaterialTheme.colorScheme.primary,
@@ -150,11 +151,11 @@ fun ProfileImage(
                 .size(200.dp)
         )
     } else {
-        Image(
+        /*Image(
             bitmap = profilePictureBitmap.asImageBitmap(),
             contentDescription = "Profile picture",
             modifier = modifier
-        )
+        )*/
     }
 }
 
