@@ -75,10 +75,18 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
         updatePreferencesUiState(_userName, stringPreferencesKey("user_name"), "")
     }
 
-    fun setProfilePictureUri(context: Context, profilePictureUri: Uri) {
+    private fun copyImageToInternalStorage(context: Context, profilePictureUri: Uri): Uri {
         copyFileToInternalDir(context, profilePictureUri, "profile_picture")
-        val profilePictureUriFromInternalDir = getFileUriFromInternalDir(context, "profile_picture")
-        setPreference(stringPreferencesKey("profile_picture_uri"), profilePictureUriFromInternalDir.toString())
+        return getFileUriFromInternalDir(context, "profile_picture")
+    }
+
+    fun setProfilePictureUri(context: Context, profilePictureUri: Uri) {
+        val profilePictureUriFromInternalDir =
+            copyImageToInternalStorage(context, profilePictureUri)
+        setPreference(
+            stringPreferencesKey("profile_picture_uri"),
+            profilePictureUriFromInternalDir.toString()
+        )
         updatePreferencesUiState(
             _profilePictureUri,
             stringPreferencesKey("profile_picture_uri"),
