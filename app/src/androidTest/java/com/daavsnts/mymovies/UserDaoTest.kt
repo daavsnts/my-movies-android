@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.daavsnts.mymovies.data.local.UserDao
-import com.daavsnts.mymovies.data.local.UserDatabase
+import com.daavsnts.mymovies.data.local.room.UserDao
+import com.daavsnts.mymovies.data.local.room.UserDatabase
 import com.daavsnts.mymovies.model.FavoriteMovieId
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first

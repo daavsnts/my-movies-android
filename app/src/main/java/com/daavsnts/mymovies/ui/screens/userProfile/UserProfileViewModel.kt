@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.daavsnts.mymovies.MyMoviesApplication
-import com.daavsnts.mymovies.repository.SettingsRepository
+import com.daavsnts.mymovies.repository.UserRepository
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
-class UserProfileViewModel(private val settingsRepository: SettingsRepository) : ViewModel() {
+class UserProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _userName = MutableStateFlow<ScreenUiState<String>>(ScreenUiState.Loading)
     val userName: Flow<ScreenUiState<String>> = _userName
     private val _profilePictureUri = MutableStateFlow<ScreenUiState<String>>(ScreenUiState.Loading)
@@ -46,7 +46,7 @@ class UserProfileViewModel(private val settingsRepository: SettingsRepository) :
             preferenceUiState.value = ScreenUiState.Loading
             try {
                 val preferenceUiStateDeferred = async {
-                    settingsRepository.getPreference(key, defaultValue)
+                    userRepository.getPreference(key, defaultValue)
                 }
                 val preferenceUiStateAwaited = preferenceUiStateDeferred.await()
                 withContext(Dispatchers.Main) {
@@ -62,7 +62,7 @@ class UserProfileViewModel(private val settingsRepository: SettingsRepository) :
 
     private fun <T> setPreference(key: Preferences.Key<T>, value: T) {
         viewModelScope.launch(Dispatchers.IO) {
-            settingsRepository.insertPreference(key, value)
+            userRepository.insertPreference(key, value)
         }
     }
 
@@ -85,9 +85,9 @@ class UserProfileViewModel(private val settingsRepository: SettingsRepository) :
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MyMoviesApplication)
-                val settingsRepository: SettingsRepository =
-                    application.container.settingsRepository
-                UserProfileViewModel(settingsRepository)
+                val userRepository: UserRepository =
+                    application.container.userRepository
+                UserProfileViewModel(userRepository)
             }
         }
     }

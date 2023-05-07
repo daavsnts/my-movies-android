@@ -1,4 +1,4 @@
-package com.daavsnts.mymovies.data.local
+package com.daavsnts.mymovies.data.local.room
 
 import android.content.Context
 import androidx.room.Database

@@ -3,8 +3,8 @@ package com.daavsnts.mymovies
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.daavsnts.mymovies.data.local.UserDao
-import com.daavsnts.mymovies.data.local.UserDatabase
+import com.daavsnts.mymovies.data.local.room.UserDao
+import com.daavsnts.mymovies.data.local.room.UserDatabase
 import com.daavsnts.mymovies.data.network.MoviesApiService
 import com.daavsnts.mymovies.data.network.MoviesRetrofitBuilder
 import com.daavsnts.mymovies.model.Genre
