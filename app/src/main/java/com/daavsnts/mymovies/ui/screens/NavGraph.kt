@@ -1,5 +1,7 @@
 package com.daavsnts.mymovies.ui.screens
 
+import android.content.Context
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
@@ -170,8 +172,8 @@ fun NavGraph(navController: NavHostController) {
                 setUserName = { userName: String ->
                     userProfileViewModel.setUserName(userName)
                 },
-                setProfilePicture = {profilePictureUri: String ->
-                    userProfileViewModel.setProfilePictureUri(profilePictureUri)
+                setProfilePicture = { context: Context, profilePictureUri: Uri ->
+                    userProfileViewModel.setProfilePictureUri(context, profilePictureUri)
                 }
             )
         }

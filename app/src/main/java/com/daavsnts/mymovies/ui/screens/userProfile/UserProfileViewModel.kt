@@ -1,5 +1,7 @@
 package com.daavsnts.mymovies.ui.screens.userProfile
 
+import android.content.Context
+import android.net.Uri
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
@@ -8,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.daavsnts.mymovies.MyMoviesApplication
+import com.daavsnts.mymovies.data.local.internaldir.copyFileToInternalDir
+import com.daavsnts.mymovies.data.local.internaldir.getFileUriFromInternalDir
 import com.daavsnts.mymovies.repository.UserRepository
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import kotlinx.coroutines.Dispatchers
@@ -71,8 +75,10 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
         updatePreferencesUiState(_userName, stringPreferencesKey("user_name"), "")
     }
 
-    fun setProfilePictureUri(profilePictureUri: String) {
-        setPreference(stringPreferencesKey("profile_picture_uri"), profilePictureUri)
+    fun setProfilePictureUri(context: Context, profilePictureUri: Uri) {
+        copyFileToInternalDir(context, profilePictureUri, "profile_picture")
+        val profilePictureUriFromInternalDir = getFileUriFromInternalDir(context, "profile_picture")
+        setPreference(stringPreferencesKey("profile_picture_uri"), profilePictureUriFromInternalDir.toString())
         updatePreferencesUiState(
             _profilePictureUri,
             stringPreferencesKey("profile_picture_uri"),

@@ -4,7 +4,10 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,6 +53,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -62,7 +66,7 @@ fun UserProfileScreen(
     userNameUiState: ScreenUiState<String>,
     profilePictureUriUiState: ScreenUiState<String>,
     setUserName: (String) -> Unit,
-    setProfilePicture: (String) -> Unit
+    setProfilePicture: (Context, Uri) -> Unit
 ) {
     var showUsernameChangeDialog by remember { mutableStateOf(false) }
     Column(
@@ -98,19 +102,16 @@ fun UserProfileScreen(
 fun ProfilePicture(
     modifier: Modifier = Modifier,
     profilePictureUriUiState: ScreenUiState<String>,
-    setProfilePicture: (String) -> Unit
+    setProfilePicture: (Context, Uri) -> Unit
 ) {
+    val context = LocalContext.current
     val galleryActivityLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent(),
             onResult = { uri ->
-                setProfilePicture(uri.toString())
+                uri?.let { setProfilePicture(context, uri) }
             })
-    Box(
-        modifier
-            .size(200.dp)
-            .background(MaterialTheme.colorScheme.onBackground, CircleShape)
-    ) {
+    Box {
         when (profilePictureUriUiState) {
             is ScreenUiState.Loading -> Log.d("profilePictureUriUiState", "Loading")
             is ScreenUiState.Success -> {
@@ -140,28 +141,32 @@ fun ProfileImage(
     modifier: Modifier = Modifier,
     profilePictureUri: String
 ) {
-    /*val profilePictureBitmap =
-        loadBitmapFromUri(LocalContext.current.contentResolver, Uri.parse(profilePictureUri))*/
+    Log.d("profileImage", profilePictureUri)
+    val context = LocalContext.current
     if (profilePictureUri == "") {
         Icon(
             imageVector = Icons.Rounded.Person,
             tint = MaterialTheme.colorScheme.primary,
             contentDescription = "Default profile picture",
             modifier = modifier
-                .size(200.dp)
+                .size(200.dp).background(MaterialTheme.colorScheme.onBackground, CircleShape)
         )
     } else {
-        /*Image(
-            bitmap = profilePictureBitmap.asImageBitmap(),
-            contentDescription = "Profile picture",
-            modifier = modifier
-        )*/
-    }
-}
+        val bitmap = if (Build.VERSION.SDK_INT < 28) {
+            MediaStore.Images
+                .Media.getBitmap(context.contentResolver, profilePictureUri.toUri())
 
-fun loadBitmapFromUri(contentResolver: ContentResolver, uri: Uri): Bitmap? {
-    return contentResolver.openInputStream(uri)?.use { stream ->
-        BitmapFactory.decodeStream(stream)
+        } else {
+            val source = ImageDecoder
+                .createSource(context.contentResolver, profilePictureUri.toUri())
+            ImageDecoder.decodeBitmap(source)
+        }
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = "Profile picture",
+            modifier = Modifier.size(200.dp).clip(CircleShape),
+            contentScale = ContentScale.Crop
+        )
     }
 }
 
