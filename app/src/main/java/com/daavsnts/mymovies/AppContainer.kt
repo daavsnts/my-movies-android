@@ -12,8 +12,6 @@ import com.daavsnts.mymovies.repository.MoviesRepository
 import com.daavsnts.mymovies.data.network.MoviesRetrofitBuilder
 import com.daavsnts.mymovies.repository.NetworkMoviesRepository
 
-val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
 interface AppContainer {
     val moviesRepository: MoviesRepository
     val userRepository: UserRepository
@@ -22,6 +20,7 @@ interface AppContainer {
 class DefaultAppContainer(context: Context) : AppContainer {
     private val moviesRetrofitService: MoviesApiService by lazy { MoviesRetrofitBuilder.apiService }
     private val userDatabase: UserDatabase by lazy { UserDatabase.getDatabase(context) }
+    private val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
     override val moviesRepository: MoviesRepository by lazy {
         NetworkMoviesRepository(moviesRetrofitService)
