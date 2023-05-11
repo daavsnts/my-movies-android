@@ -15,7 +15,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun MoviesScreen(
     modifier: Modifier = Modifier,
-    moviesUiStateList: List<Pair<String, ScreenUiState<List<Movie>>>>,
+    moviesUiStateList: List<Pair<Int, ScreenUiState<List<Movie>>>>,
     searchedMoviesUiStateList: ScreenUiState<List<Movie>>,
     setSearchedMoviesList: (String) -> Unit,
     navController: NavController

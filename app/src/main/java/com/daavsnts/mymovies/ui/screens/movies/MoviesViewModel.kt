@@ -1,5 +1,6 @@
 package com.daavsnts.mymovies.ui.screens.movies
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import com.daavsnts.mymovies.repository.MoviesRepository
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.daavsnts.mymovies.MyMoviesApplication
+import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +22,7 @@ import retrofit2.HttpException
 import kotlin.reflect.KProperty0
 
 class PairOfListMoviesState(
-    val title: String,
+    @StringRes val title: Int,
     val list: Flow<ScreenUiState<List<Movie>>>
 )
 
@@ -62,9 +64,9 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
     )
 
     val moviesUiStatesList = listOf(
-        PairOfListMoviesState("Trending Movies", trendingMoviesUiState),
-        PairOfListMoviesState("Popular Movies", popularMoviesUiState),
-        PairOfListMoviesState("Upcoming Movies", upcomingMoviesUiState)
+        PairOfListMoviesState(R.string.ms_trending_title, trendingMoviesUiState),
+        PairOfListMoviesState(R.string.ms_popular_title, popularMoviesUiState),
+        PairOfListMoviesState(R.string.ms_upcoming_title, upcomingMoviesUiState)
     )
 
     init {

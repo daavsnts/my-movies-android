@@ -39,11 +39,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.model.Genre
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
@@ -134,7 +136,7 @@ fun BackButton(
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = "go back",
+                contentDescription = stringResource(R.string.back_button_content_description),
                 tint = MaterialTheme.colorScheme.onSurface
             )
         }
@@ -212,7 +214,9 @@ fun UserScore(voteAverage: Float, modifier: Modifier = Modifier) {
 
 @Composable
 fun UserScoreText(modifier: Modifier = Modifier) {
-    val userScore = listOf("User", "Score")
+    val userText = stringResource(id = R.string.user_score_user_text)
+    val scoreText = stringResource(id = R.string.user_score_score_text)
+    val userScore = listOf(userText, scoreText)
     Column(modifier.padding(top = 2.dp)) {
         userScore.forEach {
             Text(

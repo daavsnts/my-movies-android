@@ -1,16 +1,36 @@
 <resources>
+    <!-- App Name -->
     <string name="app_name">MyMovies</string>
 
+    <!-- Components -->
+    <string name="search_bar_label">Search…</string>
+    <string name="movie_poster_content_description">Movie poster</string>
+    <string name="back_button_content_description">Go back</string>
+    <string name="user_score_user_text">User</string>
+    <string name="user_score_score_text">Score</string>
+
+    <!-- Navigation -->
+    <string name="nav_title_movies">Movies</string>
+    <string name="nav_title_favorites">Favorites</string>
+    <string name="nav_title_profile">Profile</string>
+    <string name="nav_title_details">Details</string>
+
+    <!-- MoviesScreen -->
+    <string name="ms_trending_title">Trending Movies</string>
+    <string name="ms_popular_title">Popular Movies</string>
+    <string name="ms_upcoming_title">Upcoming Movies</string>
+
     <!-- UserProfileScreen -->
-    <string name="usp_default_profile_picture">Default profile picture</string>
-    <string name="usp_profile_picture">Profile picture</string>
-    <string name="usp_change_profile_background">Change profile background</string>
-    <string name="usp_change_profile_picture">Change profile picture</string>
-    <string name="usp_edit_username">Edit username</string>
-    <string name="usp_enter_your_username">Enter your username</string>
-    <string name="usp_confirm_dialog">OK</string>
-    <string name="usp_cancel_dialog">Cancel</string>
-    <string name="usp_favorite_movies">Favorite Movies</string>
-    <string name="usp_background_picture">Background picture</string>
-    <string name="usp_default_username">Username</string>
+    <string name="ups_default_profile_picture">Default profile picture</string>
+    <string name="ups_profile_picture">Profile picture</string>
+    <string name="ups_change_profile_background">Change profile background</string>
+    <string name="ups_change_profile_picture">Change profile picture</string>
+    <string name="ups_edit_username">Edit username</string>
+    <string name="ups_enter_your_username">Enter your username</string>
+    <string name="ups_confirm_dialog">OK</string>
+    <string name="ups_cancel_dialog">Cancel</string>
+    <string name="ups_favorite_movies">Favorite Movies</string>
+    <string name="ups_background_picture">Background picture</string>
+    <string name="ups_default_username">Username</string>
+
 </resources>

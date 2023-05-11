@@ -19,15 +19,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.daavsnts.mymovies.R
 
 @Composable
 fun SearchBar(
     searchTerm: MutableState<String>,
     modifier: Modifier = Modifier
 ) {
-    val label = remember { mutableStateOf("Search...") }
+    val searchDefaultLabel = stringResource(R.string.search_bar_label)
+    val label = remember { mutableStateOf(searchDefaultLabel) }
     Box(
         modifier = modifier.background(
             MaterialTheme.colorScheme.surface,
@@ -52,7 +55,7 @@ fun SearchBar(
                     value = searchTerm.value,
                     onValueChange = {
                         searchTerm.value = it
-                        if (searchTerm.value !== "") label.value = "" else label.value = "Search..."
+                        if (searchTerm.value !== "") label.value = "" else label.value = searchDefaultLabel
                     },
                     cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
                     singleLine = true,

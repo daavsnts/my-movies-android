@@ -10,9 +10,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.daavsnts.mymovies.R
 
 @Composable
 fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
@@ -28,7 +30,7 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
                 // Use the loaded image
                 Image(
                     painter = posterImage,
-                    contentDescription = "movie poster",
+                    contentDescription = stringResource(R.string.movie_poster_content_description),
                     contentScale = ContentScale.Crop,
                     modifier = modifier.fillMaxSize()
                 )
@@ -45,9 +47,12 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
                 // Still loading
                 Image(
                     painter = posterImage,
-                    contentDescription = "movie poster",
+                    contentDescription = stringResource(R.string.movie_poster_content_description),
                     contentScale = ContentScale.Crop,
-                    modifier = modifier.fillMaxSize().alpha(0.5f).shimmerEffect()
+                    modifier = modifier
+                        .fillMaxSize()
+                        .alpha(0.5f)
+                        .shimmerEffect()
                 )
             }
         }

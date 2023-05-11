@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -21,12 +22,12 @@ import com.daavsnts.mymovies.ui.screens.ScreenUiState
 @Composable
 fun MoviesLists(
     modifier: Modifier = Modifier,
-    moviesUiStateList: List<Pair<String, ScreenUiState<List<Movie>>>>,
+    moviesUiStateList: List<Pair<Int, ScreenUiState<List<Movie>>>>,
     navController: NavController
 ) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp), contentPadding = PaddingValues(bottom = 20.dp)) {
         itemsIndexed(moviesUiStateList) { _, list ->
-            HeaderText(list.first)
+            HeaderText(stringResource(list.first))
             Spacer(modifier.height(10.dp))
             RenderMoviesList(moviesUiState = list.second, navController = navController)
         }

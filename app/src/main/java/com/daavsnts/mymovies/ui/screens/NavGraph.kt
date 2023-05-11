@@ -2,6 +2,7 @@ package com.daavsnts.mymovies.ui.screens
 
 import android.content.Context
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
@@ -20,12 +21,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesScreen
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesViewModel
@@ -39,7 +42,7 @@ import com.daavsnts.mymovies.ui.theme.GoogleSans
 
 sealed class Screen(
     val route: String,
-    val title: String,
+    @StringRes val title: Int,
     val icon: ImageVector
 ) {
     companion object {
@@ -48,25 +51,25 @@ sealed class Screen(
 
     object Movies : Screen(
         "MoviesScreen",
-        "Movies",
+        R.string.nav_title_movies,
         Icons.Default.PlayArrow
     )
 
     object Details : Screen(
         "MovieDetailsScreen/{movieId}",
-        "Details",
+        R.string.nav_title_details,
         Icons.Default.List
     )
 
     object Favorites : Screen(
         "FavoriteMoviesScreen",
-        "Favorites",
+        R.string.nav_title_favorites,
         Icons.Default.Star
     )
 
     object Profile : Screen(
         "UserProfileScreen",
-        "Profile",
+        R.string.nav_title_profile,
         Icons.Default.Person
     )
 }
@@ -197,11 +200,11 @@ fun BottomNavBar(navController: NavHostController, modifier: Modifier = Modifier
         NavigationBar(containerColor = Color.Transparent) {
             Screen.navScreenList.forEach { screen ->
                 NavigationBarItem(
-                    label = { Text(screen.title, fontFamily = GoogleSans) },
+                    label = { Text(stringResource(screen.title), fontFamily = GoogleSans) },
                     icon = {
                         Icon(
                             imageVector = screen.icon,
-                            contentDescription = screen.title
+                            contentDescription = stringResource(screen.title)
                         )
                     },
                     selected = currentDestination == screen.route,
