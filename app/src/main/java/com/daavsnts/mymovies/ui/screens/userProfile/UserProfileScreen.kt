@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,6 +45,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
@@ -57,6 +59,7 @@ import androidx.core.net.toUri
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
+import com.daavsnts.mymovies.ui.screens.composables.shimmerEffect
 
 
 @Composable
@@ -88,7 +91,7 @@ fun UserProfileScreen(
                 setProfilePicture = setProfilePicture
             )
             Spacer(modifier = modifier.height(15.dp))
-            UserName(
+            Username(
                 userNameUiState = userNameUiState,
                 showDialog = { showUsernameChangeDialog = it })
             Spacer(modifier = modifier.height(15.dp))
@@ -128,10 +131,8 @@ fun ProfileBackground(
         getGalleryActivityLauncher(context, setProfileBackground)
     Box(modifier = modifier.fillMaxSize()) {
         when (profileBackgroundUriUiState) {
-            is ScreenUiState.Loading -> Log.d("profilePictureUriUiState", "Loading")
+            is ScreenUiState.Loading -> BackgroundImageLoading()
             is ScreenUiState.Success -> {
-                Log.d("profilePictureUriUiState", "Success")
-                Log.d("profilePictureUriUiState", profileBackgroundUriUiState.data)
                 BackgroundImage(pictureUri = profileBackgroundUriUiState.data)
             }
 
@@ -165,6 +166,11 @@ fun getBitMap(context: Context, pictureUri: String): Bitmap =
     }
 
 @Composable
+fun BackgroundImageLoading(
+    modifier: Modifier = Modifier
+) { Box(modifier.fillMaxSize().shimmerEffect()) }
+
+@Composable
 fun BackgroundImage(pictureUri: String) {
     if (pictureUri != "") {
         val bitmap = getBitMap(LocalContext.current, pictureUri)
@@ -186,10 +192,8 @@ fun ProfilePicture(
         getGalleryActivityLauncher(LocalContext.current, setProfilePicture)
     Box {
         when (profilePictureUriUiState) {
-            is ScreenUiState.Loading -> Log.d("profilePictureUriUiState", "Loading")
+            is ScreenUiState.Loading -> LoadingProfileImage()
             is ScreenUiState.Success -> {
-                Log.d("profilePictureUriUiState", "Success")
-                Log.d("profilePictureUriUiState", profilePictureUriUiState.data)
                 ProfileImage(pictureUri = profilePictureUriUiState.data)
             }
 
@@ -207,6 +211,16 @@ fun ProfilePicture(
                 .clickable { galleryActivityLauncher.launch("image/*") }
         )
     }
+}
+
+@Composable
+fun LoadingProfileImage(
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = CircleShape,
+        modifier = modifier.alpha(0.5f)
+    ) { Box(modifier.size(200.dp).shimmerEffect()) }
 }
 
 @Composable
@@ -237,7 +251,7 @@ fun ProfileImage(
 }
 
 @Composable
-fun UserName(
+fun Username(
     modifier: Modifier = Modifier,
     userNameUiState: ScreenUiState<String>,
     showDialog: (Boolean) -> Unit
@@ -245,10 +259,13 @@ fun UserName(
     Row {
         Spacer(modifier = modifier.width(20.dp))
         when (userNameUiState) {
-            is ScreenUiState.Loading -> Log.d("profilePictureUriUiState", "Loading")
+            is ScreenUiState.Loading -> LoadingUsername()
             is ScreenUiState.Success -> {
                 if (userNameUiState.data == "") {
-                    Text(stringResource(id = R.string.ups_default_username), style = MaterialTheme.typography.headlineLarge)
+                    Text(
+                        stringResource(id = R.string.ups_default_username),
+                        style = MaterialTheme.typography.headlineLarge
+                    )
                 } else {
                     Text(userNameUiState.data, style = MaterialTheme.typography.headlineLarge)
                 }
@@ -275,10 +292,22 @@ fun UserName(
 }
 
 @Composable
+fun LoadingUsername(
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp)
+    ) { Box(modifier = modifier.width(150.dp).height(30.dp).shimmerEffect()) }
+}
+
+@Composable
 fun UserAnalytics(
     modifier: Modifier = Modifier
 ) {
-    Text(stringResource(id = R.string.ups_favorite_movies), style = MaterialTheme.typography.bodyMedium)
+    Text(
+        stringResource(id = R.string.ups_favorite_movies),
+        style = MaterialTheme.typography.bodyMedium
+    )
     Spacer(modifier = modifier.height(5.dp))
     Text(
         "45", style = MaterialTheme.typography.titleLarge.copy(
