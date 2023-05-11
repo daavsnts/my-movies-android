@@ -15,6 +15,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.daavsnts.mymovies.R
+import com.daavsnts.mymovies.ui.screens.shimmerEffect
 
 @Composable
 fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {

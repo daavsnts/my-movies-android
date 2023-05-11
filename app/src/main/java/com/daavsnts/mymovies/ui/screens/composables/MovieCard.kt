@@ -20,6 +20,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.navigation.NavController
 import com.daavsnts.mymovies.model.Movie
+import com.daavsnts.mymovies.ui.screens.shimmerEffect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

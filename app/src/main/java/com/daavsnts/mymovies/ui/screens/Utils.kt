@@ -1,5 +1,10 @@
-package com.daavsnts.mymovies.ui.screens.composables
+package com.daavsnts.mymovies.ui.screens
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -17,6 +22,18 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
+import androidx.core.net.toUri
+
+fun getBitMap(context: Context, pictureUri: String): Bitmap =
+    if (Build.VERSION.SDK_INT < 28) {
+        MediaStore.Images
+            .Media.getBitmap(context.contentResolver, pictureUri.toUri())
+
+    } else {
+        val source = ImageDecoder
+            .createSource(context.contentResolver, pictureUri.toUri())
+        ImageDecoder.decodeBitmap(source)
+    }
 
 fun Modifier.shimmerEffect(): Modifier = composed {
     var size by remember {

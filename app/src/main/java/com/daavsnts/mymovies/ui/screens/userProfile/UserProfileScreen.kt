@@ -1,11 +1,7 @@
 package com.daavsnts.mymovies.ui.screens.userProfile
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -55,11 +51,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
-import com.daavsnts.mymovies.ui.screens.composables.shimmerEffect
+import com.daavsnts.mymovies.ui.screens.getBitMap
+import com.daavsnts.mymovies.ui.screens.shimmerEffect
 
 
 @Composable
@@ -153,17 +149,6 @@ fun ProfileBackground(
         )
     }
 }
-
-fun getBitMap(context: Context, pictureUri: String): Bitmap =
-    if (Build.VERSION.SDK_INT < 28) {
-        MediaStore.Images
-            .Media.getBitmap(context.contentResolver, pictureUri.toUri())
-
-    } else {
-        val source = ImageDecoder
-            .createSource(context.contentResolver, pictureUri.toUri())
-        ImageDecoder.decodeBitmap(source)
-    }
 
 @Composable
 fun BackgroundImageLoading(
