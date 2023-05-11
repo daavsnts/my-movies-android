@@ -27,6 +27,9 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
     val userName: Flow<ScreenUiState<String>> = _userName
     private val _profilePictureUri = MutableStateFlow<ScreenUiState<String>>(ScreenUiState.Loading)
     val profilePictureUri: Flow<ScreenUiState<String>> = _profilePictureUri
+    private val _profileBackgroundUri =
+        MutableStateFlow<ScreenUiState<String>>(ScreenUiState.Loading)
+    val profileBackgroundUri: Flow<ScreenUiState<String>> = _profileBackgroundUri
 
     init {
         setupProfileUiStates()
@@ -37,6 +40,11 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
         updatePreferencesUiState(
             _profilePictureUri,
             stringPreferencesKey("profile_picture_uri"),
+            ""
+        )
+        updatePreferencesUiState(
+            _profileBackgroundUri,
+            stringPreferencesKey("profile_background_uri"),
             ""
         )
     }
@@ -75,23 +83,31 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
         updatePreferencesUiState(_userName, stringPreferencesKey("user_name"), "")
     }
 
-    private fun copyImageToInternalStorage(context: Context, profilePictureUri: Uri): Uri {
-        copyFileToInternalDir(context, profilePictureUri, "profile_picture")
-        return getFileUriFromInternalDir(context, "profile_picture")
+    fun setProfilePictureUri(
+        context: Context,
+        profilePictureUri: Uri,
+        key: String = "profile_picture_uri"
+    ) = setPictureUri(context, profilePictureUri, key, _profilePictureUri)
+
+    fun setBackgroundPictureUri(
+        context: Context,
+        profilePictureUri: Uri,
+        key: String = "profile_background_uri"
+    ) = setPictureUri(context, profilePictureUri, key, _profileBackgroundUri)
+
+    private fun copyImageToInternalStorage(context: Context, profilePictureUri: Uri, key: String): Uri {
+        copyFileToInternalDir(context, profilePictureUri, key)
+        return getFileUriFromInternalDir(context, key)
     }
 
-    fun setProfilePictureUri(context: Context, profilePictureUri: Uri) {
-        val profilePictureUriFromInternalDir =
-            copyImageToInternalStorage(context, profilePictureUri)
+    private fun setPictureUri(context: Context, pictureUri: Uri, key: String, pictureUriState: MutableStateFlow<ScreenUiState<String>>) {
+        val pictureUriFromInternalDir =
+            copyImageToInternalStorage(context, pictureUri, key)
         setPreference(
-            stringPreferencesKey("profile_picture_uri"),
-            profilePictureUriFromInternalDir.toString()
+            stringPreferencesKey(key),
+            pictureUriFromInternalDir.toString()
         )
-        updatePreferencesUiState(
-            _profilePictureUri,
-            stringPreferencesKey("profile_picture_uri"),
-            ""
-        )
+        updatePreferencesUiState(pictureUriState, stringPreferencesKey(key), "")
     }
 
     companion object {

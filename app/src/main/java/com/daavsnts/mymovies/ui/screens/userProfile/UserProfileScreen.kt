@@ -5,10 +5,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.graphics.Picture
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -58,6 +60,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import com.daavsnts.mymovies.ui.screens.composables.MoviePosterImage
+import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
 
 
 @Composable
@@ -65,27 +69,36 @@ fun UserProfileScreen(
     modifier: Modifier = Modifier,
     userNameUiState: ScreenUiState<String>,
     profilePictureUriUiState: ScreenUiState<String>,
+    profileBackgroundUriUiState: ScreenUiState<String>,
     setUserName: (String) -> Unit,
-    setProfilePicture: (Context, Uri) -> Unit
+    setProfilePicture: (Context, Uri) -> Unit,
+    setProfileBackground: (Context, Uri) -> Unit
 ) {
     var showUsernameChangeDialog by remember { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(20.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ProfilePicture(
-            profilePictureUriUiState = profilePictureUriUiState,
-            setProfilePicture = setProfilePicture
+    Box() {
+        ProfileBackground(
+            profileBackgroundUriUiState = profileBackgroundUriUiState,
+            setProfileBackground = setProfileBackground
         )
-        Spacer(modifier = modifier.height(15.dp))
-        UserName(
-            userNameUiState = userNameUiState,
-            showDialog = { showUsernameChangeDialog = it })
-        Spacer(modifier = modifier.height(15.dp))
-        UserAnalytics()
+        UpsideGradient(startY = 0f, color = MaterialTheme.colorScheme.primary)
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ProfilePicture(
+                profilePictureUriUiState = profilePictureUriUiState,
+                setProfilePicture = setProfilePicture
+            )
+            Spacer(modifier = modifier.height(15.dp))
+            UserName(
+                userNameUiState = userNameUiState,
+                showDialog = { showUsernameChangeDialog = it })
+            Spacer(modifier = modifier.height(15.dp))
+            UserAnalytics()
+        }
     }
     if (showUsernameChangeDialog) {
         EditTextDialog(
@@ -99,25 +112,91 @@ fun UserProfileScreen(
 }
 
 @Composable
+fun getGalleryActivityLauncher(
+    context: Context,
+    setUriFunction: (Context, Uri) -> Unit
+): ManagedActivityResultLauncher<String, Uri?> =
+    rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            uri?.let { setUriFunction(context, uri) }
+        })
+
+@Composable
+fun ProfileBackground(
+    modifier: Modifier = Modifier,
+    profileBackgroundUriUiState: ScreenUiState<String>,
+    setProfileBackground: (Context, Uri) -> Unit
+) {
+    val galleryActivityLauncher =
+        getGalleryActivityLauncher(LocalContext.current, setProfileBackground)
+    Box(modifier = modifier.fillMaxSize()) {
+        when (profileBackgroundUriUiState) {
+            is ScreenUiState.Loading -> Log.d("profilePictureUriUiState", "Loading")
+            is ScreenUiState.Success -> {
+                Log.d("profilePictureUriUiState", "Success")
+                Log.d("profilePictureUriUiState", profileBackgroundUriUiState.data)
+                BackgroundImage(PictureUri = profileBackgroundUriUiState.data)
+            }
+
+            is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
+        }
+        Icon(
+            imageVector = Icons.Default.PhotoCamera,
+            contentDescription = "Change profile background",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .padding(20.dp)
+                .size(40.dp)
+                .background(MaterialTheme.colorScheme.onBackground, CircleShape)
+                .border(3.dp, MaterialTheme.colorScheme.background, CircleShape)
+                .align(Alignment.TopEnd)
+                .padding(10.dp)
+                .clickable { galleryActivityLauncher.launch("image/*") }
+        )
+    }
+}
+
+@Composable
+fun BackgroundImage(
+    modifier: Modifier = Modifier,
+    PictureUri: String
+) {
+    val context = LocalContext.current
+    if (PictureUri != "") {
+        val bitmap = if (Build.VERSION.SDK_INT < 28) {
+            MediaStore.Images
+                .Media.getBitmap(context.contentResolver, PictureUri.toUri())
+
+        } else {
+            val source = ImageDecoder
+                .createSource(context.contentResolver, PictureUri.toUri())
+            ImageDecoder.decodeBitmap(source)
+        }
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = "Background picture",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+    }
+}
+
+@Composable
 fun ProfilePicture(
     modifier: Modifier = Modifier,
     profilePictureUriUiState: ScreenUiState<String>,
     setProfilePicture: (Context, Uri) -> Unit
 ) {
-    val context = LocalContext.current
     val galleryActivityLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.GetContent(),
-            onResult = { uri ->
-                uri?.let { setProfilePicture(context, uri) }
-            })
+        getGalleryActivityLauncher(LocalContext.current, setProfilePicture)
     Box {
         when (profilePictureUriUiState) {
             is ScreenUiState.Loading -> Log.d("profilePictureUriUiState", "Loading")
             is ScreenUiState.Success -> {
                 Log.d("profilePictureUriUiState", "Success")
                 Log.d("profilePictureUriUiState", profilePictureUriUiState.data)
-                ProfileImage(profilePictureUri = profilePictureUriUiState.data)
+                ProfileImage(PictureUri = profilePictureUriUiState.data)
             }
 
             is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
@@ -139,32 +218,34 @@ fun ProfilePicture(
 @Composable
 fun ProfileImage(
     modifier: Modifier = Modifier,
-    profilePictureUri: String
+    PictureUri: String
 ) {
-    Log.d("profileImage", profilePictureUri)
     val context = LocalContext.current
-    if (profilePictureUri == "") {
+    if (PictureUri == "") {
         Icon(
             imageVector = Icons.Rounded.Person,
             tint = MaterialTheme.colorScheme.primary,
             contentDescription = "Default profile picture",
             modifier = modifier
-                .size(200.dp).background(MaterialTheme.colorScheme.onBackground, CircleShape)
+                .size(200.dp)
+                .background(MaterialTheme.colorScheme.onBackground, CircleShape)
         )
     } else {
         val bitmap = if (Build.VERSION.SDK_INT < 28) {
             MediaStore.Images
-                .Media.getBitmap(context.contentResolver, profilePictureUri.toUri())
+                .Media.getBitmap(context.contentResolver, PictureUri.toUri())
 
         } else {
             val source = ImageDecoder
-                .createSource(context.contentResolver, profilePictureUri.toUri())
+                .createSource(context.contentResolver, PictureUri.toUri())
             ImageDecoder.decodeBitmap(source)
         }
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = "Profile picture",
-            modifier = Modifier.size(200.dp).clip(CircleShape),
+            modifier = Modifier
+                .size(200.dp)
+                .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
     }
