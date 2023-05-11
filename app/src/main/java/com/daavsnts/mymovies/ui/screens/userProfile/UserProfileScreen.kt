@@ -49,10 +49,12 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
 
@@ -121,8 +123,9 @@ fun ProfileBackground(
     profileBackgroundUriUiState: ScreenUiState<String>,
     setProfileBackground: (Context, Uri) -> Unit
 ) {
+    val context = LocalContext.current
     val galleryActivityLauncher =
-        getGalleryActivityLauncher(LocalContext.current, setProfileBackground)
+        getGalleryActivityLauncher(context, setProfileBackground)
     Box(modifier = modifier.fillMaxSize()) {
         when (profileBackgroundUriUiState) {
             is ScreenUiState.Loading -> Log.d("profilePictureUriUiState", "Loading")
@@ -136,7 +139,7 @@ fun ProfileBackground(
         }
         Icon(
             imageVector = Icons.Default.PhotoCamera,
-            contentDescription = "Change profile background",
+            contentDescription = stringResource(R.string.usp_change_profile_background),
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .padding(20.dp)
@@ -167,7 +170,7 @@ fun BackgroundImage(pictureUri: String) {
         val bitmap = getBitMap(LocalContext.current, pictureUri)
         Image(
             bitmap = bitmap.asImageBitmap(),
-            contentDescription = "Background picture",
+            contentDescription = stringResource(R.string.usp_background_picture),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
@@ -194,7 +197,7 @@ fun ProfilePicture(
         }
         Icon(
             imageVector = Icons.Default.PhotoCamera,
-            contentDescription = "Change profile picture",
+            contentDescription = stringResource(R.string.usp_change_profile_picture),
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.onBackground, CircleShape)
@@ -215,7 +218,7 @@ fun ProfileImage(
         Icon(
             imageVector = Icons.Rounded.Person,
             tint = MaterialTheme.colorScheme.primary,
-            contentDescription = "Default profile picture",
+            contentDescription = stringResource(id = R.string.usp_default_profile_picture),
             modifier = modifier
                 .size(200.dp)
                 .background(MaterialTheme.colorScheme.onBackground, CircleShape)
@@ -224,7 +227,7 @@ fun ProfileImage(
         val bitmap = getBitMap(LocalContext.current, pictureUri)
         Image(
             bitmap = bitmap.asImageBitmap(),
-            contentDescription = "Profile picture",
+            contentDescription = stringResource(id = R.string.usp_profile_picture),
             modifier = Modifier
                 .size(200.dp)
                 .clip(CircleShape),
@@ -245,7 +248,7 @@ fun UserName(
             is ScreenUiState.Loading -> Log.d("profilePictureUriUiState", "Loading")
             is ScreenUiState.Success -> {
                 if (userNameUiState.data == "") {
-                    Text("Username", style = MaterialTheme.typography.headlineLarge)
+                    Text(stringResource(id = R.string.usp_default_username), style = MaterialTheme.typography.headlineLarge)
                 } else {
                     Text(userNameUiState.data, style = MaterialTheme.typography.headlineLarge)
                 }
@@ -263,7 +266,7 @@ fun UserName(
         ) {
             Icon(
                 imageVector = Icons.Default.Edit,
-                contentDescription = "Edit username",
+                contentDescription = stringResource(id = R.string.usp_edit_username),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = modifier.size(15.dp)
             )
@@ -275,7 +278,7 @@ fun UserName(
 fun UserAnalytics(
     modifier: Modifier = Modifier
 ) {
-    Text("Favorite Movies", style = MaterialTheme.typography.bodyMedium)
+    Text(stringResource(id = R.string.usp_favorite_movies), style = MaterialTheme.typography.bodyMedium)
     Spacer(modifier = modifier.height(5.dp))
     Text(
         "45", style = MaterialTheme.typography.titleLarge.copy(
@@ -296,7 +299,7 @@ fun EditTextDialog(
         onDismissRequest = onDismissRequest,
         title = {
             Text(
-                text = "Digite seu nome de usuário",
+                text = stringResource(id = R.string.usp_enter_your_username),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -329,7 +332,7 @@ fun EditTextDialog(
         confirmButton = {
             TextButton(onClick = { onConfirmClick(userName.text) }) {
                 Text(
-                    text = "Ok",
+                    text = stringResource(id = R.string.usp_confirm_dialog),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -338,7 +341,7 @@ fun EditTextDialog(
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
                 Text(
-                    text = "Cancelar",
+                    text = stringResource(id = R.string.usp_cancel_dialog),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )

@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">MyMovies</string>
+
+    <!-- UserProfileScreen -->
+    <string name="usp_default_profile_picture">Default profile picture</string>
+    <string name="usp_profile_picture">Profile picture</string>
+    <string name="usp_change_profile_background">Change profile background</string>
+    <string name="usp_change_profile_picture">Change profile picture</string>
+    <string name="usp_edit_username">Edit username</string>
+    <string name="usp_enter_your_username">Enter your username</string>
+    <string name="usp_confirm_dialog">OK</string>
+    <string name="usp_cancel_dialog">Cancel</string>
+    <string name="usp_favorite_movies">Favorite Movies</string>
+    <string name="usp_background_picture">Background picture</string>
+    <string name="usp_default_username">Username</string>
 </resources>
