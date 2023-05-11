@@ -1,11 +1,8 @@
 package com.daavsnts.mymovies.ui.screens.userProfile
 
-import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.graphics.Picture
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -56,11 +53,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
-import com.daavsnts.mymovies.ui.screens.composables.MoviePosterImage
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
 
 
@@ -75,7 +68,7 @@ fun UserProfileScreen(
     setProfileBackground: (Context, Uri) -> Unit
 ) {
     var showUsernameChangeDialog by remember { mutableStateOf(false) }
-    Box() {
+    Box {
         ProfileBackground(
             profileBackgroundUriUiState = profileBackgroundUriUiState,
             setProfileBackground = setProfileBackground
@@ -136,7 +129,7 @@ fun ProfileBackground(
             is ScreenUiState.Success -> {
                 Log.d("profilePictureUriUiState", "Success")
                 Log.d("profilePictureUriUiState", profileBackgroundUriUiState.data)
-                BackgroundImage(PictureUri = profileBackgroundUriUiState.data)
+                BackgroundImage(pictureUri = profileBackgroundUriUiState.data)
             }
 
             is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
@@ -157,22 +150,21 @@ fun ProfileBackground(
     }
 }
 
-@Composable
-fun BackgroundImage(
-    modifier: Modifier = Modifier,
-    PictureUri: String
-) {
-    val context = LocalContext.current
-    if (PictureUri != "") {
-        val bitmap = if (Build.VERSION.SDK_INT < 28) {
-            MediaStore.Images
-                .Media.getBitmap(context.contentResolver, PictureUri.toUri())
+fun getBitMap(context: Context, pictureUri: String): Bitmap =
+    if (Build.VERSION.SDK_INT < 28) {
+        MediaStore.Images
+            .Media.getBitmap(context.contentResolver, pictureUri.toUri())
 
-        } else {
-            val source = ImageDecoder
-                .createSource(context.contentResolver, PictureUri.toUri())
-            ImageDecoder.decodeBitmap(source)
-        }
+    } else {
+        val source = ImageDecoder
+            .createSource(context.contentResolver, pictureUri.toUri())
+        ImageDecoder.decodeBitmap(source)
+    }
+
+@Composable
+fun BackgroundImage(pictureUri: String) {
+    if (pictureUri != "") {
+        val bitmap = getBitMap(LocalContext.current, pictureUri)
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = "Background picture",
@@ -184,7 +176,6 @@ fun BackgroundImage(
 
 @Composable
 fun ProfilePicture(
-    modifier: Modifier = Modifier,
     profilePictureUriUiState: ScreenUiState<String>,
     setProfilePicture: (Context, Uri) -> Unit
 ) {
@@ -196,7 +187,7 @@ fun ProfilePicture(
             is ScreenUiState.Success -> {
                 Log.d("profilePictureUriUiState", "Success")
                 Log.d("profilePictureUriUiState", profilePictureUriUiState.data)
-                ProfileImage(PictureUri = profilePictureUriUiState.data)
+                ProfileImage(pictureUri = profilePictureUriUiState.data)
             }
 
             is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
@@ -218,10 +209,9 @@ fun ProfilePicture(
 @Composable
 fun ProfileImage(
     modifier: Modifier = Modifier,
-    PictureUri: String
+    pictureUri: String
 ) {
-    val context = LocalContext.current
-    if (PictureUri == "") {
+    if (pictureUri == "") {
         Icon(
             imageVector = Icons.Rounded.Person,
             tint = MaterialTheme.colorScheme.primary,
@@ -231,15 +221,7 @@ fun ProfileImage(
                 .background(MaterialTheme.colorScheme.onBackground, CircleShape)
         )
     } else {
-        val bitmap = if (Build.VERSION.SDK_INT < 28) {
-            MediaStore.Images
-                .Media.getBitmap(context.contentResolver, PictureUri.toUri())
-
-        } else {
-            val source = ImageDecoder
-                .createSource(context.contentResolver, PictureUri.toUri())
-            ImageDecoder.decodeBitmap(source)
-        }
+        val bitmap = getBitMap(LocalContext.current, pictureUri)
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = "Profile picture",
