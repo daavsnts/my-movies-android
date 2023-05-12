@@ -1,6 +1,9 @@
 package com.daavsnts.mymovies
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.daavsnts.mymovies.data.local.room.UserDao
@@ -31,6 +34,7 @@ class MovieDetailsViewModelTest {
     private lateinit var userDao: UserDao
     private lateinit var userRepository: UserRepository
     private lateinit var movieDetailsViewModel: MovieDetailsViewModel
+    private val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
     @Before
     fun setupRepositoriesAndViewModel() {
@@ -39,7 +43,7 @@ class MovieDetailsViewModelTest {
             context, UserDatabase::class.java
         ).build()
         userDao = userDb.userDao()
-        userRepository = LocalUserRepository(userDao)
+        userRepository = LocalUserRepository(userDao, context.settingsDataStore)
         movieDetailsViewModel = MovieDetailsViewModel(moviesRepository, userRepository)
     }
 
