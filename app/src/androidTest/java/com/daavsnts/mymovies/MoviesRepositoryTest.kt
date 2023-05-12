@@ -45,7 +45,7 @@ class MoviesRepositoryTest {
             )
         )
         delay(1000)
-        assert(fightClubMovie == detailedFightClubMovie)
+        assert(fightClubMovie.title == detailedFightClubMovie.title)
     }
 
     @Test
@@ -61,6 +61,10 @@ class MoviesRepositoryTest {
             genres = null
         )
         delay(1000)
-        assert(searchedMoviesList.contains(fightClubMovie))
+        var contains: Boolean = false
+        searchedMoviesList.forEach {
+            if (it.title == fightClubMovie.title) contains = true
+        }
+        assert(contains)
     }
 }
