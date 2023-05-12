@@ -294,7 +294,8 @@ fun LoadingUsername(
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        modifier = modifier.alpha(0.5f)
     ) { Box(modifier = modifier
         .width(150.dp)
         .height(30.dp)
@@ -331,7 +332,7 @@ fun LoadingFavoriteQuantity(
 ) {
     CircularProgressIndicator(
         strokeWidth = 3.dp,
-        modifier = modifier.size(20.dp)
+        modifier = modifier.size(20.dp).alpha(0.5f)
     )
 }
 
