@@ -13,6 +13,9 @@ interface UserDao {
     @Query("SELECT * FROM favorite_movies ORDER BY id DESC")
     fun allFavoriteMoviesIds(): Flow<List<FavoriteMovieId>>
 
+    @Query("SELECT COUNT(*) FROM favorite_movies")
+    fun getAllFavoriteMoviesQuantity(): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteMovie(movieId: FavoriteMovieId)
 
