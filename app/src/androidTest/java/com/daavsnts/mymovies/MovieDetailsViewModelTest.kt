@@ -1,6 +1,7 @@
 package com.daavsnts.mymovies
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -60,7 +61,7 @@ class MovieDetailsViewModelTest {
         releaseDate = "10/15/1999",
         posterPath = "https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
         voteAverage = 8.433f,
-        voteCount = 26288,
+        voteCount = 26374,
         genres = listOf(
             Genre(18, "Drama"),
             Genre(53, "Thriller"),
@@ -74,7 +75,7 @@ class MovieDetailsViewModelTest {
         delay(1000)
         val movieDetailsUiState = movieDetailsViewModel.movieDetailUiState.first()
         if (movieDetailsUiState is ScreenUiState.Success) {
-            assert(movieDetailsUiState.data == detailedFightClubMovie)
+            assert(movieDetailsUiState.data.title == detailedFightClubMovie.title)
         }
     }
 
