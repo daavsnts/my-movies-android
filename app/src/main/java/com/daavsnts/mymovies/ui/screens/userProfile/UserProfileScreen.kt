@@ -75,7 +75,7 @@ fun UserProfileScreen(
             profileBackgroundUriUiState = profileBackgroundUriUiState,
             setProfileBackground = setProfileBackground
         )
-        UpsideGradient(startY = 0f, color = MaterialTheme.colorScheme.primary)
+        UpsideGradient(startY = 0f, color = MaterialTheme.colorScheme.background)
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -138,7 +138,7 @@ fun ProfileBackground(
         Icon(
             imageVector = Icons.Default.PhotoCamera,
             contentDescription = stringResource(R.string.ups_change_profile_background),
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.background,
             modifier = Modifier
                 .padding(20.dp)
                 .size(40.dp)
@@ -193,7 +193,7 @@ fun ProfilePicture(
         Icon(
             imageVector = Icons.Default.PhotoCamera,
             contentDescription = stringResource(R.string.ups_change_profile_picture),
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.background,
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.onBackground, CircleShape)
                 .border(3.dp, MaterialTheme.colorScheme.background, CircleShape)
@@ -225,7 +225,7 @@ fun ProfileImage(
     if (pictureUri == "") {
         Icon(
             imageVector = Icons.Rounded.Person,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.background,
             contentDescription = stringResource(id = R.string.ups_default_profile_picture),
             modifier = modifier
                 .size(200.dp)
@@ -261,7 +261,10 @@ fun Username(
                         style = MaterialTheme.typography.headlineLarge
                     )
                 } else {
-                    Text(userNameUiState.data, style = MaterialTheme.typography.headlineLarge)
+                    Text(
+                        userNameUiState.data,
+                        style = MaterialTheme.typography.headlineLarge
+                    )
                 }
             }
 
@@ -278,7 +281,7 @@ fun Username(
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = stringResource(id = R.string.ups_edit_username),
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.background,
                 modifier = modifier.size(15.dp)
             )
         }
@@ -331,6 +334,7 @@ fun EditTextDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
+        containerColor = MaterialTheme.colorScheme.background,
         title = {
             Text(
                 text = stringResource(id = R.string.ups_enter_your_username),
@@ -342,7 +346,7 @@ fun EditTextDialog(
             Box(
                 modifier = modifier
                     .background(
-                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.surface,
                         RoundedCornerShape(15.dp)
                     )
                     .fillMaxWidth()
