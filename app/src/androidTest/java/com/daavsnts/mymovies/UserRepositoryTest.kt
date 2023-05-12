@@ -15,6 +15,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
@@ -90,5 +92,20 @@ class UserRepositoryTest {
 
         val searchedList = userRepository.searchFavoriteMovies("Ant-Man").first()
         assert(searchedList.contains(antManFavoriteMovieId))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testGetAllFavoriteMoviesQuantity() = runBlocking {
+        val favoriteMovieIdList = listOf(
+            FavoriteMovieId(640146, "Ant-Man and the Wasp: Quantumania"),
+            FavoriteMovieId(502356, "The Super Mario Bros. Movie"),
+            FavoriteMovieId(594767, "Shazam! Fury of the Gods")
+        )
+        favoriteMovieIdList.forEach { userRepository.insertFavoriteMovie(it) }
+        delay(1000)
+
+        val allFavoriteMoviesIdQuantity = userRepository.getAllFavoriteMoviesQuantity()
+        assertEquals(allFavoriteMoviesIdQuantity, favoriteMovieIdList.size)
     }
 }
