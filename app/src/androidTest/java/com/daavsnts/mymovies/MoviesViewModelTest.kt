@@ -42,7 +42,12 @@ class MoviesViewModelTest {
             voteCount = 26288,
             genres = null
         )
-        if (searchedMoviesUiStateList is ScreenUiState.Success)
-            assert(searchedMoviesUiStateList.data.contains(fightClubMovie))
+        var contains: Boolean = false
+        if (searchedMoviesUiStateList is ScreenUiState.Success) {
+            searchedMoviesUiStateList.data.forEach {
+                if (it.title == fightClubMovie.title) contains = true
+            }
+        }
+        assert(contains)
     }
 }
