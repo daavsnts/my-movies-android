@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -311,7 +312,7 @@ fun UserAnalytics(
     )
     Spacer(modifier = modifier.height(5.dp))
     when (userFavoriteMoviesQuantityUiState) {
-        is ScreenUiState.Loading -> Log.d("userFavoriteMoviesQuantityUiState", "Loading")
+        is ScreenUiState.Loading -> LoadingFavoriteQuantity()
         is ScreenUiState.Success -> {
             Text(
                 userFavoriteMoviesQuantityUiState.data,
@@ -322,6 +323,16 @@ fun UserAnalytics(
         }
         is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
     }
+}
+
+@Composable
+fun LoadingFavoriteQuantity(
+    modifier: Modifier = Modifier
+) {
+    CircularProgressIndicator(
+        strokeWidth = 3.dp,
+        modifier = modifier.size(20.dp)
+    )
 }
 
 @Composable
