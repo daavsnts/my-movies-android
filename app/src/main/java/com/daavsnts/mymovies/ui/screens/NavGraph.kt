@@ -173,10 +173,15 @@ fun NavGraph(navController: NavHostController) {
                 userProfileViewModel
                     .profileBackgroundUri
                     .collectAsState(initial = ScreenUiState.Loading).value
+            val userFavoriteMoviesQuantityUiState =
+                userProfileViewModel
+                    .userFavoriteMoviesQuantity
+                    .collectAsState(initial = ScreenUiState.Loading).value
             UserProfileScreen(
                 userNameUiState = userNameUiState,
                 profilePictureUriUiState = profilePictureUriUiState,
                 profileBackgroundUriUiState = profileBackgroundUriUiState,
+                userFavoriteMoviesQuantityUiState = userFavoriteMoviesQuantityUiState,
                 setUserName = { userName: String ->
                     userProfileViewModel.setUserName(userName)
                 },

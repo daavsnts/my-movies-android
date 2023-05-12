@@ -96,7 +96,7 @@ class UserDaoTest {
         )
         favoriteMovieIdList.forEach { userDao.insertFavoriteMovie(it) }
         delay(1000)
-        val allFavoriteMoviesIdQuantity = userDao.getAllFavoriteMoviesQuantity()
+        val allFavoriteMoviesIdQuantity = userDao.getAllFavoriteMoviesQuantity().first()
         assertEquals(allFavoriteMoviesIdQuantity, favoriteMovieIdList.size)
     }
 

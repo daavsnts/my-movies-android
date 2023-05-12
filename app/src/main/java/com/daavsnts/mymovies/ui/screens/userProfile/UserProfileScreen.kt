@@ -64,6 +64,7 @@ fun UserProfileScreen(
     userNameUiState: ScreenUiState<String>,
     profilePictureUriUiState: ScreenUiState<String>,
     profileBackgroundUriUiState: ScreenUiState<String>,
+    userFavoriteMoviesQuantityUiState: ScreenUiState<String>,
     setUserName: (String) -> Unit,
     setProfilePicture: (Context, Uri) -> Unit,
     setProfileBackground: (Context, Uri) -> Unit
@@ -91,7 +92,7 @@ fun UserProfileScreen(
                 userNameUiState = userNameUiState,
                 showDialog = { showUsernameChangeDialog = it })
             Spacer(modifier = modifier.height(15.dp))
-            UserAnalytics()
+            UserAnalytics(userFavoriteMoviesQuantityUiState = userFavoriteMoviesQuantityUiState)
         }
     }
     if (showUsernameChangeDialog) {
@@ -153,7 +154,12 @@ fun ProfileBackground(
 @Composable
 fun BackgroundImageLoading(
     modifier: Modifier = Modifier
-) { Box(modifier.fillMaxSize().shimmerEffect()) }
+) {
+    Box(
+        modifier
+            .fillMaxSize()
+            .shimmerEffect())
+}
 
 @Composable
 fun BackgroundImage(pictureUri: String) {
@@ -205,7 +211,10 @@ fun LoadingProfileImage(
     Card(
         shape = CircleShape,
         modifier = modifier.alpha(0.5f)
-    ) { Box(modifier.size(200.dp).shimmerEffect()) }
+    ) { Box(
+        modifier
+            .size(200.dp)
+            .shimmerEffect()) }
 }
 
 @Composable
@@ -282,23 +291,34 @@ fun LoadingUsername(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp)
-    ) { Box(modifier = modifier.width(150.dp).height(30.dp).shimmerEffect()) }
+    ) { Box(modifier = modifier
+        .width(150.dp)
+        .height(30.dp)
+        .shimmerEffect()) }
 }
 
 @Composable
 fun UserAnalytics(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    userFavoriteMoviesQuantityUiState: ScreenUiState<String>,
 ) {
     Text(
         stringResource(id = R.string.ups_favorite_movies),
         style = MaterialTheme.typography.bodyMedium
     )
     Spacer(modifier = modifier.height(5.dp))
-    Text(
-        "45", style = MaterialTheme.typography.titleLarge.copy(
-            fontWeight = FontWeight.Bold
-        )
-    )
+    when (userFavoriteMoviesQuantityUiState) {
+        is ScreenUiState.Loading -> Log.d("userFavoriteMoviesQuantityUiState", "Loading")
+        is ScreenUiState.Success -> {
+            Text(
+                userFavoriteMoviesQuantityUiState.data,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        }
+        is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
+    }
 }
 
 @Composable

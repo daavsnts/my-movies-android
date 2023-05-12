@@ -14,7 +14,7 @@ import java.io.IOException
 
 interface UserRepository {
     val allFavoriteMoviesIds: Flow<List<FavoriteMovieId>>
-    suspend fun getAllFavoriteMoviesQuantity(): Int
+    suspend fun getAllFavoriteMoviesQuantity(): Flow<Int>
     suspend fun isMovieFavorite(movieId: Int): Boolean
     suspend fun insertFavoriteMovie(movieId: FavoriteMovieId)
     suspend fun deleteFavoriteMovie(movieId: FavoriteMovieId)
@@ -32,7 +32,7 @@ class LocalUserRepository(
     override val allFavoriteMoviesIds: Flow<List<FavoriteMovieId>> = userDao.allFavoriteMoviesIds()
 
     @WorkerThread
-    override suspend fun getAllFavoriteMoviesQuantity(): Int =
+    override suspend fun getAllFavoriteMoviesQuantity(): Flow<Int> =
         userDao.getAllFavoriteMoviesQuantity()
 
     @WorkerThread

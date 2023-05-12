@@ -40,7 +40,9 @@ class FavoriteMoviesViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _favoriteMoviesUiState.value = ScreenUiState.Loading
             try {
-                val favoritesIdListDeferred = async { userRepository.allFavoriteMoviesIds }
+                val favoritesIdListDeferred = async {
+                    userRepository.allFavoriteMoviesIds
+                }
                 val favoritesIdList = favoritesIdListDeferred.await()
                 withContext(Dispatchers.Main) {
                     favoritesIdList.collect {
@@ -60,7 +62,8 @@ class FavoriteMoviesViewModel(
             try {
                 val searchFavoritesIdListDeferred =
                     async { userRepository.searchFavoriteMovies(searchTerm) }
-                val searchFavoritesIdList = searchFavoritesIdListDeferred.await()
+                val searchFavoritesIdList =
+                    searchFavoritesIdListDeferred.await()
                 withContext(Dispatchers.Main) {
                     searchFavoritesIdList.collect {
                         _searchedMoviesUiState.value =

@@ -105,7 +105,7 @@ class UserRepositoryTest {
         favoriteMovieIdList.forEach { userRepository.insertFavoriteMovie(it) }
         delay(1000)
 
-        val allFavoriteMoviesIdQuantity = userRepository.getAllFavoriteMoviesQuantity()
+        val allFavoriteMoviesIdQuantity = userRepository.getAllFavoriteMoviesQuantity().first()
         assertEquals(allFavoriteMoviesIdQuantity, favoriteMovieIdList.size)
     }
 }

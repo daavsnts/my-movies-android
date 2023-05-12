@@ -30,6 +30,9 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
     private val _profileBackgroundUri =
         MutableStateFlow<ScreenUiState<String>>(ScreenUiState.Loading)
     val profileBackgroundUri: Flow<ScreenUiState<String>> = _profileBackgroundUri
+    private val _userFavoriteMoviesQuantity =
+        MutableStateFlow<ScreenUiState<String>>(ScreenUiState.Loading)
+    val userFavoriteMoviesQuantity: Flow<ScreenUiState<String>> = _userFavoriteMoviesQuantity
 
     init {
         setupProfileUiStates()
@@ -47,6 +50,29 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
             stringPreferencesKey("profile_background_uri"),
             ""
         )
+        updateUserFavoriteMoviesQuantity(_userFavoriteMoviesQuantity)
+    }
+
+    private fun updateUserFavoriteMoviesQuantity(
+        userFavoriteMoviesQuantityUiState: MutableStateFlow<ScreenUiState<String>>
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val userFavoriteMoviesQuantityUiStateDeferred = async {
+                    userRepository.getAllFavoriteMoviesQuantity()
+                }
+                val userFavoriteMoviesQuantityUiStateAwaited =
+                    userFavoriteMoviesQuantityUiStateDeferred.await()
+                withContext(Dispatchers.Main) {
+                    userFavoriteMoviesQuantityUiStateAwaited.collect {
+                        userFavoriteMoviesQuantityUiState.value =
+                            ScreenUiState.Success(it.toString())
+                    }
+                }
+            } catch (e: IOException) {
+                ScreenUiState.Error(e.message)
+            }
+        }
     }
 
     private fun <T> updatePreferencesUiState(
@@ -95,12 +121,21 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
         key: String = "profile_background_uri"
     ) = setPictureUri(context, profilePictureUri, key, _profileBackgroundUri)
 
-    private fun copyImageToInternalStorage(context: Context, profilePictureUri: Uri, key: String): Uri {
+    private fun copyImageToInternalStorage(
+        context: Context,
+        profilePictureUri: Uri,
+        key: String
+    ): Uri {
         copyFileToInternalDir(context, profilePictureUri, key)
         return getFileUriFromInternalDir(context, key)
     }
 
-    private fun setPictureUri(context: Context, pictureUri: Uri, key: String, pictureUriState: MutableStateFlow<ScreenUiState<String>>) {
+    private fun setPictureUri(
+        context: Context,
+        pictureUri: Uri,
+        key: String,
+        pictureUriState: MutableStateFlow<ScreenUiState<String>>
+    ) {
         val pictureUriFromInternalDir =
             copyImageToInternalStorage(context, pictureUri, key)
         setPreference(
