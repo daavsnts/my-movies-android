@@ -11,14 +11,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import coil.imageLoader
+import coil.memory.MemoryCache
 import coil.request.ImageRequest
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.ui.screens.shimmerEffect
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
+    val imageLoader = LocalContext.current.imageLoader
+    posterPath?.let {
+        imageLoader.diskCache?.remove(posterPath)
+        imageLoader.memoryCache?.remove(MemoryCache.Key(posterPath))
+    }
     val posterImage = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context = LocalContext.current)
             .data(posterPath)
