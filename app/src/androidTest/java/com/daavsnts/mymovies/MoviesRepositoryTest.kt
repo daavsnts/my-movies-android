@@ -1,6 +1,5 @@
 package com.daavsnts.mymovies
 
-import android.util.Log
 import com.daavsnts.mymovies.data.network.MoviesApiService
 import com.daavsnts.mymovies.data.network.MoviesRetrofitBuilder
 import com.daavsnts.mymovies.model.Genre
@@ -61,7 +60,7 @@ class MoviesRepositoryTest {
             genres = null
         )
         delay(1000)
-        var contains: Boolean = false
+        var contains = false
         searchedMoviesList.forEach {
             if (it.title == fightClubMovie.title) contains = true
         }
