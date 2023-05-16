@@ -5,8 +5,6 @@
     <!-- Components -->
     <string name="search_bar_label">Search…</string>
     <string name="movie_poster_content_description">Movie poster</string>
-    <string name="movie_poster_loading_error_content_description">Movie poster loading error</string>
-    <string name="movie_poster_loading_error_text">Something went wrong!</string>
     <string name="back_button_content_description">Go back</string>
     <string name="user_score_user_text">User</string>
     <string name="user_score_score_text">Score</string>
@@ -34,5 +32,9 @@
     <string name="ups_favorite_movies">Favorite Movies</string>
     <string name="ups_background_picture">Background picture</string>
     <string name="ups_default_username">Username</string>
+
+    <!-- Errors -->
+    <string name="loading_error_text">Something went wrong!</string>
+    <string name="loading_error_content_description">Movie poster loading error</string>
 
 </resources>

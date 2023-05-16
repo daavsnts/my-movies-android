@@ -1,6 +1,5 @@
 package com.daavsnts.mymovies.ui.screens.movieDetails
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -21,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,11 +38,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -50,8 +53,10 @@ import com.daavsnts.mymovies.model.Genre
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.composables.CircularProgressBar
+import com.daavsnts.mymovies.ui.screens.composables.ErrorMessage
 import com.daavsnts.mymovies.ui.screens.composables.MoviePosterImage
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
+import com.daavsnts.mymovies.ui.screens.shimmerEffect
 import com.daavsnts.mymovies.ui.theme.Maize
 
 @Composable
@@ -63,7 +68,7 @@ fun MovieDetailsScreen(
     isMovieFavorite: Boolean
 ) {
     when (movieDetailsUiState) {
-        is ScreenUiState.Loading -> MovieDetailsLoading()
+        is ScreenUiState.Loading -> MovieDetailsLoading(navController = navController)
         is ScreenUiState.Success -> {
             MovieDetails(
                 navController = navController,
@@ -74,13 +79,133 @@ fun MovieDetailsScreen(
             )
         }
 
-        is ScreenUiState.Error -> Log.d("moviesUiState", "Error")
+        is ScreenUiState.Error -> MovieDetailsError(navController = navController)
     }
 }
 
 @Composable
-fun MovieDetailsLoading(modifier: Modifier = Modifier) {
-    // Create animation of circle loading
+fun MovieDetailsLoading(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
+) {
+    Box(
+        modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+        BackButton(
+            modifier = modifier
+                .padding(top = 20.dp, start = 20.dp)
+                .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(15.dp)),
+            navController = navController
+        )
+        Box(
+            modifier
+                .fillMaxSize()
+                .alpha(0.5f)
+                .shimmerEffect()
+        )
+        UpsideGradient(startY = 300f, MaterialTheme.colorScheme.surface)
+        InfoBoxLoading()
+    }
+}
+
+@Composable
+fun InfoBoxLoading(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .padding(top = 280.dp), contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, top = 20.dp, end = 20.dp)
+        ) {
+            Row(
+                modifier
+                    .fillMaxWidth()
+                    .height(80.dp), horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // User score
+                Row(modifier.padding(top = 10.dp)) {
+                    Card(
+                        shape = CircleShape,
+                        modifier = modifier.alpha(0.5f)
+                    ) {
+                        Box(
+                            modifier
+                                .size(60.dp)
+                                .shimmerEffect()
+                        )
+                    }
+                    Spacer(modifier.width(12.dp))
+                    Column(modifier.padding(top = 2.dp)) {
+                        LoadingText(width = 40.dp, height = 22.dp)
+                        Spacer(modifier.height(8.dp))
+                        LoadingText(width = 55.dp, height = 22.dp)
+                    }
+                }
+            }
+            Spacer(modifier.height(5.dp))
+            // Title
+            LoadingText(width = 300.dp, height = 35.dp)
+            Spacer(modifier.height(15.dp))
+            // Release date
+            LoadingText(width = 100.dp, height = 20.dp)
+            Spacer(modifier.height(15.dp))
+            // Tags
+            Row(horizontalArrangement = Arrangement.spacedBy(15.dp)) {
+                LoadingText(width = 40.dp, height = 22.dp)
+                LoadingText(width = 80.dp, height = 22.dp)
+                LoadingText(width = 60.dp, height = 22.dp)
+            }
+            Spacer(modifier.height(15.dp))
+            // Overview
+            Column(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                LoadingText(width = 400.dp, height = 22.dp)
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    LoadingText(width = 200.dp, height = 22.dp)
+                    LoadingText(width = 90.dp, height = 22.dp)
+                    LoadingText(width = 90.dp, height = 22.dp)
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    LoadingText(width = 50.dp, height = 22.dp)
+                    LoadingText(width = 180.dp, height = 22.dp)
+                    LoadingText(width = 150.dp, height = 22.dp)
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    LoadingText(width = 150.dp, height = 22.dp)
+                    LoadingText(width = 100.dp, height = 22.dp)
+                    LoadingText(width = 120.dp, height = 22.dp)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun LoadingText(
+    modifier: Modifier = Modifier,
+    width: Dp,
+    height: Dp
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        modifier = modifier.alpha(0.5f)
+    ) {
+        Box(
+            modifier = modifier
+                .width(width)
+                .height(height)
+                .shimmerEffect()
+        )
+    }
 }
 
 @Composable
@@ -343,5 +468,21 @@ fun GenreButton(genre: String, modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.Light
             )
         )
+    }
+}
+
+@Composable
+fun MovieDetailsError(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
+) {
+    Box {
+        BackButton(
+            modifier = modifier
+                .padding(top = 20.dp, start = 20.dp)
+                .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(15.dp)),
+            navController = navController
+        )
+        ErrorMessage(iconSize = 50.dp, textSize = 30.sp)
     }
 }
