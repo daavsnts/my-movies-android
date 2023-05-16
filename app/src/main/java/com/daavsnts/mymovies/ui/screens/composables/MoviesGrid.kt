@@ -26,7 +26,7 @@ fun RenderMoviesGrid(
     when (moviesUiStateList) {
         is ScreenUiState.Loading -> LoadingGridOfMovies()
         is ScreenUiState.Success -> GridOfMovies(moviesUiStateList.data, navController)
-        is ScreenUiState.Error -> Log.d("moviesUiState", "Error")
+        is ScreenUiState.Error -> ErrorGridOfMovies()
     }
 }
 
@@ -56,6 +56,19 @@ fun GridOfMovies(
     ) {
         itemsIndexed(movies) { _, movie ->
             MovieCard(movie = movie, navController = navController)
+        }
+    }
+}
+
+@Composable
+fun ErrorGridOfMovies() {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        items(15) {
+            ErrorMovieCard()
         }
     }
 }
