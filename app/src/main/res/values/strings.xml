@@ -20,6 +20,9 @@
     <string name="ms_popular_title">Popular Movies</string>
     <string name="ms_upcoming_title">Upcoming Movies</string>
 
+    <!-- FavoriteMoviesScreen -->
+    <string name="fms_empty_favorite_list_text">Your favorite movies list is empty!</string>
+
     <!-- UserProfileScreen -->
     <string name="ups_default_profile_picture">Default profile picture</string>
     <string name="ups_profile_picture">Profile picture</string>
