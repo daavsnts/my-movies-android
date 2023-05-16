@@ -37,7 +37,8 @@ fun MovieCard(
             movieId.let {
                 navController.navigate("MovieDetailsScreen/$movieId")
             }
-        }
+        },
+        modifier = modifier.background(MaterialTheme.colorScheme.surface)
     ) {
         Box(
             modifier = modifier
@@ -110,7 +111,7 @@ fun LoadingMovieCard(modifier: Modifier = Modifier) {
             modifier = modifier
                 .height(230.dp)
                 .width(170.dp)
-                .background(Color.Black)
+                .background(MaterialTheme.colorScheme.surface)
                 .shimmerEffect()
         )
     }
