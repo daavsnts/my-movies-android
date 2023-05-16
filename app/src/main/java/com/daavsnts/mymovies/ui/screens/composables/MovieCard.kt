@@ -115,3 +115,19 @@ fun LoadingMovieCard(modifier: Modifier = Modifier) {
         )
     }
 }
+
+@Composable
+fun ErrorMovieCard(modifier: Modifier = Modifier) {
+    Card(
+        shape = RoundedCornerShape(15.dp),
+        elevation = CardDefaults.cardElevation(5.dp),
+        modifier = modifier.alpha(0.5f)
+    ) {
+        Box(
+            modifier = modifier
+                .height(230.dp)
+                .width(170.dp)
+                .background(MaterialTheme.colorScheme.surface)
+        ) { ErrorMessage(iconSize = 50.dp, textSize = 18.sp) }
+    }
+}

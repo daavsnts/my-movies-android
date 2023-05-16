@@ -1,6 +1,5 @@
 package com.daavsnts.mymovies.ui.screens.composables
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -53,7 +52,7 @@ fun RenderMoviesList(
     when (moviesUiState) {
         is ScreenUiState.Loading -> LoadingListOfMovies()
         is ScreenUiState.Success -> ListOfMovies(moviesUiState.data, navController = navController)
-        is ScreenUiState.Error -> Log.d("moviesUiState", "Error")
+        is ScreenUiState.Error -> ErrorListOfMovies()
     }
 }
 
@@ -71,6 +70,15 @@ fun ListOfMovies(movies: List<Movie>, navController: NavController) {
     LazyRow(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         itemsIndexed(movies) { _, movie ->
             MovieCard(movie = movie, navController = navController)
+        }
+    }
+}
+
+@Composable
+fun ErrorListOfMovies() {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+        items(15) {
+            ErrorMovieCard()
         }
     }
 }
