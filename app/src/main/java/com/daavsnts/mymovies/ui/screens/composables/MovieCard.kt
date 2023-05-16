@@ -104,8 +104,7 @@ fun MovieCard(
 fun LoadingMovieCard(modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(5.dp),
-        modifier = modifier.alpha(0.5f)
+        elevation = CardDefaults.cardElevation(5.dp)
     ) {
         Box(
             modifier = modifier
@@ -128,7 +127,7 @@ fun ErrorMovieCard(modifier: Modifier = Modifier) {
                 .height(230.dp)
                 .width(170.dp)
         ) {
-            Box(modifier.fillMaxSize().alpha(0.5f).background(MaterialTheme.colorScheme.surface))
+            Box(modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface))
             ErrorMessage(
                 iconSize = 50.dp,
                 textSize = 18.sp,
