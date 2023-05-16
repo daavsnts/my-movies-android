@@ -69,7 +69,7 @@ fun UpsideGlassGradient(
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .alpha(0.7f)
+                .alpha(0.8f)
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
