@@ -70,13 +70,14 @@ fun MovieDetailsScreen(
     when (movieDetailsUiState) {
         is ScreenUiState.Loading -> MovieDetailsLoading(navController = navController)
         is ScreenUiState.Success -> {
-            MovieDetails(
-                navController = navController,
-                movie = movieDetailsUiState.data,
-                isMovieFavorite = isMovieFavorite,
-                addFavoriteMovie = addFavoriteMovie,
-                removeFavoriteMovie = removeFavoriteMovie
-            )
+//            MovieDetails(
+//                navController = navController,
+//                movie = movieDetailsUiState.data,
+//                isMovieFavorite = isMovieFavorite,
+//                addFavoriteMovie = addFavoriteMovie,
+//                removeFavoriteMovie = removeFavoriteMovie
+//            )
+            MovieDetailsError(navController = navController)
         }
 
         is ScreenUiState.Error -> MovieDetailsError(navController = navController)
@@ -483,6 +484,11 @@ fun MovieDetailsError(
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(15.dp)),
             navController = navController
         )
-        ErrorMessage(iconSize = 50.dp, textSize = 30.sp)
+        ErrorMessage(
+            iconSize = 50.dp,
+            textSize = 30.sp,
+            errorColor = MaterialTheme.colorScheme.error,
+            alpha = 0.8f
+        )
     }
 }

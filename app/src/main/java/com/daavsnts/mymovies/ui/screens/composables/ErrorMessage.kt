@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -26,26 +27,28 @@ fun ErrorMessage(
     modifier: Modifier = Modifier,
     message: String = stringResource(R.string.loading_error_text),
     iconSize: Dp,
-    textSize: TextUnit
+    textSize: TextUnit,
+    errorColor: Color,
+    alpha: Float
     ) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .alpha(0.5f)
+            .alpha(alpha)
     ) {
         Icon(
             imageVector = Icons.Default.ErrorOutline,
             contentDescription = stringResource(R.string.loading_error_content_description),
-            tint = MaterialTheme.colorScheme.error,
+            tint = errorColor,
             modifier = modifier
                 .size(iconSize)
         )
         Text(
             message,
             style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.error,
+                color = errorColor,
                 textAlign = TextAlign.Center,
                 fontSize = textSize
             ),

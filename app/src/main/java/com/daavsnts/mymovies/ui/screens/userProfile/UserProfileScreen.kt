@@ -253,7 +253,7 @@ fun ErrorProfileImage(
 ) {
     Card(
         shape = CircleShape,
-        modifier = modifier.alpha(0.5f)
+        modifier = modifier.alpha(0.8f)
     ) {
         Box(modifier.size(200.dp)) {
             Icon(
@@ -296,7 +296,7 @@ fun Username(
                 style = MaterialTheme.typography.headlineLarge.copy(
                     color = MaterialTheme.colorScheme.error
                 ),
-                modifier = modifier.alpha(0.5f)
+                modifier = modifier.alpha(0.8f)
             )
         }
         Spacer(modifier = modifier.width(5.dp))
@@ -356,7 +356,7 @@ fun UserAnalytics(
                 contentDescription = stringResource(R.string.loading_error_content_description),
                 tint = MaterialTheme.colorScheme.error,
                 modifier = modifier
-                    .size(22.dp).alpha(0.5f)
+                    .size(22.dp).alpha(0.8f)
             )
         }
     }
