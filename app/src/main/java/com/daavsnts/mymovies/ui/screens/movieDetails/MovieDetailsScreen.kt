@@ -243,7 +243,7 @@ fun MovieDetails(
 @Composable
 fun MovieDetailsBackground(posterPath: String) {
     MoviePosterImage(posterPath = posterPath)
-    UpsideGradient(startY = 300f, MaterialTheme.colorScheme.surface)
+    //UpsideGradient(startY = 300f, MaterialTheme.colorScheme.surface)
 }
 
 @Composable

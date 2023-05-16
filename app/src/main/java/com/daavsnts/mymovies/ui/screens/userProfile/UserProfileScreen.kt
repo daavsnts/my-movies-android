@@ -48,13 +48,19 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberAsyncImagePainter
+import coil.imageLoader
+import coil.memory.MemoryCache
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.composables.MissingPoster
+import com.daavsnts.mymovies.ui.screens.composables.UpsideGlassGradient
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
 import com.daavsnts.mymovies.ui.screens.getBitMap
 import com.daavsnts.mymovies.ui.screens.shimmerEffect
@@ -77,7 +83,6 @@ fun UserProfileScreen(
             profileBackgroundUriUiState = profileBackgroundUriUiState,
             setProfileBackground = setProfileBackground
         )
-        UpsideGradient(startY = 0f, color = MaterialTheme.colorScheme.background)
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -160,11 +165,17 @@ fun BackgroundImageLoading(
     Box(
         modifier
             .fillMaxSize()
-            .shimmerEffect())
+            .shimmerEffect()
+    )
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun BackgroundImage(pictureUri: String) {
+    val imageLoader = LocalContext.current.imageLoader
+    imageLoader.diskCache?.remove(pictureUri)
+    imageLoader.memoryCache?.remove(MemoryCache.Key(pictureUri))
+
     if (pictureUri != "") {
         val bitmap = getBitMap(LocalContext.current, pictureUri)
         Image(
@@ -173,7 +184,19 @@ fun BackgroundImage(pictureUri: String) {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-    } else { MissingPoster() }
+        UpsideGlassGradient(
+            posterImage = rememberAsyncImagePainter(bitmap),
+            startY = 300f,
+            color = MaterialTheme.colorScheme.background
+        )
+    } else {
+        MissingPoster()
+        UpsideGlassGradient(
+            posterImage = painterResource(id = R.drawable.missing_poster),
+            startY = 300f,
+            color = MaterialTheme.colorScheme.background
+        )
+    }
 }
 
 @Composable
@@ -189,6 +212,7 @@ fun ProfilePicture(
             is ScreenUiState.Success -> {
                 ProfileImage(pictureUri = profilePictureUriUiState.data)
             }
+
             is ScreenUiState.Error -> ErrorProfileImage()
         }
         Icon(
@@ -212,10 +236,13 @@ fun LoadingProfileImage(
     Card(
         shape = CircleShape,
         modifier = modifier.alpha(0.5f)
-    ) { Box(
-        modifier
-            .size(200.dp)
-            .shimmerEffect()) }
+    ) {
+        Box(
+            modifier
+                .size(200.dp)
+                .shimmerEffect()
+        )
+    }
 }
 
 @Composable
@@ -289,6 +316,7 @@ fun Username(
                     )
                 }
             }
+
             is ScreenUiState.Error -> Text(
                 stringResource(id = R.string.ups_default_username),
                 style = MaterialTheme.typography.headlineLarge.copy(
@@ -322,10 +350,14 @@ fun LoadingUsername(
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = modifier.alpha(0.5f)
-    ) { Box(modifier = modifier
-        .width(150.dp)
-        .height(30.dp)
-        .shimmerEffect()) }
+    ) {
+        Box(
+            modifier = modifier
+                .width(150.dp)
+                .height(30.dp)
+                .shimmerEffect()
+        )
+    }
 }
 
 @Composable
@@ -348,6 +380,7 @@ fun UserAnalytics(
                 )
             )
         }
+
         is ScreenUiState.Error -> {
             Icon(
                 imageVector = Icons.Default.ErrorOutline,

@@ -46,12 +46,13 @@ fun MovieCard(
         ) {
             Box(
                 modifier = modifier
-                    .height(220.dp)
-                    .fillMaxWidth()
+                    .height(230.dp)
+                    .fillMaxSize()
             ) {
                 MoviePosterImage(posterPath = movie.posterPath)
             }
-            UpsideGradient(startY = 300f, color = MaterialTheme.colorScheme.surface)
+            //UpsideGradient(startY = 300f, color = MaterialTheme.colorScheme.surface)
+            //UpsideGlassGradient(startY = 300f, color = MaterialTheme.colorScheme.surface)
             Box(
                 modifier = modifier
                     .fillMaxSize()

@@ -4,12 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImagePainter
@@ -43,9 +45,21 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
                     contentScale = ContentScale.Crop,
                     modifier = modifier.fillMaxSize()
                 )
+                UpsideGlassGradient(
+                    posterImage = posterImage,
+                    startY = 300f,
+                    color = MaterialTheme.colorScheme.surface
+                )
             }
 
-            is AsyncImagePainter.State.Error -> { MissingPoster() }
+            is AsyncImagePainter.State.Error -> {
+                MissingPoster()
+                UpsideGlassGradient(
+                    posterImage = painterResource(id = R.drawable.missing_poster),
+                    startY = 300f,
+                    color = MaterialTheme.colorScheme.surface
+                )
+            }
 
             is AsyncImagePainter.State.Empty -> {}
 
@@ -58,6 +72,11 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
                         .fillMaxSize()
                         .alpha(0.5f)
                         .shimmerEffect()
+                )
+                UpsideGlassGradient(
+                    posterImage = posterImage,
+                    startY = 300f,
+                    color = MaterialTheme.colorScheme.surface
                 )
             }
         }
