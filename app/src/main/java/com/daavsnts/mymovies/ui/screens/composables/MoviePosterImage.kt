@@ -48,14 +48,7 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
                 )
             }
 
-            is AsyncImagePainter.State.Error -> {
-                Image(
-                    painter = painterResource(id = R.drawable.missing_poster),
-                    contentDescription = stringResource(id = R.string.loading_error_content_description),
-                    contentScale = ContentScale.Crop,
-                    modifier = modifier.fillMaxSize().alpha(0.5f)
-                )
-            }
+            is AsyncImagePainter.State.Error -> { MissingPoster() }
 
             is AsyncImagePainter.State.Empty -> {}
 
