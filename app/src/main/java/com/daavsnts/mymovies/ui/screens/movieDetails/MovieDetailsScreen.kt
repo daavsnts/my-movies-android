@@ -70,14 +70,13 @@ fun MovieDetailsScreen(
     when (movieDetailsUiState) {
         is ScreenUiState.Loading -> MovieDetailsLoading(navController = navController)
         is ScreenUiState.Success -> {
-//            MovieDetails(
-//                navController = navController,
-//                movie = movieDetailsUiState.data,
-//                isMovieFavorite = isMovieFavorite,
-//                addFavoriteMovie = addFavoriteMovie,
-//                removeFavoriteMovie = removeFavoriteMovie
-//            )
-            MovieDetailsError(navController = navController)
+            MovieDetails(
+                navController = navController,
+                movie = movieDetailsUiState.data,
+                isMovieFavorite = isMovieFavorite,
+                addFavoriteMovie = addFavoriteMovie,
+                removeFavoriteMovie = removeFavoriteMovie
+            )
         }
 
         is ScreenUiState.Error -> MovieDetailsError(navController = navController)

@@ -175,7 +175,7 @@ fun BackgroundImage(pictureUri: String) {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-    }
+    } else { MissingPoster() }
 }
 
 @Composable
@@ -356,7 +356,8 @@ fun UserAnalytics(
                 contentDescription = stringResource(R.string.loading_error_content_description),
                 tint = MaterialTheme.colorScheme.error,
                 modifier = modifier
-                    .size(22.dp).alpha(0.8f)
+                    .size(22.dp)
+                    .alpha(0.8f)
             )
         }
     }
