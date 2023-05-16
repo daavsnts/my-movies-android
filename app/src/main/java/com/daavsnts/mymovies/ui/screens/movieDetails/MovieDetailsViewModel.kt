@@ -11,6 +11,7 @@ import com.daavsnts.mymovies.repository.MoviesRepository
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.model.FavoriteMovieId
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -30,17 +31,16 @@ class MovieDetailsViewModel(
     val isMovieFavorite: Flow<Boolean> = _isMovieFavorite
 
     fun setMovieDetails(movieId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            _movieDetailUiState.value = ScreenUiState.Error(throwable.message)
+        }
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _movieDetailUiState.value = ScreenUiState.Loading
-            try {
-                val moviesDetailsUiStateDeferred =
-                    async { moviesRepository.getMovieDetails(movieId) }
-                val moviesDetailsUiState = moviesDetailsUiStateDeferred.await()
-                withContext(Dispatchers.Main) {
-                    _movieDetailUiState.value = ScreenUiState.Success(moviesDetailsUiState)
-                }
-            } catch (e: IOException) {
-                ScreenUiState.Error(e.message)
+            val moviesDetailsUiStateDeferred =
+                async { moviesRepository.getMovieDetails(movieId) }
+            val moviesDetailsUiState = moviesDetailsUiStateDeferred.await()
+            withContext(Dispatchers.Main) {
+                _movieDetailUiState.value = ScreenUiState.Success(moviesDetailsUiState)
             }
         }
     }

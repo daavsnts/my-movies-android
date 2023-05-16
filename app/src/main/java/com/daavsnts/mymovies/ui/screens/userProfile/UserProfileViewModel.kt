@@ -14,6 +14,7 @@ import com.daavsnts.mymovies.data.local.internaldir.copyFileToInternalDir
 import com.daavsnts.mymovies.data.local.internaldir.getFileUriFromInternalDir
 import com.daavsnts.mymovies.repository.UserRepository
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -56,21 +57,20 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
     private fun updateUserFavoriteMoviesQuantity(
         userFavoriteMoviesQuantityUiState: MutableStateFlow<ScreenUiState<String>>
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val userFavoriteMoviesQuantityUiStateDeferred = async {
-                    userRepository.getAllFavoriteMoviesQuantity()
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            userFavoriteMoviesQuantityUiState.value = ScreenUiState.Error(throwable.message)
+        }
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val userFavoriteMoviesQuantityUiStateDeferred = async {
+                userRepository.getAllFavoriteMoviesQuantity()
+            }
+            val userFavoriteMoviesQuantityUiStateAwaited =
+                userFavoriteMoviesQuantityUiStateDeferred.await()
+            withContext(Dispatchers.Main) {
+                userFavoriteMoviesQuantityUiStateAwaited.collect {
+                    userFavoriteMoviesQuantityUiState.value =
+                        ScreenUiState.Success(it.toString())
                 }
-                val userFavoriteMoviesQuantityUiStateAwaited =
-                    userFavoriteMoviesQuantityUiStateDeferred.await()
-                withContext(Dispatchers.Main) {
-                    userFavoriteMoviesQuantityUiStateAwaited.collect {
-                        userFavoriteMoviesQuantityUiState.value =
-                            ScreenUiState.Success(it.toString())
-                    }
-                }
-            } catch (e: IOException) {
-                ScreenUiState.Error(e.message)
             }
         }
     }
@@ -80,20 +80,19 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
         key: Preferences.Key<T>,
         defaultValue: T,
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            preferenceUiState.value = ScreenUiState.Error(throwable.message)
+        }
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             preferenceUiState.value = ScreenUiState.Loading
-            try {
-                val preferenceUiStateDeferred = async {
-                    userRepository.getPreference(key, defaultValue)
+            val preferenceUiStateDeferred = async {
+                userRepository.getPreference(key, defaultValue)
+            }
+            val preferenceUiStateAwaited = preferenceUiStateDeferred.await()
+            withContext(Dispatchers.Main) {
+                preferenceUiStateAwaited.collect {
+                    preferenceUiState.value = ScreenUiState.Success(it)
                 }
-                val preferenceUiStateAwaited = preferenceUiStateDeferred.await()
-                withContext(Dispatchers.Main) {
-                    preferenceUiStateAwaited.collect {
-                        preferenceUiState.value = ScreenUiState.Success(it)
-                    }
-                }
-            } catch (e: IOException) {
-                ScreenUiState.Error(e.message)
             }
         }
     }

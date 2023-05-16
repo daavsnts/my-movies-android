@@ -12,13 +12,13 @@ import com.daavsnts.mymovies.MyMoviesApplication
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
 import kotlin.reflect.KProperty0
 
 class PairOfListMoviesState(
@@ -83,32 +83,31 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
         moviesUiState: KProperty0<MutableStateFlow<ScreenUiState<List<Movie>>>>,
         getMoviesFunction: suspend () -> List<Movie>
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            moviesUiState.get().value = ScreenUiState.Error(throwable.message)
+        }
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             moviesUiState.get().value = ScreenUiState.Loading
-            try {
-                val moviesUiStateListDeferred = async { getMoviesFunction() }
-                val moviesUiStateList = moviesUiStateListDeferred.await()
-                withContext(Dispatchers.Main) {
-                    moviesUiState.get().value = ScreenUiState.Success(moviesUiStateList)
-                }
-            } catch (e: IOException) {
-                ScreenUiState.Error(e.message)
+            val moviesUiStateListDeferred = async { getMoviesFunction() }
+            val moviesUiStateList = moviesUiStateListDeferred.await()
+            withContext(Dispatchers.Main) {
+                moviesUiState.get().value = ScreenUiState.Success(moviesUiStateList)
             }
+
         }
     }
 
     fun setSearchedMoviesList(searchTerm: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            _searchedMoviesUiState.value = ScreenUiState.Error(throwable.message)
+        }
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _searchedMoviesUiState.value = ScreenUiState.Loading
-            try {
-                val searchedMoviesUiStateDeferred =
-                    async { moviesRepository.searchMoviesByTerm(searchTerm) }
-                val searchedMoviesUiState = searchedMoviesUiStateDeferred.await()
-                withContext(Dispatchers.Main) {
-                    _searchedMoviesUiState.value = ScreenUiState.Success(searchedMoviesUiState)
-                }
-            } catch (e: IOException) {
-                ScreenUiState.Error(e.message)
+            val searchedMoviesUiStateDeferred =
+                async { moviesRepository.searchMoviesByTerm(searchTerm) }
+            val searchedMoviesUiState = searchedMoviesUiStateDeferred.await()
+            withContext(Dispatchers.Main) {
+                _searchedMoviesUiState.value = ScreenUiState.Success(searchedMoviesUiState)
             }
         }
     }

@@ -11,6 +11,7 @@ import com.daavsnts.mymovies.repository.MoviesRepository
 import com.daavsnts.mymovies.model.FavoriteMovieId
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -18,7 +19,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
 
 class FavoriteMoviesViewModel(
     private val moviesRepository: MoviesRepository,
@@ -37,41 +37,39 @@ class FavoriteMoviesViewModel(
     }
 
     private fun setupFavoriteMovies() {
-        viewModelScope.launch(Dispatchers.IO) {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            _favoriteMoviesUiState.value = ScreenUiState.Error(throwable.message)
+        }
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _favoriteMoviesUiState.value = ScreenUiState.Loading
-            try {
-                val favoritesIdListDeferred = async {
-                    userRepository.allFavoriteMoviesIds
+            val favoritesIdListDeferred = async {
+                userRepository.allFavoriteMoviesIds
+            }
+            val favoritesIdList = favoritesIdListDeferred.await()
+            withContext(Dispatchers.Main) {
+                favoritesIdList.collect {
+                    _favoriteMoviesUiState.value =
+                        ScreenUiState.Success(getFavoriteMoviesListByIds(it))
                 }
-                val favoritesIdList = favoritesIdListDeferred.await()
-                withContext(Dispatchers.Main) {
-                    favoritesIdList.collect {
-                        _favoriteMoviesUiState.value =
-                            ScreenUiState.Success(getFavoriteMoviesListByIds(it))
-                    }
-                }
-            } catch (e: IOException) {
-                ScreenUiState.Error(e.message)
             }
         }
     }
 
     fun setSearchedMoviesList(searchTerm: String) {
-        viewModelScope.launch {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            _favoriteMoviesUiState.value = ScreenUiState.Error(throwable.message)
+        }
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _searchedMoviesUiState.value = ScreenUiState.Loading
-            try {
-                val searchFavoritesIdListDeferred =
-                    async { userRepository.searchFavoriteMovies(searchTerm) }
-                val searchFavoritesIdList =
-                    searchFavoritesIdListDeferred.await()
-                withContext(Dispatchers.Main) {
-                    searchFavoritesIdList.collect {
-                        _searchedMoviesUiState.value =
-                            ScreenUiState.Success(getFavoriteMoviesListByIds(it))
-                    }
+            val searchFavoritesIdListDeferred =
+                async { userRepository.searchFavoriteMovies(searchTerm) }
+            val searchFavoritesIdList =
+                searchFavoritesIdListDeferred.await()
+            withContext(Dispatchers.Main) {
+                searchFavoritesIdList.collect {
+                    _searchedMoviesUiState.value =
+                        ScreenUiState.Success(getFavoriteMoviesListByIds(it))
                 }
-            } catch (e: IOException) {
-                ScreenUiState.Error(e.message)
             }
         }
     }
