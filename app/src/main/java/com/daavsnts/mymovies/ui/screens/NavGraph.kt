@@ -76,7 +76,7 @@ sealed class Screen(
 
 @Composable
 fun NavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Profile.route) {
+    NavHost(navController = navController, startDestination = Screen.Movies.route) {
         composable(Screen.Movies.route) {
             val moviesViewModel: MoviesViewModel =
                 viewModel(factory = MoviesViewModel.Factory)
