@@ -10,6 +10,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,9 +49,11 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
             }
 
             is AsyncImagePainter.State.Error -> {
-                ErrorMessage(
-                    iconSize = 50.dp,
-                    textSize = 18.sp
+                Image(
+                    painter = painterResource(id = R.drawable.missing_poster),
+                    contentDescription = stringResource(id = R.string.loading_error_content_description),
+                    contentScale = ContentScale.Crop,
+                    modifier = modifier.fillMaxSize().alpha(0.5f)
                 )
             }
 
