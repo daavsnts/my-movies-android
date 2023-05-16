@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -48,26 +47,10 @@ fun FavoriteMoviesScreen(
     ) {
         SearchBar(searchTerm)
         Spacer(modifier.height(20.dp))
-        if (favoriteMoviesUiState is ScreenUiState.Success) {
-            if (favoriteMoviesUiState.data.isEmpty()) {
-                Text(
-                    text = stringResource(id = R.string.fms_empty_favorite_list_text),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(20.dp)
-                        .alpha(0.8f)
-                )
-            }
-        } else {
-            RenderMoviesGrid(
-                moviesUiStateList = if (searchTerm.value.isEmpty())
-                    favoriteMoviesUiState else searchedMoviesUiStateList,
-                navController = navController
-            )
-        }
+        RenderMoviesGrid(
+            moviesUiStateList = if (searchTerm.value.isEmpty())
+                favoriteMoviesUiState else searchedMoviesUiStateList,
+            navController = navController
+        )
     }
 }
