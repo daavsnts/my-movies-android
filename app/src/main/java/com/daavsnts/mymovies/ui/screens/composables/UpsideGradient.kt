@@ -64,12 +64,11 @@ fun UpsideGlassGradient(
                     )
                 }
                 .blur(20.dp)
-                .alpha(0.8f)
         )
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .alpha(0.8f)
+                .alpha(0.9f)
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
