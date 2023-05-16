@@ -37,8 +37,7 @@ fun MovieCard(
             movieId.let {
                 navController.navigate("MovieDetailsScreen/$movieId")
             }
-        },
-        modifier = modifier.background(MaterialTheme.colorScheme.surface)
+        }
     ) {
         Box(
             modifier = modifier
