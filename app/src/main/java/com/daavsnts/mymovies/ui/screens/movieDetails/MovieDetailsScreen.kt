@@ -278,7 +278,7 @@ fun InfoBox(
 ) {
     Box(
         modifier = modifier
-            .padding(top = 280.dp), contentAlignment = Alignment.Center
+            .padding(top = 270.dp), contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = modifier
