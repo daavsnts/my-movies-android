@@ -132,7 +132,7 @@ fun ErrorMovieCard(modifier: Modifier = Modifier) {
                 iconSize = 50.dp,
                 textSize = 18.sp,
                 errorColor = MaterialTheme.colorScheme.background,
-                alpha = 0.8f)
+                alpha = 1f)
         }
     }
 }
