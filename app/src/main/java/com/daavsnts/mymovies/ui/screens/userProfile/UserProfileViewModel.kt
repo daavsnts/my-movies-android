@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
 
 class UserProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _userName = MutableStateFlow<ScreenUiState<String>>(ScreenUiState.Loading)

@@ -2,7 +2,6 @@ package com.daavsnts.mymovies.ui.screens.userProfile
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -55,7 +54,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
-import com.daavsnts.mymovies.ui.screens.composables.ErrorMessage
 import com.daavsnts.mymovies.ui.screens.composables.MissingPoster
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
 import com.daavsnts.mymovies.ui.screens.getBitMap

@@ -1,6 +1,5 @@
 package com.daavsnts.mymovies.ui.screens.composables
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
