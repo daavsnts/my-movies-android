@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.AlertDialog
@@ -54,6 +55,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import com.daavsnts.mymovies.ui.screens.composables.ErrorMessage
+import com.daavsnts.mymovies.ui.screens.composables.MissingPoster
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
 import com.daavsnts.mymovies.ui.screens.getBitMap
 import com.daavsnts.mymovies.ui.screens.shimmerEffect
@@ -134,7 +137,7 @@ fun ProfileBackground(
                 BackgroundImage(pictureUri = profileBackgroundUriUiState.data)
             }
 
-            is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
+            is ScreenUiState.Error -> MissingPoster()
         }
         Icon(
             imageVector = Icons.Default.PhotoCamera,
@@ -188,8 +191,7 @@ fun ProfilePicture(
             is ScreenUiState.Success -> {
                 ProfileImage(pictureUri = profilePictureUriUiState.data)
             }
-
-            is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
+            is ScreenUiState.Error -> ErrorProfileImage()
         }
         Icon(
             imageVector = Icons.Default.PhotoCamera,
@@ -246,6 +248,27 @@ fun ProfileImage(
 }
 
 @Composable
+fun ErrorProfileImage(
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = CircleShape,
+        modifier = modifier.alpha(0.5f)
+    ) {
+        Box(modifier.size(200.dp)) {
+            Icon(
+                imageVector = Icons.Default.ErrorOutline,
+                contentDescription = stringResource(R.string.loading_error_content_description),
+                tint = MaterialTheme.colorScheme.error,
+                modifier = modifier
+                    .size(180.dp)
+                    .align(Alignment.Center)
+            )
+        }
+    }
+}
+
+@Composable
 fun Username(
     modifier: Modifier = Modifier,
     userNameUiState: ScreenUiState<String>,
@@ -268,8 +291,13 @@ fun Username(
                     )
                 }
             }
-
-            is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
+            is ScreenUiState.Error -> Text(
+                stringResource(id = R.string.ups_default_username),
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    color = MaterialTheme.colorScheme.error
+                ),
+                modifier = modifier.alpha(0.5f)
+            )
         }
         Spacer(modifier = modifier.width(5.dp))
         Box(modifier = modifier
@@ -322,7 +350,15 @@ fun UserAnalytics(
                 )
             )
         }
-        is ScreenUiState.Error -> Log.d("profilePictureUriUiState", "Error")
+        is ScreenUiState.Error -> {
+            Icon(
+                imageVector = Icons.Default.ErrorOutline,
+                contentDescription = stringResource(R.string.loading_error_content_description),
+                tint = MaterialTheme.colorScheme.error,
+                modifier = modifier
+                    .size(22.dp).alpha(0.5f)
+            )
+        }
     }
 }
 
@@ -332,7 +368,9 @@ fun LoadingFavoriteQuantity(
 ) {
     CircularProgressIndicator(
         strokeWidth = 3.dp,
-        modifier = modifier.size(20.dp).alpha(0.5f)
+        modifier = modifier
+            .size(20.dp)
+            .alpha(0.5f)
     )
 }
 
