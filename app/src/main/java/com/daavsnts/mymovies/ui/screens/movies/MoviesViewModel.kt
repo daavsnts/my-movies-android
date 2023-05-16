@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
+import java.io.IOException
 import kotlin.reflect.KProperty0
 
 class PairOfListMoviesState(
@@ -91,7 +91,7 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
                 withContext(Dispatchers.Main) {
                     moviesUiState.get().value = ScreenUiState.Success(moviesUiStateList)
                 }
-            } catch (e: HttpException) {
+            } catch (e: IOException) {
                 ScreenUiState.Error(e.message)
             }
         }
@@ -107,7 +107,7 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
                 withContext(Dispatchers.Main) {
                     _searchedMoviesUiState.value = ScreenUiState.Success(searchedMoviesUiState)
                 }
-            } catch (e: HttpException) {
+            } catch (e: IOException) {
                 ScreenUiState.Error(e.message)
             }
         }

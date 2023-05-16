@@ -4,8 +4,8 @@ import android.icu.text.SimpleDateFormat
 import com.daavsnts.mymovies.data.network.MoviesApiService
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.model.MovieList
-import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 import java.util.Locale
 
 interface MoviesRepository {
@@ -37,7 +37,7 @@ class NetworkMoviesRepository(
             val movies = body?.results
             movies?.let { return treatMovies(it).filter { movie -> movie.title != null && movie.posterPath != null } }
         }
-        throw HttpException(response)
+        throw IOException()
     }
 
     override suspend fun getMovieDetails(movieId: Int): Movie {
@@ -48,7 +48,7 @@ class NetworkMoviesRepository(
                 return treatMovie(movie)
             }
         }
-        throw HttpException(response)
+        throw IOException()
     }
 
     override suspend fun searchMoviesByTerm(searchTerm: String): List<Movie> {
@@ -58,7 +58,7 @@ class NetworkMoviesRepository(
             val movies = body?.results
             movies?.let { return treatMovies(it).filter { movie -> movie.title != null && movie.posterPath != null } }
         }
-        throw HttpException(response)
+        throw IOException()
     }
 
     private fun treatMovie(movie: Movie): Movie {
