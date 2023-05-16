@@ -61,7 +61,6 @@ import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.composables.MissingPoster
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGlassGradient
-import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
 import com.daavsnts.mymovies.ui.screens.getBitMap
 import com.daavsnts.mymovies.ui.screens.shimmerEffect
 

@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImagePainter
 
 @Composable
 fun UpsideGradient(startY: Float, color: Color, modifier: Modifier = Modifier) {
