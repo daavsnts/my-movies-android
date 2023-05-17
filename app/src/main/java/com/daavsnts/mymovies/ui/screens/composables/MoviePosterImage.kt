@@ -24,7 +24,11 @@ import com.daavsnts.mymovies.ui.screens.shimmerEffect
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
+fun MoviePosterImage(
+    modifier: Modifier = Modifier,
+    posterPath: String?,
+    gradientColor: Color
+) {
     val imageLoader = LocalContext.current.imageLoader
     posterPath?.let {
         imageLoader.diskCache?.remove(posterPath)
@@ -36,7 +40,7 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
             .crossfade(true)
             .build()
     )
-    Box(modifier = modifier.background(Color.Black)) {
+    Box(modifier = modifier.background(MaterialTheme.colorScheme.background)) {
         when (posterImage.state) {
             is AsyncImagePainter.State.Success -> {
                 Image(
@@ -48,7 +52,7 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
                 UpsideGlassGradient(
                     posterImage = posterImage,
                     startY = 300f,
-                    color = MaterialTheme.colorScheme.surface
+                    color = gradientColor
                 )
             }
 
@@ -57,7 +61,7 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
                 UpsideGlassGradient(
                     posterImage = painterResource(id = R.drawable.missing_poster),
                     startY = 300f,
-                    color = MaterialTheme.colorScheme.surface
+                    color = gradientColor
                 )
             }
 
@@ -76,7 +80,7 @@ fun MoviePosterImage(posterPath: String?, modifier: Modifier = Modifier) {
                 UpsideGlassGradient(
                     posterImage = posterImage,
                     startY = 300f,
-                    color = MaterialTheme.colorScheme.surface
+                    color = gradientColor
                 )
             }
         }

@@ -11,25 +11,25 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 
 private val DarkColorScheme = darkColorScheme(
-    background = Jet,
-    onBackground = GhostWhite,
-    primary = Night,
-    onPrimary = GhostWhite,
-    surface = Night,
-    onSurface = GhostWhite,
-    secondaryContainer = Jet,
-    error = PersianRed
+    background = MyNight,
+    onBackground = MyWhite,
+    primary = MyBlack,
+    onPrimary = MyWhite,
+    surface = MyBlack,
+    onSurface = MyWhite,
+    secondaryContainer = MyNight,
+    error = MyRed
 )
 
 private val LightColorScheme = lightColorScheme(
-    background = GhostWhite,
-    onBackground = EerieBlack,
-    primary = Night,
-    onPrimary = GhostWhite,
-    surface = Night,
-    onSurface = GhostWhite,
-    secondaryContainer = GhostWhite,
-    error = PersianRed
+    background = MyNight,
+    onBackground = MyWhite,
+    primary = MyBlack,
+    onPrimary = MyWhite,
+    surface = MyBlack,
+    onSurface = MyWhite,
+    secondaryContainer = MyNight,
+    error = MyRed
 )
 
 @Composable

@@ -57,7 +57,10 @@ import com.daavsnts.mymovies.ui.screens.composables.ErrorMessage
 import com.daavsnts.mymovies.ui.screens.composables.MoviePosterImage
 import com.daavsnts.mymovies.ui.screens.composables.UpsideGradient
 import com.daavsnts.mymovies.ui.screens.shimmerEffect
-import com.daavsnts.mymovies.ui.theme.Maize
+import com.daavsnts.mymovies.ui.theme.MyLightGray
+import com.daavsnts.mymovies.ui.theme.MyDarkGrey
+import com.daavsnts.mymovies.ui.theme.MyWhite
+import com.daavsnts.mymovies.ui.theme.MyYellow
 
 @Composable
 fun MovieDetailsScreen(
@@ -91,7 +94,7 @@ fun MovieDetailsLoading(
     Box(
         modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         BackButton(
             modifier = modifier
@@ -223,7 +226,7 @@ fun MovieDetails(
             .background(Color.Black)
     ) {
         movie.posterPath?.let {
-            MovieDetailsBackground(it)
+            MoviePosterImage(posterPath = it, gradientColor = MaterialTheme.colorScheme.surface)
         }
         BackButton(
             modifier = modifier
@@ -238,12 +241,6 @@ fun MovieDetails(
             removeFavoriteMovie = removeFavoriteMovie
         )
     }
-}
-
-@Composable
-fun MovieDetailsBackground(posterPath: String) {
-    MoviePosterImage(posterPath = posterPath)
-    //UpsideGradient(startY = 300f, MaterialTheme.colorScheme.surface)
 }
 
 @Composable
@@ -390,7 +387,7 @@ fun FavoriteIcon(
             .size(80.dp)
             .clickable(indication = rememberRipple(
                 radius = 32.dp,
-                color = Color.Black.copy(alpha = 0.4f)
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
             ),
                 interactionSource = remember { MutableInteractionSource() }) {
                 favoriteFunction(movie)
@@ -398,7 +395,7 @@ fun FavoriteIcon(
         Icon(
             imageVector = iconType,
             contentDescription = null,
-            tint = Maize,
+            tint = MyYellow,
             modifier = modifier.size(80.dp)
         )
     }
@@ -408,7 +405,7 @@ fun FavoriteIcon(
 fun ReleaseDateText(releaseDate: String) {
     Text(
         text = releaseDate,
-        color = Color.LightGray,
+        color = MyLightGray,
         style = MaterialTheme.typography.bodyLarge.copy(
             fontWeight = FontWeight.Light
         )
@@ -458,12 +455,12 @@ fun GenreList(genres: List<Genre>, modifier: Modifier = Modifier) {
 fun GenreButton(genre: String, modifier: Modifier = Modifier) {
     Box(
         modifier
-            .background(Color.DarkGray, RoundedCornerShape(5.dp))
+            .background(MyDarkGrey, RoundedCornerShape(5.dp))
             .padding(start = 7.dp, end = 7.dp, top = 3.dp, bottom = 3.dp)
     ) {
         Text(
             text = genre,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MyWhite,
             style = MaterialTheme.typography.bodySmall.copy(
                 fontWeight = FontWeight.Light
             )

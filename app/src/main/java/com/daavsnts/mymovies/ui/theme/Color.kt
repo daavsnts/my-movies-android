@@ -2,10 +2,11 @@ package com.daavsnts.mymovies.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val EerieBlack = Color(0xFF1E1B18)
-val GhostWhite = Color(0xFFFFFAFF)
-val Emerald = Color(0xFF23CE6B)
-val PersianRed = Color(0xFFCC2936)
-val Maize = Color(0xFFFFED66)
-val Night = Color(0xFF161412)
-val Jet = Color(0xFF2D2925)
+val MyWhite = Color(0xFFF6F8FF)
+val MyGreen = Color(0xFF1BDA5E)
+val MyRed = Color(0xFFCB152B)
+val MyYellow = Color(0xFFFFD61F)
+val MyBlack = Color(0xFF0A0A0B)
+val MyNight = Color(0xFF131315)
+val MyDarkGrey = Color(0xFF333333)
+val MyLightGray = Color(0xFFA3A3A3)

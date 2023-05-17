@@ -144,12 +144,12 @@ fun ProfileBackground(
         Icon(
             imageVector = Icons.Default.PhotoCamera,
             contentDescription = stringResource(R.string.ups_change_profile_background),
-            tint = MaterialTheme.colorScheme.background,
+            tint = MaterialTheme.colorScheme.surface,
             modifier = Modifier
                 .padding(20.dp)
                 .size(40.dp)
-                .background(MaterialTheme.colorScheme.onBackground, CircleShape)
-                .border(3.dp, MaterialTheme.colorScheme.background, CircleShape)
+                .background(MaterialTheme.colorScheme.onSurface, CircleShape)
+                .border(3.dp, MaterialTheme.colorScheme.surface, CircleShape)
                 .align(Alignment.TopEnd)
                 .padding(10.dp)
                 .clickable { galleryActivityLauncher.launch("image/*") }
@@ -186,14 +186,14 @@ fun BackgroundImage(pictureUri: String) {
         UpsideGlassGradient(
             posterImage = rememberAsyncImagePainter(bitmap),
             startY = 300f,
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.surface
         )
     } else {
         MissingPoster()
         UpsideGlassGradient(
             posterImage = painterResource(id = R.drawable.missing_poster),
             startY = 300f,
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.surface
         )
     }
 }
@@ -217,10 +217,10 @@ fun ProfilePicture(
         Icon(
             imageVector = Icons.Default.PhotoCamera,
             contentDescription = stringResource(R.string.ups_change_profile_picture),
-            tint = MaterialTheme.colorScheme.background,
+            tint = MaterialTheme.colorScheme.surface,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.onBackground, CircleShape)
-                .border(3.dp, MaterialTheme.colorScheme.background, CircleShape)
+                .background(MaterialTheme.colorScheme.onSurface, CircleShape)
+                .border(3.dp, MaterialTheme.colorScheme.surface, CircleShape)
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
                 .clickable { galleryActivityLauncher.launch("image/*") }
@@ -326,7 +326,7 @@ fun Username(
         }
         Spacer(modifier = modifier.width(5.dp))
         Box(modifier = modifier
-            .background(MaterialTheme.colorScheme.onBackground, CircleShape)
+            .background(MaterialTheme.colorScheme.onSurface, CircleShape)
             .padding(2.dp)
             .clickable {
                 showDialog(true)
@@ -335,7 +335,7 @@ fun Username(
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = stringResource(id = R.string.ups_edit_username),
-                tint = MaterialTheme.colorScheme.background,
+                tint = MaterialTheme.colorScheme.surface,
                 modifier = modifier.size(15.dp)
             )
         }

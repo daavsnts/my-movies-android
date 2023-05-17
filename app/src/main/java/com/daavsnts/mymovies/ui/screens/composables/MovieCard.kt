@@ -15,12 +15,12 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.navigation.NavController
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.shimmerEffect
+import com.daavsnts.mymovies.ui.theme.MyLightGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +49,10 @@ fun MovieCard(
                     .height(230.dp)
                     .fillMaxSize()
             ) {
-                MoviePosterImage(posterPath = movie.posterPath)
+                MoviePosterImage(
+                    posterPath = movie.posterPath,
+                    gradientColor = MaterialTheme.colorScheme.surface
+                )
             }
             //UpsideGradient(startY = 300f, color = MaterialTheme.colorScheme.surface)
             //UpsideGlassGradient(startY = 300f, color = MaterialTheme.colorScheme.surface)
@@ -86,7 +89,7 @@ fun MovieCard(
                 movie.releaseDate?.let {
                     Text(
                         text = it,
-                        color = Color.LightGray,
+                        color = MyLightGray,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             shadow = Shadow(
                                 Color.Black, blurRadius = 8f,
@@ -127,12 +130,16 @@ fun ErrorMovieCard(modifier: Modifier = Modifier) {
                 .height(230.dp)
                 .width(170.dp)
         ) {
-            Box(modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface))
+            Box(
+                modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface))
             ErrorMessage(
                 iconSize = 50.dp,
                 textSize = 18.sp,
                 errorColor = MaterialTheme.colorScheme.background,
-                alpha = 1f)
+                alpha = 1f
+            )
         }
     }
 }

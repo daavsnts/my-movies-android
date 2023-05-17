@@ -19,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import androidx.core.net.toUri
+import com.daavsnts.mymovies.ui.theme.MyDarkGrey
 
 fun getBitMap(context: Context, pictureUri: String): Bitmap =
     if (Build.VERSION.SDK_INT < 28) {
@@ -51,9 +51,9 @@ fun Modifier.shimmerEffect(): Modifier = composed {
     background(
         brush = Brush.linearGradient(
             colors = listOf(
-                MaterialTheme.colorScheme.surface,
-                Color.DarkGray,
-                MaterialTheme.colorScheme.surface,
+                MaterialTheme.colorScheme.primary,
+                MyDarkGrey,
+                MaterialTheme.colorScheme.primary,
             ),
             start = Offset(startOffsetX, 0f),
             end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat()),

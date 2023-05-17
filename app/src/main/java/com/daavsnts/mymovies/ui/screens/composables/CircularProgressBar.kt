@@ -24,15 +24,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.daavsnts.mymovies.ui.theme.Emerald
-import com.daavsnts.mymovies.ui.theme.Night
+import com.daavsnts.mymovies.ui.theme.MyGreen
 
 @Composable
 fun CircularProgressBar(
     percentage: Float,
     fontSize: TextUnit,
     radius: Dp = 15.dp,
-    color: Color = Emerald,
+    color: Color = MyGreen,
     strokeWidth: Dp = 4.dp,
     animDuration: Int = 1000,
     animDelay: Int = 0
@@ -56,9 +55,10 @@ fun CircularProgressBar(
         contentAlignment = Alignment.Center,
         modifier = Modifier.size(radius * 2f)
     ) {
+        val circleBgColor = MaterialTheme.colorScheme.primary
         Canvas(modifier = Modifier.size(radius * 2f)) {
             drawCircle(
-                color = Night,
+                color = circleBgColor,
                 alpha = 0.6f
             )
             drawArc(
