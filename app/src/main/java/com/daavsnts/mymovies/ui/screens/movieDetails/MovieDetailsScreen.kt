@@ -47,7 +47,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.domain.model.Genre
@@ -65,7 +64,7 @@ import com.daavsnts.mymovies.ui.theme.MyYellow
 
 @Composable
 fun MovieDetailsScreen(
-    navController: NavController,
+    navController: NavHostController,
     movieDetailsUiState: ScreenUiState<Movie>,
     addFavoriteMovie: (Movie) -> Unit,
     removeFavoriteMovie: (Movie) -> Unit,
@@ -90,7 +89,7 @@ fun MovieDetailsScreen(
 @Composable
 fun MovieDetailsLoading(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavHostController
 ) {
     Box(
         modifier
@@ -214,7 +213,7 @@ fun LoadingText(
 
 @Composable
 fun MovieDetails(
-    navController: NavController,
+    navController: NavHostController,
     movie: Movie,
     isMovieFavorite: Boolean,
     addFavoriteMovie: (Movie) -> Unit,
@@ -247,7 +246,7 @@ fun MovieDetails(
 @Composable
 fun BackButton(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavHostController
 ) {
     Box(
         modifier = modifier
@@ -472,7 +471,7 @@ fun GenreButton(genre: String, modifier: Modifier = Modifier) {
 @Composable
 fun MovieDetailsError(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavHostController
 ) {
     Box {
         BackButton(

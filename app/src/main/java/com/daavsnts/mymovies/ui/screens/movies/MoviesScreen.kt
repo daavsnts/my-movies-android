@@ -18,7 +18,7 @@ fun MoviesScreen(
     moviesUiStateList: List<Pair<Int, ScreenUiState<List<Movie>>>>,
     searchedMoviesUiStateList: ScreenUiState<List<Movie>>,
     setSearchedMoviesList: (String) -> Unit,
-    navigateToDetails: (Int) -> Unit,
+    navController: NavController
 ) {
     val searchTerm = remember { mutableStateOf("") }
 
@@ -35,9 +35,9 @@ fun MoviesScreen(
         SearchBar(searchTerm)
         Spacer(modifier.height(20.dp))
         if (searchTerm.value.isEmpty()) {
-            MoviesLists(moviesUiStateList = moviesUiStateList, navigateToDetails = navigateToDetails)
+            MoviesLists(moviesUiStateList = moviesUiStateList, navController = navController)
         } else {
-            MoviesGrid(searchedMoviesUiStateList, navigateToDetails = navigateToDetails)
+            MoviesGrid(searchedMoviesUiStateList, navController = navController)
         }
     }
 }

@@ -30,7 +30,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun FavoriteMoviesScreen(
-    navigateToDetails: (Int) -> Unit,
+    navController: NavController,
     favoriteMoviesUiState: ScreenUiState<List<Movie>>,
     searchedMoviesUiStateList: ScreenUiState<List<Movie>>,
     setSearchedMoviesList: (String) -> Unit,
@@ -53,7 +53,7 @@ fun FavoriteMoviesScreen(
         RenderFavoriteMoviesGrid(
             moviesUiStateList = if (searchTerm.value.isEmpty())
                 favoriteMoviesUiState else searchedMoviesUiStateList,
-            navigateToDetails = navigateToDetails
+            navController = navController
         )
     }
 }
@@ -62,7 +62,7 @@ fun FavoriteMoviesScreen(
 fun RenderFavoriteMoviesGrid(
     modifier: Modifier = Modifier,
     moviesUiStateList: ScreenUiState<List<Movie>>,
-    navigateToDetails: (Int) -> Unit
+    navController: NavController
 ) {
     when (moviesUiStateList) {
         is ScreenUiState.Loading -> LoadingGridOfMovies()
@@ -77,7 +77,7 @@ fun RenderFavoriteMoviesGrid(
                     modifier = modifier.fillMaxWidth().padding(20.dp).alpha(0.8f)
                 )
             } else {
-                GridOfMovies(moviesUiStateList.data, navigateToDetails)
+                GridOfMovies(moviesUiStateList.data, navController)
             }
         }
         is ScreenUiState.Error -> ErrorGridOfMovies()

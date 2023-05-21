@@ -1,7 +1,6 @@
 package com.daavsnts.mymovies.ui
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -14,13 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.daavsnts.mymovies.ui.screens.BottomNavBar
 import com.daavsnts.mymovies.ui.screens.NavGraph
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MyMoviesApp(modifier: Modifier = Modifier) {
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
     Scaffold(
         modifier = modifier
             .fillMaxSize()
