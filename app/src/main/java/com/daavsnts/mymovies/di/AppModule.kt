@@ -46,16 +46,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMoviesRepository(moviesApiService: MoviesApiService): MoviesRepository {
-        return NetworkMoviesRepository(moviesApiService)
-    }
+    fun provideMoviesRepository(moviesApiService: MoviesApiService): MoviesRepository =
+        NetworkMoviesRepository(moviesApiService)
 
     @Provides
     @Singleton
-    fun provideUserRepository(context: Application): UserRepository {
-        return LocalUserRepository(
-            UserDatabase.getDatabase(context).userDao(),
-            context.settingsDataStore
-        )
-    }
+    fun provideUserRepository(context: Application): UserRepository = LocalUserRepository(
+        UserDatabase.getDatabase(context).userDao(),
+        context.settingsDataStore
+    )
 }
