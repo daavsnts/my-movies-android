@@ -14,17 +14,17 @@ import com.daavsnts.mymovies.ui.screens.ScreenUiState
 @Composable
 fun MoviesGrid(
     moviesUiStateList: ScreenUiState<List<Movie>>,
-    navController: NavController
-) = RenderMoviesGrid(moviesUiStateList = moviesUiStateList, navController = navController)
+    navigateToDetails: (Int) -> Unit
+) = RenderMoviesGrid(moviesUiStateList = moviesUiStateList, navigateToDetails = navigateToDetails)
 
 @Composable
 fun RenderMoviesGrid(
     moviesUiStateList: ScreenUiState<List<Movie>>,
-    navController: NavController
+    navigateToDetails: (Int) -> Unit
 ) {
     when (moviesUiStateList) {
         is ScreenUiState.Loading -> LoadingGridOfMovies()
-        is ScreenUiState.Success -> GridOfMovies(moviesUiStateList.data, navController)
+        is ScreenUiState.Success -> GridOfMovies(moviesUiStateList.data, navigateToDetails)
         is ScreenUiState.Error -> ErrorGridOfMovies()
     }
 }
@@ -45,7 +45,7 @@ fun LoadingGridOfMovies() {
 @Composable
 fun GridOfMovies(
     movies: List<Movie>,
-    navController: NavController
+    navigateToDetails: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -54,7 +54,7 @@ fun GridOfMovies(
         contentPadding = PaddingValues(bottom = 20.dp)
     ) {
         itemsIndexed(movies) { _, movie ->
-            MovieCard(movie = movie, navController = navController)
+            MovieCard(movie = movie, navigateToDetails = navigateToDetails)
         }
     }
 }

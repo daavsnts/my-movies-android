@@ -27,16 +27,13 @@ import com.daavsnts.mymovies.ui.theme.MyLightGray
 fun MovieCard(
     movie: Movie,
     modifier: Modifier = Modifier,
-    navController: NavController
+    navigateToDetails: (Int) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(5.dp),
         onClick = {
-            val movieId = movie.id
-            movieId.let {
-                navController.navigate("MovieDetailsScreen/$movieId")
-            }
+            navigateToDetails(movie.id)
         }
     ) {
         Box(
