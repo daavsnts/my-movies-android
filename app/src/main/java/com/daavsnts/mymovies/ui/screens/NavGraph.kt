@@ -29,7 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.daavsnts.mymovies.R
-import com.daavsnts.mymovies.model.Movie
+import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesScreen
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesViewModel
 import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsScreen

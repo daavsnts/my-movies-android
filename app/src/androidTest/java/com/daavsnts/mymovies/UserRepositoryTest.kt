@@ -8,8 +8,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.daavsnts.mymovies.data.local.room.UserDao
 import com.daavsnts.mymovies.data.local.room.UserDatabase
-import com.daavsnts.mymovies.model.FavoriteMovieId
-import com.daavsnts.mymovies.repository.LocalUserRepository
+import com.daavsnts.mymovies.domain.model.FavoriteMovieId
+import com.daavsnts.mymovies.data.repository.LocalUserRepository
 import com.daavsnts.mymovies.repository.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first

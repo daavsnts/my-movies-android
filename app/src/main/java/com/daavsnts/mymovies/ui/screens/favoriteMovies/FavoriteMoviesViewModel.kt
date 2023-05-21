@@ -1,15 +1,11 @@
 package com.daavsnts.mymovies.ui.screens.favoriteMovies
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.daavsnts.mymovies.MyMoviesApplication
-import com.daavsnts.mymovies.repository.UserRepository
-import com.daavsnts.mymovies.repository.MoviesRepository
-import com.daavsnts.mymovies.model.FavoriteMovieId
-import com.daavsnts.mymovies.model.Movie
+import com.daavsnts.mymovies.domain.model.FavoriteMovieId
+import com.daavsnts.mymovies.domain.model.Movie
+import com.daavsnts.mymovies.domain.repository.MoviesRepository
+import com.daavsnts.mymovies.domain.repository.UserRepository
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler

@@ -2,9 +2,9 @@ package com.daavsnts.mymovies
 
 import com.daavsnts.mymovies.data.network.MoviesApiService
 import com.daavsnts.mymovies.data.network.MoviesRetrofitBuilder
-import com.daavsnts.mymovies.model.Genre
-import com.daavsnts.mymovies.model.Movie
-import com.daavsnts.mymovies.repository.NetworkMoviesRepository
+import com.daavsnts.mymovies.domain.model.Genre
+import com.daavsnts.mymovies.domain.model.Movie
+import com.daavsnts.mymovies.data.repository.NetworkMoviesRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

@@ -9,10 +9,10 @@ import com.daavsnts.mymovies.BuildConfig
 import com.daavsnts.mymovies.data.local.room.UserDatabase
 import com.daavsnts.mymovies.data.network.ApiKeyInterceptor
 import com.daavsnts.mymovies.data.network.MoviesApiService
-import com.daavsnts.mymovies.repository.LocalUserRepository
-import com.daavsnts.mymovies.repository.MoviesRepository
-import com.daavsnts.mymovies.repository.NetworkMoviesRepository
-import com.daavsnts.mymovies.repository.UserRepository
+import com.daavsnts.mymovies.data.repository.LocalUserRepository
+import com.daavsnts.mymovies.data.repository.NetworkMoviesRepository
+import com.daavsnts.mymovies.domain.repository.MoviesRepository
+import com.daavsnts.mymovies.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

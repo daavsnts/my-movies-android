@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.daavsnts.mymovies.model.FavoriteMovieId
+import com.daavsnts.mymovies.domain.model.FavoriteMovieId
 
 @Database(entities = [FavoriteMovieId::class], version = 1, exportSchema = false)
 abstract class UserDatabase : RoomDatabase() {

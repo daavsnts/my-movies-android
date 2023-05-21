@@ -1,8 +1,8 @@
 package com.daavsnts.mymovies.data.network
 
 import com.daavsnts.mymovies.BuildConfig
-import com.daavsnts.mymovies.model.Movie
-import com.daavsnts.mymovies.model.MovieList
+import com.daavsnts.mymovies.domain.model.Movie
+import com.daavsnts.mymovies.domain.model.MovieList
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit

@@ -1,4 +1,4 @@
-package com.daavsnts.mymovies.repository
+package com.daavsnts.mymovies.data.repository
 
 import androidx.annotation.WorkerThread
 import androidx.datastore.core.DataStore
@@ -6,24 +6,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.daavsnts.mymovies.data.local.room.UserDao
-import com.daavsnts.mymovies.model.FavoriteMovieId
+import com.daavsnts.mymovies.domain.model.FavoriteMovieId
+import com.daavsnts.mymovies.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
-
-interface UserRepository {
-    val allFavoriteMoviesIds: Flow<List<FavoriteMovieId>>
-    suspend fun getAllFavoriteMoviesQuantity(): Flow<Int>
-    suspend fun isMovieFavorite(movieId: Int): Boolean
-    suspend fun insertFavoriteMovie(movieId: FavoriteMovieId)
-    suspend fun deleteFavoriteMovie(movieId: FavoriteMovieId)
-    suspend fun searchFavoriteMovies(searchTerm: String): Flow<List<FavoriteMovieId>>
-    suspend fun <T> getPreference(key: Preferences.Key<T>, defaultValue: T): Flow<T>
-    suspend fun <T> insertPreference(key: Preferences.Key<T>, value: T)
-    suspend fun <T> removePreference(key: Preferences.Key<T>)
-    suspend fun clearAllPreference()
-}
 
 class LocalUserRepository(
     private val userDao: UserDao,

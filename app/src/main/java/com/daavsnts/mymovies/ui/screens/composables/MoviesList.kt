@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.daavsnts.mymovies.model.Movie
+import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 
 @Composable

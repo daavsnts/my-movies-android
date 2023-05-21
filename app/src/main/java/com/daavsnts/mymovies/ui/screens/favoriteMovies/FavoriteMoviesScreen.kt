@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.daavsnts.mymovies.R
-import com.daavsnts.mymovies.model.Movie
+import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.composables.ErrorGridOfMovies
 import com.daavsnts.mymovies.ui.screens.composables.GridOfMovies

@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.daavsnts.mymovies.model.Movie
+import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 
 @Composable

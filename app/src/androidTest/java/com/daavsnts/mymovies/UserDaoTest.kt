@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.daavsnts.mymovies.data.local.room.UserDao
 import com.daavsnts.mymovies.data.local.room.UserDatabase
-import com.daavsnts.mymovies.model.FavoriteMovieId
+import com.daavsnts.mymovies.domain.model.FavoriteMovieId
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

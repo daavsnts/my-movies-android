@@ -1,20 +1,13 @@
-package com.daavsnts.mymovies.repository
+package com.daavsnts.mymovies.data.repository
 
 import android.icu.text.SimpleDateFormat
 import com.daavsnts.mymovies.data.network.MoviesApiService
-import com.daavsnts.mymovies.model.Movie
-import com.daavsnts.mymovies.model.MovieList
+import com.daavsnts.mymovies.domain.model.Movie
+import com.daavsnts.mymovies.domain.model.MovieList
+import com.daavsnts.mymovies.domain.repository.MoviesRepository
 import retrofit2.Response
 import java.io.IOException
 import java.util.Locale
-
-interface MoviesRepository {
-    suspend fun getTrendingMovies(): List<Movie>
-    suspend fun getPopularMovies(): List<Movie>
-    suspend fun getUpcomingMovies(): List<Movie>
-    suspend fun getMovieDetails(movieId: Int): Movie
-    suspend fun searchMoviesByTerm(searchTerm: String): List<Movie>
-}
 
 class NetworkMoviesRepository(
     private val moviesApiService: MoviesApiService

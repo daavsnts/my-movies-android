@@ -2,8 +2,8 @@ package com.daavsnts.mymovies
 
 import com.daavsnts.mymovies.data.network.MoviesApiService
 import com.daavsnts.mymovies.data.network.MoviesRetrofitBuilder
-import com.daavsnts.mymovies.model.Movie
-import com.daavsnts.mymovies.repository.NetworkMoviesRepository
+import com.daavsnts.mymovies.domain.model.Movie
+import com.daavsnts.mymovies.data.repository.NetworkMoviesRepository
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.movies.MoviesViewModel
 import kotlinx.coroutines.delay

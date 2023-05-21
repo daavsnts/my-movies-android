@@ -1,4 +1,4 @@
-package com.daavsnts.mymovies.model
+package com.daavsnts.mymovies.domain.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName

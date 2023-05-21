@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.daavsnts.mymovies.ui.screens.composables.MoviesGrid
 import com.daavsnts.mymovies.ui.screens.composables.SearchBar
-import com.daavsnts.mymovies.model.Movie
+import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.composables.MoviesLists
 import kotlinx.coroutines.delay
