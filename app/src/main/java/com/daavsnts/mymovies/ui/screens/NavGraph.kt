@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -78,8 +78,7 @@ sealed class Screen(
 fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Movies.route) {
         composable(Screen.Movies.route) {
-            val moviesViewModel: MoviesViewModel =
-                viewModel(factory = MoviesViewModel.Factory)
+            val moviesViewModel = hiltViewModel<MoviesViewModel>()
             val moviesUiStateList =
                 moviesViewModel.moviesUiStatesList.map {
                     Pair(
@@ -104,8 +103,7 @@ fun NavGraph(navController: NavHostController) {
             )
         }
         composable(Screen.Details.route) {
-            val movieDetailsViewModel: MovieDetailsViewModel =
-                viewModel(factory = MovieDetailsViewModel.Factory)
+            val movieDetailsViewModel = hiltViewModel<MovieDetailsViewModel>()
             val movieId = it.arguments?.getString("movieId")?.toInt()
             val movieDetailsUiState =
                 movieDetailsViewModel
@@ -137,8 +135,7 @@ fun NavGraph(navController: NavHostController) {
             }
         }
         composable(Screen.Favorites.route) {
-            val favoriteMoviesViewModel: FavoriteMoviesViewModel =
-                viewModel(factory = FavoriteMoviesViewModel.Factory)
+            val favoriteMoviesViewModel = hiltViewModel<FavoriteMoviesViewModel>()
             val favoriteMoviesUiState =
                 favoriteMoviesViewModel
                     .favoriteMoviesUiState
@@ -159,8 +156,7 @@ fun NavGraph(navController: NavHostController) {
             )
         }
         composable(Screen.Profile.route) {
-            val userProfileViewModel: UserProfileViewModel =
-                viewModel(factory = UserProfileViewModel.Factory)
+            val userProfileViewModel = hiltViewModel<UserProfileViewModel>()
             val userNameUiState =
                 userProfileViewModel
                     .userName

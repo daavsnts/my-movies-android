@@ -11,6 +11,7 @@ import com.daavsnts.mymovies.repository.MoviesRepository
 import com.daavsnts.mymovies.model.FavoriteMovieId
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,8 +20,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class FavoriteMoviesViewModel(
+@HiltViewModel
+class FavoriteMoviesViewModel @Inject constructor(
     private val moviesRepository: MoviesRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
@@ -83,17 +86,5 @@ class FavoriteMoviesViewModel(
             favoriteMoviesList.add(moviesRepository.getMovieDetails(it.id))
         }
         return favoriteMoviesList
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application =
-                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MyMoviesApplication)
-                val moviesRepository: MoviesRepository = application.container.moviesRepository
-                val userRepository: UserRepository = application.container.userRepository
-                FavoriteMoviesViewModel(moviesRepository, userRepository)
-            }
-        }
     }
 }

@@ -12,6 +12,7 @@ import com.daavsnts.mymovies.MyMoviesApplication
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.reflect.KProperty0
 
 class PairOfListMoviesState(
@@ -31,7 +33,10 @@ class PairOfStatesWithRepositoryFunctions(
     val apiFunction: suspend () -> List<Movie>
 )
 
-class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
+@HiltViewModel
+class MoviesViewModel @Inject constructor(
+    private val moviesRepository: MoviesRepository
+    ) : ViewModel() {
     private val _trendingMoviesUiState =
         MutableStateFlow<ScreenUiState<List<Movie>>>(ScreenUiState.Loading)
     private val trendingMoviesUiState: Flow<ScreenUiState<List<Movie>>> = _trendingMoviesUiState
@@ -108,16 +113,6 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
             val searchedMoviesUiState = searchedMoviesUiStateDeferred.await()
             withContext(Dispatchers.Main) {
                 _searchedMoviesUiState.value = ScreenUiState.Success(searchedMoviesUiState)
-            }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = (this[APPLICATION_KEY] as MyMoviesApplication)
-                val moviesRepository: MoviesRepository = application.container.moviesRepository
-                MoviesViewModel(moviesRepository)
             }
         }
     }

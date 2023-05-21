@@ -14,6 +14,7 @@ import com.daavsnts.mymovies.data.local.internaldir.copyFileToInternalDir
 import com.daavsnts.mymovies.data.local.internaldir.getFileUriFromInternalDir
 import com.daavsnts.mymovies.repository.UserRepository
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -21,8 +22,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class UserProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
+@HiltViewModel
+class UserProfileViewModel @Inject constructor(
+    private val userRepository: UserRepository
+    ) : ViewModel() {
     private val _userName = MutableStateFlow<ScreenUiState<String>>(ScreenUiState.Loading)
     val userName: Flow<ScreenUiState<String>> = _userName
     private val _profilePictureUri = MutableStateFlow<ScreenUiState<String>>(ScreenUiState.Loading)
@@ -141,17 +146,5 @@ class UserProfileViewModel(private val userRepository: UserRepository) : ViewMod
             pictureUriFromInternalDir.toString()
         )
         updatePreferencesUiState(pictureUriState, stringPreferencesKey(key), "")
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application =
-                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MyMoviesApplication)
-                val userRepository: UserRepository =
-                    application.container.userRepository
-                UserProfileViewModel(userRepository)
-            }
-        }
     }
 }

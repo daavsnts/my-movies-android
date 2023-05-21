@@ -1,12 +1,7 @@
 package com.daavsnts.mymovies
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class MyMoviesApplication: Application() {
-    lateinit var container: AppContainer
-
-    override fun onCreate() {
-        super.onCreate()
-        container = DefaultAppContainer(applicationContext)
-    }
-}
+@HiltAndroidApp
+class MyMoviesApplication: Application()
