@@ -17,7 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
-import androidx.navigation.NavController
 import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.shimmerEffect
 import com.daavsnts.mymovies.ui.theme.MyLightGray
@@ -27,17 +26,12 @@ import com.daavsnts.mymovies.ui.theme.MyLightGray
 fun MovieCard(
     movie: Movie,
     modifier: Modifier = Modifier,
-    navController: NavController
+    navigateToDetails: (Int) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(5.dp),
-        onClick = {
-            val movieId = movie.id
-            movieId.let {
-                navController.navigate("MovieDetailsScreen/$movieId")
-            }
-        }
+        onClick = { navigateToDetails(movie.id) }
     ) {
         Box(
             modifier = modifier

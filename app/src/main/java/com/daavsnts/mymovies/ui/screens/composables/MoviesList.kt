@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 
@@ -22,13 +21,16 @@ import com.daavsnts.mymovies.ui.screens.ScreenUiState
 fun MoviesLists(
     modifier: Modifier = Modifier,
     moviesUiStateList: List<Pair<Int, ScreenUiState<List<Movie>>>>,
-    navController: NavController
+    navigateToDetails: (Int) -> Unit
 ) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp), contentPadding = PaddingValues(bottom = 20.dp)) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        contentPadding = PaddingValues(bottom = 20.dp)
+    ) {
         itemsIndexed(moviesUiStateList) { _, list ->
             HeaderText(stringResource(list.first))
             Spacer(modifier.height(10.dp))
-            RenderMoviesList(moviesUiState = list.second, navController = navController)
+            RenderMoviesList(moviesUiState = list.second, navigateToDetails = navigateToDetails)
         }
     }
 }
@@ -47,11 +49,15 @@ fun HeaderText(text: String) {
 @Composable
 fun RenderMoviesList(
     moviesUiState: ScreenUiState<List<Movie>>,
-    navController: NavController
+    navigateToDetails: (Int) -> Unit
 ) {
     when (moviesUiState) {
         is ScreenUiState.Loading -> LoadingListOfMovies()
-        is ScreenUiState.Success -> ListOfMovies(moviesUiState.data, navController = navController)
+        is ScreenUiState.Success -> ListOfMovies(
+            moviesUiState.data,
+            navigateToDetails = navigateToDetails
+        )
+
         is ScreenUiState.Error -> ErrorListOfMovies()
     }
 }
@@ -66,10 +72,10 @@ fun LoadingListOfMovies() {
 }
 
 @Composable
-fun ListOfMovies(movies: List<Movie>, navController: NavController) {
+fun ListOfMovies(movies: List<Movie>, navigateToDetails: (Int) -> Unit) {
     LazyRow(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         itemsIndexed(movies) { _, movie ->
-            MovieCard(movie = movie, navController = navController)
+            MovieCard(movie = movie, navigateToDetails = navigateToDetails)
         }
     }
 }
