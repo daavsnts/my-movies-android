@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -100,6 +101,10 @@ fun NavGraph(navController: NavHostController) {
         favoriteScreen(navController)
         profileScreen()
     }
+}
+
+class MoviesScreenViewModel(): ViewModel() {
+    
 }
 
 fun NavGraphBuilder.moviesScreen(navController: NavHostController) {

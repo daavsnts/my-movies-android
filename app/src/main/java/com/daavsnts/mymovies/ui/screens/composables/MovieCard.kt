@@ -31,25 +31,18 @@ fun MovieCard(
     Card(
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(5.dp),
-        onClick = { navigateToDetails(movie.id) }
+        onClick = { navigateToDetails(movie.id) },
+        modifier = modifier
+            .height(230.dp)
+            .width(170.dp)
     ) {
         Box(
-            modifier = modifier
-                .height(230.dp)
-                .width(170.dp)
+            modifier = modifier.fillMaxSize()
         ) {
-            Box(
-                modifier = modifier
-                    .height(230.dp)
-                    .fillMaxSize()
-            ) {
-                MoviePosterImage(
-                    posterPath = movie.posterPath,
-                    gradientColor = MaterialTheme.colorScheme.surface
-                )
-            }
-            //UpsideGradient(startY = 300f, color = MaterialTheme.colorScheme.surface)
-            //UpsideGlassGradient(startY = 300f, color = MaterialTheme.colorScheme.surface)
+            MoviePosterImage(
+                posterPath = movie.posterPath,
+                gradientColor = MaterialTheme.colorScheme.surface
+            )
             Box(
                 modifier = modifier
                     .fillMaxSize()
@@ -101,12 +94,12 @@ fun MovieCard(
 fun LoadingMovieCard(modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(5.dp)
+        elevation = CardDefaults.cardElevation(5.dp),
+        modifier = modifier.height(230.dp).width(170.dp)
     ) {
         Box(
             modifier = modifier
-                .height(230.dp)
-                .width(170.dp)
+                .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
                 .shimmerEffect()
         )
@@ -118,16 +111,14 @@ fun ErrorMovieCard(modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(5.dp),
+        modifier = modifier.height(230.dp).width(170.dp)
     ) {
-        Box(
-            modifier = modifier
-                .height(230.dp)
-                .width(170.dp)
-        ) {
+        Box(modifier = modifier.fillMaxSize()) {
             Box(
                 modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surface))
+                    .background(MaterialTheme.colorScheme.surface)
+            )
             ErrorMessage(
                 iconSize = 50.dp,
                 textSize = 18.sp,
