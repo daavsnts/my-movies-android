@@ -1,4 +1,4 @@
-package com.daavsnts.mymovies.ui.screens
+package com.daavsnts.mymovies.ui.navigation
 
 import android.content.Context
 import android.net.Uri
@@ -32,6 +32,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.domain.model.Movie
+import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesScreen
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesViewModel
 import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsScreen
@@ -101,10 +102,6 @@ fun NavGraph(navController: NavHostController) {
         favoriteScreen(navController)
         profileScreen()
     }
-}
-
-class MoviesScreenViewModel(): ViewModel() {
-    
 }
 
 fun NavGraphBuilder.moviesScreen(navController: NavHostController) {

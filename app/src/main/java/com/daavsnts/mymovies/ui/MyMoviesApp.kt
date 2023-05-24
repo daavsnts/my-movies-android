@@ -11,8 +11,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.daavsnts.mymovies.ui.screens.BottomNavBar
-import com.daavsnts.mymovies.ui.screens.NavGraph
+import com.daavsnts.mymovies.ui.navigation.BottomNavBar
+import com.daavsnts.mymovies.ui.navigation.NavGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

@@ -1,4 +1,4 @@
-package com.daavsnts.mymovies
+package com.daavsnts.mymovies.di
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
