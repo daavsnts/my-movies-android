@@ -235,22 +235,24 @@ fun BottomNavBar(navController: NavHostController, modifier: Modifier = Modifier
     Box(modifier.background(MaterialTheme.colorScheme.primary)) {
         NavigationBar(containerColor = Color.Transparent) {
             Destinations.navScreenList.forEach { screen ->
-                NavigationBarItem(
-                    label = { Text(stringResource(screen.title), fontFamily = GoogleSans) },
-                    icon = {
-                        Icon(
-                            imageVector = screen.icon,
-                            contentDescription = stringResource(screen.title)
-                        )
-                    },
-                    selected = currentDestination == screen.route,
-                    onClick = {
-                        navController.navigate(screen.route) {
-                            popUpTo(navController.graph.findStartDestination().id)
-                            launchSingleTop = true
+                if (screen.title != null && screen.icon != null) {
+                    NavigationBarItem(
+                        label = { Text(stringResource(screen.title), fontFamily = GoogleSans) },
+                        icon = {
+                            Icon(
+                                imageVector = screen.icon,
+                                contentDescription = stringResource(screen.title)
+                            )
+                        },
+                        selected = currentDestination == screen.route || currentDestination == screen.subRoute,
+                        onClick = {
+                            navController.navigate(screen.route) {
+                                popUpTo(navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }

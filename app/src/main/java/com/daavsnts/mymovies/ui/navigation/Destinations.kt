@@ -10,8 +10,9 @@ import com.daavsnts.mymovies.R
 
 sealed class Destinations(
     val route: String,
-    @StringRes val title: Int,
-    val icon: ImageVector
+    val subRoute: String?,
+    @StringRes val title: Int?,
+    val icon: ImageVector?
 ) {
     companion object {
         val navScreenList = listOf(Movies, Favorites, Profile)
@@ -19,42 +20,49 @@ sealed class Destinations(
 
     object Movies : Destinations(
         "MoviesScreen",
+        "MoviesDiscoverScreen",
         R.string.nav_title_movies,
         Icons.Default.PlayArrow
     )
 
     object MoviesDiscover : Destinations(
         "MoviesDiscoverScreen",
-        R.string.nav_title_movies,
-        Icons.Default.PlayArrow
+        null,
+        null,
+        null
     )
 
     object MoviesDetails : Destinations(
         "MovieDetailsScreen/{movieId}",
-        R.string.nav_title_movies,
-        Icons.Default.PlayArrow
+        null,
+        null,
+        null
     )
 
     object Favorites : Destinations(
         "FavoriteMoviesScreen",
+        "FavoriteDiscoverScreen",
         R.string.nav_title_favorites,
         Icons.Default.Star
     )
 
     object FavoritesDiscover : Destinations(
         "FavoriteDiscoverScreen",
-        R.string.nav_title_favorites,
-        Icons.Default.Star
+        null,
+        null,
+        null
     )
 
     object FavoritesDetails : Destinations(
         "FavoriteDetailsScreen/{movieId}",
-        R.string.nav_title_favorites,
-        Icons.Default.Star
+        null,
+        null,
+        null
     )
 
     object Profile : Destinations(
         "UserProfileScreen",
+        null,
         R.string.nav_title_profile,
         Icons.Default.Person
     )
