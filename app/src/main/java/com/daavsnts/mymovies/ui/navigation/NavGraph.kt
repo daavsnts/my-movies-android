@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -58,13 +59,13 @@ fun NavGraphBuilder.moviesScreen(
                 moviesViewModel.moviesUiStatesList.map {
                     Pair(
                         it.title,
-                        it.list.collectAsState(initial = ScreenUiState.Loading).value
+                        it.list.collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
                     )
                 }
             val searchedMoviesUiStateList =
                 moviesViewModel
                     .searchedMoviesUiState
-                    .collectAsState(initial = ScreenUiState.Loading).value
+                    .collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
 
             MoviesScreen(
                 navigateToDetails = { movieId: Int ->
@@ -85,9 +86,11 @@ fun NavGraphBuilder.moviesScreen(
             val movieDetailsUiState =
                 movieDetailsViewModel
                     .movieDetailUiState
-                    .collectAsState(initial = ScreenUiState.Loading).value
+                    .collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
             val isMovieFavorite =
-                movieDetailsViewModel.isMovieFavorite.collectAsState(initial = false).value
+                movieDetailsViewModel
+                    .isMovieFavorite
+                    .collectAsStateWithLifecycle(initialValue = false).value
 
             movieIdArg?.let {
                 LaunchedEffect(movieIdArg) {
@@ -129,11 +132,11 @@ fun NavGraphBuilder.favoriteScreen(
             val favoriteMoviesUiState =
                 favoriteMoviesViewModel
                     .favoriteMoviesUiState
-                    .collectAsState(initial = ScreenUiState.Loading).value
+                    .collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
             val searchedMoviesUiStateList =
                 favoriteMoviesViewModel
                     .searchedMoviesUiState
-                    .collectAsState(initial = ScreenUiState.Loading).value
+                    .collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
             FavoriteMoviesScreen(
                 navigateToDetails = { movieId: Int ->
                     navController.navigate("FavoriteDetailsScreen/$movieId")
@@ -155,7 +158,9 @@ fun NavGraphBuilder.favoriteScreen(
                     .movieDetailUiState
                     .collectAsState(initial = ScreenUiState.Loading).value
             val isMovieFavorite =
-                movieDetailsViewModel.isMovieFavorite.collectAsState(initial = false).value
+                movieDetailsViewModel
+                    .isMovieFavorite
+                    .collectAsStateWithLifecycle(initialValue = false).value
 
             movieIdArg?.let {
                 LaunchedEffect(movieIdArg) {
@@ -191,19 +196,19 @@ fun NavGraphBuilder.profileScreen() {
         val userNameUiState =
             userProfileViewModel
                 .userName
-                .collectAsState(initial = ScreenUiState.Loading).value
+                .collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
         val profilePictureUriUiState =
             userProfileViewModel
                 .profilePictureUri
-                .collectAsState(initial = ScreenUiState.Loading).value
+                .collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
         val profileBackgroundUriUiState =
             userProfileViewModel
                 .profileBackgroundUri
-                .collectAsState(initial = ScreenUiState.Loading).value
+                .collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
         val userFavoriteMoviesQuantityUiState =
             userProfileViewModel
                 .userFavoriteMoviesQuantity
-                .collectAsState(initial = ScreenUiState.Loading).value
+                .collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
         UserProfileScreen(
             userNameUiState = userNameUiState,
             profilePictureUriUiState = profilePictureUriUiState,
