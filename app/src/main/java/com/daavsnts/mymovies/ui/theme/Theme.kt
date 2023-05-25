@@ -18,6 +18,7 @@ private val DarkColorScheme = darkColorScheme(
     surface = MyBlack,
     onSurface = MyWhite,
     secondaryContainer = MyNight,
+    onSecondaryContainer = MyWhite,
     error = MyRed
 )
 
@@ -29,6 +30,7 @@ private val LightColorScheme = lightColorScheme(
     surface = MyBlack,
     onSurface = MyWhite,
     secondaryContainer = MyNight,
+    onSecondaryContainer = MyWhite,
     error = MyRed
 )
 
