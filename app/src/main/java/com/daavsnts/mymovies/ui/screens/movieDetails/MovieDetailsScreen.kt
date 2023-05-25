@@ -47,7 +47,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.domain.model.Genre
 import com.daavsnts.mymovies.domain.model.Movie
@@ -64,17 +63,17 @@ import com.daavsnts.mymovies.ui.theme.MyYellow
 
 @Composable
 fun MovieDetailsScreen(
-    navController: NavHostController,
+    popBackStack: () -> Unit,
     movieDetailsUiState: ScreenUiState<Movie>,
     addFavoriteMovie: (Movie) -> Unit,
     removeFavoriteMovie: (Movie) -> Unit,
     isMovieFavorite: Boolean
 ) {
     when (movieDetailsUiState) {
-        is ScreenUiState.Loading -> MovieDetailsLoading(navController = navController)
+        is ScreenUiState.Loading -> MovieDetailsLoading(popBackStack = popBackStack)
         is ScreenUiState.Success -> {
             MovieDetails(
-                navController = navController,
+                popBackStack = popBackStack,
                 movie = movieDetailsUiState.data,
                 isMovieFavorite = isMovieFavorite,
                 addFavoriteMovie = addFavoriteMovie,
@@ -82,14 +81,14 @@ fun MovieDetailsScreen(
             )
         }
 
-        is ScreenUiState.Error -> MovieDetailsError(navController = navController)
+        is ScreenUiState.Error -> MovieDetailsError(popBackStack = popBackStack)
     }
 }
 
 @Composable
 fun MovieDetailsLoading(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    popBackStack: () -> Unit
 ) {
     Box(
         modifier
@@ -100,7 +99,7 @@ fun MovieDetailsLoading(
             modifier = modifier
                 .padding(top = 20.dp, start = 20.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(15.dp)),
-            navController = navController
+            popBackStack = popBackStack
         )
         Box(
             modifier
@@ -213,7 +212,7 @@ fun LoadingText(
 
 @Composable
 fun MovieDetails(
-    navController: NavHostController,
+    popBackStack: () -> Unit,
     movie: Movie,
     isMovieFavorite: Boolean,
     addFavoriteMovie: (Movie) -> Unit,
@@ -232,7 +231,7 @@ fun MovieDetails(
             modifier = modifier
                 .padding(top = 20.dp, start = 20.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(15.dp)),
-            navController = navController
+            popBackStack = popBackStack
         )
         InfoBox(
             movie,
@@ -246,7 +245,7 @@ fun MovieDetails(
 @Composable
 fun BackButton(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    popBackStack: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -254,7 +253,7 @@ fun BackButton(
             .background(MaterialTheme.colorScheme.surface)
     ) {
         IconButton(
-            onClick = { navController.popBackStack() },
+            onClick = { popBackStack() },
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
@@ -471,14 +470,14 @@ fun GenreButton(genre: String, modifier: Modifier = Modifier) {
 @Composable
 fun MovieDetailsError(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    popBackStack: () -> Unit
 ) {
     Box {
         BackButton(
             modifier = modifier
                 .padding(top = 20.dp, start = 20.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(15.dp)),
-            navController = navController
+            popBackStack = popBackStack
         )
         ErrorMessage(
             iconSize = 50.dp,

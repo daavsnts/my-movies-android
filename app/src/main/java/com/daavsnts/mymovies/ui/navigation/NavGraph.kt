@@ -2,13 +2,8 @@ package com.daavsnts.mymovies.ui.navigation
 
 import android.content.Context
 import android.net.Uri
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -19,10 +14,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -30,7 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
-import com.daavsnts.mymovies.R
 import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesScreen
@@ -42,72 +34,40 @@ import com.daavsnts.mymovies.ui.screens.movies.MoviesViewModel
 import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileScreen
 import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileViewModel
 import com.daavsnts.mymovies.ui.theme.GoogleSans
-
-sealed class Destinations(
-    val route: String,
-    @StringRes val title: Int,
-    val icon: ImageVector
-) {
-    companion object {
-        val navScreenList = listOf(Movies, Favorites, Profile)
-    }
-
-    object Movies : Destinations(
-        "MoviesScreen",
-        R.string.nav_title_movies,
-        Icons.Default.PlayArrow
-    )
-
-    object MoviesDiscover : Destinations(
-        "MoviesDiscoverScreen",
-        R.string.nav_title_movies,
-        Icons.Default.PlayArrow
-    )
-
-    object MoviesDetails : Destinations(
-        "MovieDetailsScreen/{movieId}",
-        R.string.nav_title_movies,
-        Icons.Default.PlayArrow
-    )
-
-    object Favorites : Destinations(
-        "FavoriteMoviesScreen",
-        R.string.nav_title_favorites,
-        Icons.Default.Star
-    )
-
-    object FavoritesDiscover : Destinations(
-        "FavoriteDiscoverScreen",
-        R.string.nav_title_favorites,
-        Icons.Default.Star
-    )
-
-    object FavoritesDetails : Destinations(
-        "FavoriteDetailsScreen/{movieId}",
-        R.string.nav_title_favorites,
-        Icons.Default.Star
-    )
-
-    object Profile : Destinations(
-        "UserProfileScreen",
-        R.string.nav_title_profile,
-        Icons.Default.Person
-    )
-}
+import kotlinx.coroutines.flow.first
 
 @Composable
 fun NavGraph(navController: NavHostController) {
+    val moviesScreenNavigationViewModel = hiltViewModel<MoviesScreenNavigationViewModel>()
+    val moviesScreenCurrentDestination =
+        moviesScreenNavigationViewModel
+            .currentDestination
+            .collectAsState(initial = Destinations.MoviesDiscover.route).value
+    val favoriteScreenNavigationViewModel = hiltViewModel<FavoriteScreenNavigationViewModel>()
+    val favoriteScreenCurrentDestination =
+        favoriteScreenNavigationViewModel
+            .currentDestination
+            .collectAsState(initial = Destinations.FavoritesDiscover.route).value
+
     NavHost(navController = navController, startDestination = Destinations.Movies.route) {
-        moviesScreen(navController)
-        favoriteScreen(navController)
+        moviesScreen(navController, moviesScreenNavigationViewModel, moviesScreenCurrentDestination)
+        favoriteScreen(
+            navController,
+            favoriteScreenNavigationViewModel,
+            favoriteScreenCurrentDestination
+        )
         profileScreen()
     }
 }
 
-fun NavGraphBuilder.moviesScreen(navController: NavHostController) {
+fun NavGraphBuilder.moviesScreen(
+    navController: NavHostController,
+    navigationViewModel: MoviesScreenNavigationViewModel,
+    currentDestination: String
+) {
     navigation(
         route = Destinations.Movies.route,
-        startDestination = Destinations.MoviesDiscover.route
+        startDestination = currentDestination
     ) {
         composable(Destinations.MoviesDiscover.route) {
             val moviesViewModel = hiltViewModel<MoviesViewModel>()
@@ -124,7 +84,10 @@ fun NavGraphBuilder.moviesScreen(navController: NavHostController) {
                     .collectAsState(initial = ScreenUiState.Loading).value
 
             MoviesScreen(
-                navigateToDetails = { movieId: Int -> navController.navigate("MovieDetailsScreen/$movieId") },
+                navigateToDetails = { movieId: Int ->
+                    navigationViewModel.setDestination(Destinations.MoviesDetails.route)
+                    navController.navigate("MovieDetailsScreen/$movieId")
+                },
                 moviesUiStateList = moviesUiStateList,
                 searchedMoviesUiStateList = searchedMoviesUiStateList,
                 setSearchedMoviesList = { searchTerm: String ->
@@ -136,43 +99,51 @@ fun NavGraphBuilder.moviesScreen(navController: NavHostController) {
         }
         composable(Destinations.MoviesDetails.route) {
             val movieDetailsViewModel = hiltViewModel<MovieDetailsViewModel>()
-            val movieId = it.arguments?.getString("movieId")?.toInt()
+            val movieIdArg = it.arguments?.getString("movieId")?.toInt()
             val movieDetailsUiState =
                 movieDetailsViewModel
                     .movieDetailUiState
                     .collectAsState(initial = ScreenUiState.Loading).value
             val isMovieFavorite =
                 movieDetailsViewModel.isMovieFavorite.collectAsState(initial = false).value
+            movieIdArg?.let { navigationViewModel.setDetailsMovieId(movieIdArg) }
 
-            movieId?.let {
-                LaunchedEffect(movieId) {
-                    movieDetailsViewModel.setMovieDetails(movieId)
-                    movieDetailsViewModel.refreshIsMovieFavorite(movieId)
-                }
-                MovieDetailsScreen(
-                    navController = navController,
-                    movieDetailsUiState = movieDetailsUiState,
-                    isMovieFavorite = isMovieFavorite,
-                    addFavoriteMovie = { movie: Movie ->
-                        movieDetailsViewModel.addFavoriteMovie(
-                            movie
-                        )
-                    },
-                    removeFavoriteMovie = { movie: Movie ->
-                        movieDetailsViewModel.removeFavoriteMovie(
-                            movie
-                        )
-                    },
-                )
+            LaunchedEffect(Unit) {
+                val currentMovieId =
+                    navigationViewModel.currentMovieId.first()
+                movieDetailsViewModel.setMovieDetails(currentMovieId)
+                movieDetailsViewModel.refreshIsMovieFavorite(currentMovieId)
             }
+            MovieDetailsScreen(
+                popBackStack = {
+                    navigationViewModel.setDestination(Destinations.MoviesDiscover.route)
+                    navController.popBackStack()
+                },
+                movieDetailsUiState = movieDetailsUiState,
+                isMovieFavorite = isMovieFavorite,
+                addFavoriteMovie = { movie: Movie ->
+                    movieDetailsViewModel.addFavoriteMovie(
+                        movie
+                    )
+                },
+                removeFavoriteMovie = { movie: Movie ->
+                    movieDetailsViewModel.removeFavoriteMovie(
+                        movie
+                    )
+                },
+            )
         }
     }
 }
 
-fun NavGraphBuilder.favoriteScreen(navController: NavHostController) {
+fun NavGraphBuilder.favoriteScreen(
+    navController: NavHostController,
+    navigationViewModel: FavoriteScreenNavigationViewModel,
+    currentDestination: String
+) {
     navigation(
         route = Destinations.Favorites.route,
-        startDestination = Destinations.FavoritesDiscover.route
+        startDestination = currentDestination
     ) {
         composable(Destinations.FavoritesDiscover.route) {
             val favoriteMoviesViewModel = hiltViewModel<FavoriteMoviesViewModel>()
@@ -185,7 +156,10 @@ fun NavGraphBuilder.favoriteScreen(navController: NavHostController) {
                     .searchedMoviesUiState
                     .collectAsState(initial = ScreenUiState.Loading).value
             FavoriteMoviesScreen(
-                navigateToDetails = { movieId: Int -> navController.navigate("FavoriteDetailsScreen/$movieId") },
+                navigateToDetails = { movieId: Int ->
+                    navigationViewModel.setDestination(Destinations.FavoritesDetails.route)
+                    navController.navigate("FavoriteDetailsScreen/$movieId")
+                },
                 favoriteMoviesUiState = favoriteMoviesUiState,
                 searchedMoviesUiStateList = searchedMoviesUiStateList,
                 setSearchedMoviesList = { searchTerm: String ->
@@ -197,7 +171,7 @@ fun NavGraphBuilder.favoriteScreen(navController: NavHostController) {
         }
         composable(Destinations.FavoritesDetails.route) {
             val movieDetailsViewModel = hiltViewModel<MovieDetailsViewModel>()
-            val movieId = it.arguments?.getString("movieId")?.toInt()
+            val movieIdArg = it.arguments?.getString("movieId")?.toInt()
             val movieDetailsUiState =
                 movieDetailsViewModel
                     .movieDetailUiState
@@ -205,27 +179,31 @@ fun NavGraphBuilder.favoriteScreen(navController: NavHostController) {
             val isMovieFavorite =
                 movieDetailsViewModel.isMovieFavorite.collectAsState(initial = false).value
 
-            movieId?.let {
-                LaunchedEffect(movieId) {
-                    movieDetailsViewModel.setMovieDetails(movieId)
-                    movieDetailsViewModel.refreshIsMovieFavorite(movieId)
-                }
-                MovieDetailsScreen(
-                    navController = navController,
-                    movieDetailsUiState = movieDetailsUiState,
-                    isMovieFavorite = isMovieFavorite,
-                    addFavoriteMovie = { movie: Movie ->
-                        movieDetailsViewModel.addFavoriteMovie(
-                            movie
-                        )
-                    },
-                    removeFavoriteMovie = { movie: Movie ->
-                        movieDetailsViewModel.removeFavoriteMovie(
-                            movie
-                        )
-                    },
-                )
+            movieIdArg?.let { navigationViewModel.setDetailsMovieId(movieIdArg) }
+
+            LaunchedEffect(Unit) {
+                val currentMovieId = navigationViewModel.currentMovieId.first()
+                movieDetailsViewModel.setMovieDetails(currentMovieId)
+                movieDetailsViewModel.refreshIsMovieFavorite(currentMovieId)
             }
+            MovieDetailsScreen(
+                popBackStack = {
+                    navigationViewModel.setDestination(Destinations.FavoritesDiscover.route)
+                    navController.popBackStack()
+                },
+                movieDetailsUiState = movieDetailsUiState,
+                isMovieFavorite = isMovieFavorite,
+                addFavoriteMovie = { movie: Movie ->
+                    movieDetailsViewModel.addFavoriteMovie(
+                        movie
+                    )
+                },
+                removeFavoriteMovie = { movie: Movie ->
+                    movieDetailsViewModel.removeFavoriteMovie(
+                        movie
+                    )
+                },
+            )
         }
     }
 }

@@ -13,6 +13,9 @@ import com.daavsnts.mymovies.data.repository.LocalUserRepository
 import com.daavsnts.mymovies.data.repository.NetworkMoviesRepository
 import com.daavsnts.mymovies.domain.repository.MoviesRepository
 import com.daavsnts.mymovies.domain.repository.UserRepository
+import com.daavsnts.mymovies.ui.navigation.Destinations
+import com.daavsnts.mymovies.ui.navigation.FavoriteScreenNavigationViewModel
+import com.daavsnts.mymovies.ui.navigation.MoviesScreenNavigationViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +28,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     private val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
     @Provides
@@ -55,4 +57,14 @@ object AppModule {
         UserDatabase.getDatabase(context).userDao(),
         context.settingsDataStore
     )
+
+    @Provides
+    @Singleton
+    fun provideMoviesScreenNavigationViewModel():  MoviesScreenNavigationViewModel =
+        MoviesScreenNavigationViewModel(Destinations.MoviesDiscover.route)
+
+    @Provides
+    @Singleton
+    fun provideFavoriteScreenNavigationViewModel(): FavoriteScreenNavigationViewModel =
+        FavoriteScreenNavigationViewModel(Destinations.FavoritesDiscover.route)
 }
