@@ -36,6 +36,7 @@ import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileViewModel
 import com.daavsnts.mymovies.ui.theme.GoogleSans
 import kotlinx.coroutines.flow.first
 
+
 @Composable
 fun NavGraph(navController: NavHostController) {
     val moviesScreenNavigationViewModel = hiltViewModel<MoviesScreenNavigationViewModel>()
