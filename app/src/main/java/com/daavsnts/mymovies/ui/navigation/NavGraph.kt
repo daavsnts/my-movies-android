@@ -34,41 +34,23 @@ import com.daavsnts.mymovies.ui.screens.movies.MoviesViewModel
 import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileScreen
 import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileViewModel
 import com.daavsnts.mymovies.ui.theme.GoogleSans
-import kotlinx.coroutines.flow.first
 
 
 @Composable
 fun NavGraph(navController: NavHostController) {
-    val moviesScreenNavigationViewModel = hiltViewModel<MoviesScreenNavigationViewModel>()
-    val moviesScreenCurrentDestination =
-        moviesScreenNavigationViewModel
-            .currentDestination
-            .collectAsState(initial = Destinations.MoviesDiscover.route).value
-    val favoriteScreenNavigationViewModel = hiltViewModel<FavoriteScreenNavigationViewModel>()
-    val favoriteScreenCurrentDestination =
-        favoriteScreenNavigationViewModel
-            .currentDestination
-            .collectAsState(initial = Destinations.FavoritesDiscover.route).value
-
     NavHost(navController = navController, startDestination = Destinations.Movies.route) {
-        moviesScreen(navController, moviesScreenNavigationViewModel, moviesScreenCurrentDestination)
-        favoriteScreen(
-            navController,
-            favoriteScreenNavigationViewModel,
-            favoriteScreenCurrentDestination
-        )
+        moviesScreen(navController)
+        favoriteScreen(navController)
         profileScreen()
     }
 }
 
 fun NavGraphBuilder.moviesScreen(
     navController: NavHostController,
-    navigationViewModel: MoviesScreenNavigationViewModel,
-    currentDestination: String
 ) {
     navigation(
         route = Destinations.Movies.route,
-        startDestination = currentDestination
+        startDestination = Destinations.MoviesDiscover.route
     ) {
         composable(Destinations.MoviesDiscover.route) {
             val moviesViewModel = hiltViewModel<MoviesViewModel>()
@@ -86,7 +68,6 @@ fun NavGraphBuilder.moviesScreen(
 
             MoviesScreen(
                 navigateToDetails = { movieId: Int ->
-                    navigationViewModel.setDestination(Destinations.MoviesDetails.route)
                     navController.navigate("MovieDetailsScreen/$movieId")
                 },
                 moviesUiStateList = moviesUiStateList,
@@ -107,44 +88,41 @@ fun NavGraphBuilder.moviesScreen(
                     .collectAsState(initial = ScreenUiState.Loading).value
             val isMovieFavorite =
                 movieDetailsViewModel.isMovieFavorite.collectAsState(initial = false).value
-            movieIdArg?.let { navigationViewModel.setDetailsMovieId(movieIdArg) }
 
-            LaunchedEffect(Unit) {
-                val currentMovieId =
-                    navigationViewModel.currentMovieId.first()
-                movieDetailsViewModel.setMovieDetails(currentMovieId)
-                movieDetailsViewModel.refreshIsMovieFavorite(currentMovieId)
+            movieIdArg?.let {
+                LaunchedEffect(movieIdArg) {
+                    movieDetailsViewModel.setMovieDetails(movieIdArg)
+                    movieDetailsViewModel.refreshIsMovieFavorite(movieIdArg)
+                }
+
+                MovieDetailsScreen(
+                    popBackStack = {
+                        navController.popBackStack()
+                    },
+                    movieDetailsUiState = movieDetailsUiState,
+                    isMovieFavorite = isMovieFavorite,
+                    addFavoriteMovie = { movie: Movie ->
+                        movieDetailsViewModel.addFavoriteMovie(
+                            movie
+                        )
+                    },
+                    removeFavoriteMovie = { movie: Movie ->
+                        movieDetailsViewModel.removeFavoriteMovie(
+                            movie
+                        )
+                    },
+                )
             }
-            MovieDetailsScreen(
-                popBackStack = {
-                    navigationViewModel.setDestination(Destinations.MoviesDiscover.route)
-                    navController.popBackStack()
-                },
-                movieDetailsUiState = movieDetailsUiState,
-                isMovieFavorite = isMovieFavorite,
-                addFavoriteMovie = { movie: Movie ->
-                    movieDetailsViewModel.addFavoriteMovie(
-                        movie
-                    )
-                },
-                removeFavoriteMovie = { movie: Movie ->
-                    movieDetailsViewModel.removeFavoriteMovie(
-                        movie
-                    )
-                },
-            )
         }
     }
 }
 
 fun NavGraphBuilder.favoriteScreen(
-    navController: NavHostController,
-    navigationViewModel: FavoriteScreenNavigationViewModel,
-    currentDestination: String
+    navController: NavHostController
 ) {
     navigation(
         route = Destinations.Favorites.route,
-        startDestination = currentDestination
+        startDestination = Destinations.FavoritesDiscover.route
     ) {
         composable(Destinations.FavoritesDiscover.route) {
             val favoriteMoviesViewModel = hiltViewModel<FavoriteMoviesViewModel>()
@@ -158,7 +136,6 @@ fun NavGraphBuilder.favoriteScreen(
                     .collectAsState(initial = ScreenUiState.Loading).value
             FavoriteMoviesScreen(
                 navigateToDetails = { movieId: Int ->
-                    navigationViewModel.setDestination(Destinations.FavoritesDetails.route)
                     navController.navigate("FavoriteDetailsScreen/$movieId")
                 },
                 favoriteMoviesUiState = favoriteMoviesUiState,
@@ -180,31 +157,30 @@ fun NavGraphBuilder.favoriteScreen(
             val isMovieFavorite =
                 movieDetailsViewModel.isMovieFavorite.collectAsState(initial = false).value
 
-            movieIdArg?.let { navigationViewModel.setDetailsMovieId(movieIdArg) }
+            movieIdArg?.let {
+                LaunchedEffect(movieIdArg) {
+                    movieDetailsViewModel.setMovieDetails(movieIdArg)
+                    movieDetailsViewModel.refreshIsMovieFavorite(movieIdArg)
+                }
 
-            LaunchedEffect(Unit) {
-                val currentMovieId = navigationViewModel.currentMovieId.first()
-                movieDetailsViewModel.setMovieDetails(currentMovieId)
-                movieDetailsViewModel.refreshIsMovieFavorite(currentMovieId)
+                MovieDetailsScreen(
+                    popBackStack = {
+                        navController.popBackStack()
+                    },
+                    movieDetailsUiState = movieDetailsUiState,
+                    isMovieFavorite = isMovieFavorite,
+                    addFavoriteMovie = { movie: Movie ->
+                        movieDetailsViewModel.addFavoriteMovie(
+                            movie
+                        )
+                    },
+                    removeFavoriteMovie = { movie: Movie ->
+                        movieDetailsViewModel.removeFavoriteMovie(
+                            movie
+                        )
+                    },
+                )
             }
-            MovieDetailsScreen(
-                popBackStack = {
-                    navigationViewModel.setDestination(Destinations.FavoritesDiscover.route)
-                    navController.popBackStack()
-                },
-                movieDetailsUiState = movieDetailsUiState,
-                isMovieFavorite = isMovieFavorite,
-                addFavoriteMovie = { movie: Movie ->
-                    movieDetailsViewModel.addFavoriteMovie(
-                        movie
-                    )
-                },
-                removeFavoriteMovie = { movie: Movie ->
-                    movieDetailsViewModel.removeFavoriteMovie(
-                        movie
-                    )
-                },
-            )
         }
     }
 }
@@ -262,7 +238,7 @@ fun BottomNavBar(navController: NavHostController, modifier: Modifier = Modifier
                             contentDescription = stringResource(screen.title)
                         )
                     },
-                    selected = currentDestination == screen.route || currentDestination == screen.subRoute,
+                    selected = currentDestination == screen.route,
                     onClick = {
                         navController.navigate(screen.route) {
                             popUpTo(navController.graph.findStartDestination().id)
