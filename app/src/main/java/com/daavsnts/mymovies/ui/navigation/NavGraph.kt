@@ -261,7 +261,7 @@ fun BottomNavBar(navController: NavHostController, modifier: Modifier = Modifier
                             contentDescription = stringResource(screen.title)
                         )
                     },
-                    selected = currentDestination == screen.route,
+                    selected = currentDestination == screen.route || currentDestination == screen.subRoute,
                     onClick = {
                         navController.navigate(screen.route) {
                             popUpTo(navController.graph.findStartDestination().id)
