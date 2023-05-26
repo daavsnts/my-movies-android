@@ -2,6 +2,9 @@ package com.daavsnts.mymovies.ui.navigation
 
 import android.content.Context
 import android.net.Uri
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Icon
@@ -20,10 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesScreen
@@ -35,24 +35,75 @@ import com.daavsnts.mymovies.ui.screens.movies.MoviesViewModel
 import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileScreen
 import com.daavsnts.mymovies.ui.screens.userProfile.UserProfileViewModel
 import com.daavsnts.mymovies.ui.theme.GoogleSans
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Destinations.Movies.route) {
+    AnimatedNavHost(navController = navController, startDestination = Destinations.Movies.route) {
         composable(Destinations.Movies.route) { MoviesScreenGraph() }
         composable(Destinations.Favorites.route) { FavoriteScreenGraph() }
         profileScreen()
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MoviesScreenGraph(navController: NavHostController = rememberNavController()) {
-    NavHost(
+fun MoviesScreenGraph(navController: NavHostController = rememberAnimatedNavController()) {
+    AnimatedNavHost(
         navController = navController,
         startDestination = Destinations.MoviesDiscover.route
     ) {
-        composable(Destinations.MoviesDiscover.route) {
+        composable(
+            Destinations.MoviesDiscover.route,
+            enterTransition = {
+                when (initialState.destination.route) {
+                    Destinations.MoviesDetails.route ->
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    Destinations.MoviesDetails.route ->
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            popEnterTransition = {
+                when (initialState.destination.route) {
+                    Destinations.MoviesDetails.route ->
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            popExitTransition = {
+                when (targetState.destination.route) {
+                    Destinations.MoviesDetails.route ->
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            }
+        ) {
             val moviesViewModel = hiltViewModel<MoviesViewModel>()
             val moviesUiStateList =
                 moviesViewModel.moviesUiStatesList.map {
@@ -85,7 +136,53 @@ fun MoviesScreenGraph(navController: NavHostController = rememberNavController()
                 }
             )
         }
-        composable(Destinations.MoviesDetails.route) {
+        composable(
+            Destinations.MoviesDetails.route,
+            enterTransition = {
+                when (initialState.destination.route) {
+                    Destinations.MoviesDiscover.route ->
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    Destinations.MoviesDiscover.route ->
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            popEnterTransition = {
+                when (initialState.destination.route) {
+                    Destinations.MoviesDiscover.route ->
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            popExitTransition = {
+                when (targetState.destination.route) {
+                    Destinations.MoviesDiscover.route ->
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            }
+        ) {
             val movieDetailsViewModel = hiltViewModel<MovieDetailsViewModel>()
             val movieIdArg = it.arguments?.getString("movieId")?.toInt()
             val movieDetailsUiState =
@@ -125,13 +222,60 @@ fun MoviesScreenGraph(navController: NavHostController = rememberNavController()
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun FavoriteScreenGraph(navController: NavHostController = rememberNavController()) {
-    NavHost(
+fun FavoriteScreenGraph(navController: NavHostController = rememberAnimatedNavController()) {
+    AnimatedNavHost(
         navController = navController,
         startDestination = Destinations.FavoritesDiscover.route
     ) {
-        composable(Destinations.FavoritesDiscover.route) {
+        composable(
+            Destinations.FavoritesDiscover.route,
+            enterTransition = {
+                when (initialState.destination.route) {
+                    Destinations.FavoritesDetails.route ->
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    Destinations.FavoritesDetails.route ->
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            popEnterTransition = {
+                when (initialState.destination.route) {
+                    Destinations.FavoritesDetails.route ->
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            popExitTransition = {
+                when (targetState.destination.route) {
+                    Destinations.FavoritesDetails.route ->
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            }
+        ) {
             val favoriteMoviesViewModel = hiltViewModel<FavoriteMoviesViewModel>()
             val favoriteMoviesUiState =
                 favoriteMoviesViewModel
@@ -160,7 +304,53 @@ fun FavoriteScreenGraph(navController: NavHostController = rememberNavController
                 }
             )
         }
-        composable(Destinations.FavoritesDetails.route) {
+        composable(
+            Destinations.FavoritesDetails.route,
+            enterTransition = {
+                when (initialState.destination.route) {
+                    Destinations.FavoritesDiscover.route ->
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    Destinations.FavoritesDiscover.route ->
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            popEnterTransition = {
+                when (initialState.destination.route) {
+                    Destinations.FavoritesDiscover.route ->
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            },
+            popExitTransition = {
+                when (targetState.destination.route) {
+                    Destinations.FavoritesDiscover.route ->
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+
+                    else -> null
+                }
+            }
+        ) {
             val movieDetailsViewModel = hiltViewModel<MovieDetailsViewModel>()
             val movieIdArg = it.arguments?.getString("movieId")?.toInt()
             val movieDetailsUiState =
@@ -200,6 +390,7 @@ fun FavoriteScreenGraph(navController: NavHostController = rememberNavController
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.profileScreen() {
     composable(Destinations.Profile.route) {
         val userProfileViewModel = hiltViewModel<UserProfileViewModel>()
