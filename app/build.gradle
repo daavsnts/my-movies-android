@@ -91,6 +91,7 @@ dependencies {
 
     // Accompanist
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.30.1"
+    implementation "com.google.accompanist:accompanist-navigation-animation:0.31.2-alpha"
 
     // DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
