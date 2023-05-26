@@ -23,7 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.navigation
+import androidx.navigation.compose.rememberNavController
 import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.favoriteMovies.FavoriteMoviesScreen
@@ -40,17 +40,16 @@ import com.daavsnts.mymovies.ui.theme.GoogleSans
 @Composable
 fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Destinations.Movies.route) {
-        moviesScreen(navController)
-        favoriteScreen(navController)
+        composable(Destinations.Movies.route) { MoviesScreenGraph() }
+        composable(Destinations.Favorites.route) { FavoriteScreenGraph() }
         profileScreen()
     }
 }
 
-fun NavGraphBuilder.moviesScreen(
-    navController: NavHostController,
-) {
-    navigation(
-        route = Destinations.Movies.route,
+@Composable
+fun MoviesScreenGraph(navController: NavHostController = rememberNavController()) {
+    NavHost(
+        navController = navController,
         startDestination = Destinations.MoviesDiscover.route
     ) {
         composable(Destinations.MoviesDiscover.route) {
@@ -69,7 +68,13 @@ fun NavGraphBuilder.moviesScreen(
 
             MoviesScreen(
                 navigateToDetails = { movieId: Int ->
-                    navController.navigate("MovieDetailsScreen/$movieId")
+                    navController.navigate("MovieDetailsScreen/$movieId") {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 moviesUiStateList = moviesUiStateList,
                 searchedMoviesUiStateList = searchedMoviesUiStateList,
@@ -120,11 +125,10 @@ fun NavGraphBuilder.moviesScreen(
     }
 }
 
-fun NavGraphBuilder.favoriteScreen(
-    navController: NavHostController
-) {
-    navigation(
-        route = Destinations.Favorites.route,
+@Composable
+fun FavoriteScreenGraph(navController: NavHostController = rememberNavController()) {
+    NavHost(
+        navController = navController,
         startDestination = Destinations.FavoritesDiscover.route
     ) {
         composable(Destinations.FavoritesDiscover.route) {
@@ -139,7 +143,13 @@ fun NavGraphBuilder.favoriteScreen(
                     .collectAsStateWithLifecycle(initialValue = ScreenUiState.Loading).value
             FavoriteMoviesScreen(
                 navigateToDetails = { movieId: Int ->
-                    navController.navigate("FavoriteDetailsScreen/$movieId")
+                    navController.navigate("FavoriteDetailsScreen/$movieId") {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 favoriteMoviesUiState = favoriteMoviesUiState,
                 searchedMoviesUiStateList = searchedMoviesUiStateList,
@@ -247,8 +257,11 @@ fun BottomNavBar(navController: NavHostController, modifier: Modifier = Modifier
                         selected = currentDestination == screen.route || currentDestination == screen.subRoute,
                         onClick = {
                             navController.navigate(screen.route) {
-                                popUpTo(navController.graph.findStartDestination().id)
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
                                 launchSingleTop = true
+                                restoreState = true
                             }
                         }
                     )
