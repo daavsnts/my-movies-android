@@ -30,6 +30,6 @@ Made following <b>Clean Code + Clean Architecture</b> and <b>Android conventions
 <h2>📦 Installation</h2> 
 <ul>
 <li><a href="https://www.themoviedb.org/settings/api">Get your API_KEY here!</a></li> 
-<li>Put your SDK_DIR and your API_KEY into local.properties file.</li> 
+<li>Put your SDK_DIR and your API_KEY into <a href="https://github.com/daavsnts/my-movies-android/blob/main/local.properties">local.properties</a> file.</li> 
 <li>Build and run the App!</li>
 </ul>
