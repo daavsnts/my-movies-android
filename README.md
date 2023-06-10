@@ -1,5 +1,4 @@
-<h1 align="center"><img src="https://github.com/daavsnts/my-movies-android/raw/main/images/my-movies
--icon.png"></h1>
+<h1 align="center"><img src="https://github.com/daavsnts/my-movies-android/raw/main/repo-images/my-movies-icon.png" width="300"></h1>
 <p align="center"><b>A Movie App</b> made with <b>Kotlin + Jetpack Compose</b> to <b>Android</b> devices.</br>
 Made following <b>Clean Code + Clean Architecture</b> and <b>Android conventions</b> from <b>Google codelabs</b>.</br></p>
 
@@ -17,14 +16,14 @@ Made following <b>Clean Code + Clean Architecture</b> and <b>Android conventions
 </br>
 <div align="center">
 <p float="left">
-<img src="https://github.com/daavsnts/my-movies-android/raw/main/images/Screenshot_20230610-145554.jpg" width="400"/>
-<img src="https://github.com/daavsnts/my-movies-android/raw/main/images/Screenshot_20230610-145602.jpg" width="400"/>
+<img src="https://github.com/daavsnts/my-movies-android/raw/main/repo-images/Screenshot_20230610-145554.jpg" width="400"/>
+<img src="https://github.com/daavsnts/my-movies-android/raw/main/repo-images/Screenshot_20230610-145602.jpg" width="400"/>
 </p>
 </div>
 <div align="center">
 <p float="left">
-<img src="https://github.com/daavsnts/my-movies-android/raw/main/images/Screenshot_20230610-145622.jpg" width="400"/>
-<img src="https://github.com/daavsnts/my-movies-android/raw/main/images/Screenshot_20230610-145723.jpg" width="400"/>
+<img src="https://github.com/daavsnts/my-movies-android/raw/main/repo-images/Screenshot_20230610-145622.jpg" width="400"/>
+<img src="https://github.com/daavsnts/my-movies-android/raw/main/repo-images/Screenshot_20230610-145723.jpg" width="400"/>
 </p>
 </div>
 
