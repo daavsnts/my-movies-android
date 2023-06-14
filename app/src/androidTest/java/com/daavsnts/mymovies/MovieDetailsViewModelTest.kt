@@ -13,9 +13,9 @@ import com.daavsnts.mymovies.data.network.MoviesRetrofitBuilder
 import com.daavsnts.mymovies.domain.model.Genre
 import com.daavsnts.mymovies.domain.model.Movie
 import com.daavsnts.mymovies.data.repository.LocalUserRepository
-import com.daavsnts.mymovies.repository.MoviesRepository
 import com.daavsnts.mymovies.data.repository.NetworkMoviesRepository
-import com.daavsnts.mymovies.repository.UserRepository
+import com.daavsnts.mymovies.domain.repository.MoviesRepository
+import com.daavsnts.mymovies.domain.repository.UserRepository
 import com.daavsnts.mymovies.ui.screens.ScreenUiState
 import com.daavsnts.mymovies.ui.screens.movieDetails.MovieDetailsViewModel
 import kotlinx.coroutines.delay
