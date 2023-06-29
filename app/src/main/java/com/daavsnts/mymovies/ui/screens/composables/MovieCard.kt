@@ -64,25 +64,14 @@ fun MovieCard(
                         text = it,
                         modifier = modifier.padding(bottom = 24.dp),
                         color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            shadow = Shadow(
-                                Color.Black,
-                                blurRadius = 8f,
-                                offset = Offset(4f, 4f)
-                            )
-                        )
+                        style = MaterialTheme.typography.titleLarge
                     )
                 }
                 movie.releaseDate?.let {
                     Text(
                         text = it,
                         color = MyLightGray,
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            shadow = Shadow(
-                                Color.Black, blurRadius = 8f,
-                                offset = Offset(4f, 4f)
-                            )
-                        )
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }
